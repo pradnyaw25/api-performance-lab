@@ -353,6 +353,163 @@ def chart_social(summary, out):
     plt.close(fig)
 
 
+# ------------------------------------------------- simplified set (Medium)
+# One message per chart, at most four bars, big type, no axes to read.
+
+SIMPLE_LABEL = {"rust-axum": "Rust", "go-nethttp": "Go", "python-fastapi": "Python\n10 workers", "python-fastapi-1w": "Python\n1 worker"}
+
+
+def simple_canvas(ttl, sub, left=0.17, bottom=0.10):
+    fig, ax = plt.subplots(figsize=(16, 9), dpi=100)
+    fig.text(0.05, 0.94, ttl, fontsize=30, fontweight="bold", color=INK, va="top", ha="left", wrap=True)
+    fig.text(0.05, 0.845, sub, fontsize=17, color=INK2, va="top", ha="left")
+    fig.subplots_adjust(left=left, right=0.90, top=0.76, bottom=bottom)
+    ax.set_xticks([])
+    ax.tick_params(axis="y", length=0, labelsize=21, colors=INK)
+    for sp in ax.spines.values():
+        sp.set_visible(False)
+    return fig, ax
+
+
+def simple_bars(ax, names, vals, labels, xmax=None):
+    y = list(range(len(names)))[::-1]
+    ax.barh(y, vals, height=0.62, color=[SERIES[n] for n in names], edgecolor=SURFACE, linewidth=2)
+    top = xmax or max(vals)
+    for yy, v, lab in zip(y, vals, labels):
+        ax.text(v + top * 0.015, yy, lab, va="center", ha="left", fontsize=24, color=INK, fontweight="bold")
+    ax.set_yticks(y)
+    ax.set_yticklabels([SIMPLE_LABEL[n] for n in names])
+    ax.set_xlim(0, top * 1.22)
+    ax.set_ylim(-0.6, len(names) - 0.4)
+
+
+def simple_footer(fig, text):
+    fig.text(0.05, 0.03, text, fontsize=13, color=INK3, ha="left", va="bottom")
+
+
+def simple_advantage(summary, out):
+    I = summary["implementations"]
+    r, g, p = I["rust-axum"]["scenarios"], I["go-nethttp"]["scenarios"], I["python-fastapi"]["scenarios"]
+    rows = [("CPU-bound request\n(SHA-256 ×5000)", "cpu"), ("Simple lookup", "get"), ("200-item list", "list"), ("I/O-bound request\n(10 ms wait)", "io")]
+    fig, ax = simple_canvas("How much faster is Rust? It depends on the workload.",
+                            "Rust's throughput ÷ the alternative's on the same API and machine. 1× means the language made no difference.", left=0.21)
+    y0 = list(range(len(rows)))[::-1]
+    h = 0.34
+    for i, (lab, sc) in enumerate(rows):
+        yy = y0[i]
+        vg, vp = r[sc]["rps"] / g[sc]["rps"], r[sc]["rps"] / p[sc]["rps"]
+        ax.barh(yy + h / 2 + 0.02, vg, height=h, color=SERIES["go-nethttp"], edgecolor=SURFACE, linewidth=2)
+        ax.barh(yy - h / 2 - 0.02, vp, height=h, color=SERIES["python-fastapi"], edgecolor=SURFACE, linewidth=2)
+        ax.text(vg + 0.1, yy + h / 2 + 0.02, f"{vg:.1f}× vs Go", va="center", fontsize=21, color=INK, fontweight="bold")
+        ax.text(vp + 0.1, yy - h / 2 - 0.02, f"{vp:.1f}× vs Python ×10", va="center", fontsize=21, color=INK, fontweight="bold")
+    ax.axvline(1, color=INK3, linewidth=1.5, linestyle=(0, (4, 4)))
+    ax.text(1, len(rows) - 0.35, "1× = same speed", ha="center", va="bottom", fontsize=14, color=INK3)
+    ax.set_yticks(y0)
+    ax.set_yticklabels([lab for lab, _ in rows])
+    ax.set_xlim(0, 9.4)
+    ax.set_ylim(-0.7, len(rows) - 0.3)
+    simple_footer(fig, "Medians of 4 runs, 64 concurrent connections, Apple M5. Both I/O bars are below 1×: on a waiting request Rust was slightly slower than both.")
+    fig.savefig(out)
+    plt.close(fig)
+
+
+def simple_overload(summary, out):
+    I = summary["implementations"]
+    names = [n for n in ORDER if I[n].get("saturation")]
+    vals = [I[n]["saturation"]["sat-cpu"]["error_pct"] for n in names]
+    fig, ax = simple_canvas("Under CPU overload, only Rust met the deadline for every request",
+                            "500 concurrent clients, a 1-second timeout per request. Share of requests that timed out.")
+    simple_bars(ax, names, vals, [("0%" if v == 0 else f"{v:.1f}%" if v < 10 else f"{v:.0f}%") + (" timed out" if i == 0 else "") for i, v in enumerate(vals)], xmax=70)
+    simple_footer(fig, "Rust's p99 under this load: {:,.0f} ms. Go: {:,.0f} ms. Python ×10: {:,.0f} ms. Medians of 4 runs.".format(
+        *[I[n]["saturation"]["sat-cpu"]["p99_ms"] for n in names[:3]]))
+    fig.savefig(out)
+    plt.close(fig)
+
+
+def simple_tail(summary, out):
+    I = summary["implementations"]
+    names = [n for n in ORDER if I[n].get("scenarios")]
+    fig, ax = simple_canvas("On a simple lookup, Rust's p99 is under a millisecond",
+                            "Left dot: median latency. Right dot: p99. A short line is a predictable service.")
+    y = list(range(len(names)))[::-1]
+    for n, yy in zip(names, y):
+        s = I[n]["scenarios"]["get"]
+        p50, p99 = s["p50_ms"], s["p99_ms"]
+        ax.plot([p50, p99], [yy, yy], color=SERIES[n], linewidth=7, solid_capstyle="round", zorder=2)
+        ax.plot([p50, p99], [yy, yy], "o", color=SERIES[n], markersize=22, markeredgecolor=SURFACE, markeredgewidth=3, zorder=3)
+        ax.text(p99 + 0.15, yy, f"p99 {p99:.2f} ms   ({p99 / p50:.0f}× the median)", va="center", fontsize=22, color=INK, fontweight="bold")
+    ax.set_yticks(y)
+    ax.set_yticklabels([SIMPLE_LABEL[n] for n in names])
+    ax.set_xlim(0, 9.5)
+    ax.set_ylim(-0.6, len(names) - 0.4)
+    simple_footer(fig, "GET /items/{id}, 64 concurrent connections, medians of 4 runs. Rust's p99 ranged 0.71–2.04 ms across runs; Go's 1.83–2.23 ms.")
+    fig.savefig(out)
+    plt.close(fig)
+
+
+def simple_io(summary, out):
+    I = summary["implementations"]
+    names = [n for n in ORDER if I[n].get("scenarios")]
+    vals = [I[n]["scenarios"]["io"]["rps"] for n in names]
+    fig, ax = simple_canvas("When the request is waiting on I/O, the language barely matters",
+                            "Requests per second on a 10 ms async wait, 64 connections. All four within 9% of each other; Rust is last.")
+    simple_bars(ax, names, vals, [f"{v:,.0f} req/s" for v in vals], xmax=6400)
+    ax.axvline(6400, color=INK3, linewidth=1.5, linestyle=(0, (4, 4)))
+    ax.text(6400, len(names) - 0.35, "ceiling: 64 ÷ 10 ms", ha="right", va="bottom", fontsize=14, color=INK3)
+    ax.set_xlim(0, 6400 * 1.28)
+    cpu = [I[n]["scenarios"]["io"]["cpu_ms_per_1k_req"] for n in names]
+    simple_footer(fig, f"What differs is the cost of waiting: CPU per 1,000 requests is {cpu[0]:.0f} ms for Rust, {cpu[1]:.0f} ms for Go, {cpu[2]:.0f} ms for Python ×10.")
+    fig.savefig(out)
+    plt.close(fig)
+
+
+def simple_memory(summary, out):
+    I = summary["implementations"]
+    names = [n for n in ORDER if I[n].get("scenarios")]
+    vals = [I[n]["idle_rss_bytes"] / 1e6 for n in names]
+    fig, ax = simple_canvas("Idle memory: ten Python workers are ten copies of everything",
+                            "Resident memory of the whole process tree before any load, in MB.")
+    simple_bars(ax, names, vals, [f"{v:,.0f} MB" + (f"   ({v / vals[0]:.1f}× Rust)" if 0 < i and v / vals[0] < 10 else f"   ({v / vals[0]:.0f}× Rust)" if i else "") for i, v in enumerate(vals)])
+    simple_footer(fig, "Each Uvicorn worker is a separate process with its own interpreter and its own copy of the data; they share nothing in memory.")
+    fig.savefig(out)
+    plt.close(fig)
+
+
+def simple_tuning(baseline, tuned, out):
+    b, t = baseline["implementations"], tuned["implementations"]
+    rows = [("Python, 200-item list\nreturn ORJSONResponse directly\ninstead of a dict", "python-fastapi", "list"),
+            ("Rust, SHA-256 endpoint\nsha2 crate with the asm feature\ninstead of the default", "rust-axum", "cpu")]
+    fig, ax = simple_canvas("Two one-line changes moved the numbers more than the language did",
+                            "Hollow dot: framework default. Filled dot: after the change. Requests per second.", left=0.3)
+    y = list(range(len(rows)))[::-1]
+    for (lab, n, sc), yy in zip(rows, y):
+        before, after = b[n]["scenarios"][sc]["rps"], t[n]["scenarios"][sc]["rps"]
+        ax.plot([before, after], [yy, yy], color=SERIES[n], linewidth=7, solid_capstyle="round", zorder=2)
+        ax.plot(before, yy, "o", color=SURFACE, markersize=24, markeredgecolor=SERIES[n], markeredgewidth=4, zorder=3)
+        ax.plot(after, yy, "o", color=SERIES[n], markersize=24, markeredgecolor=SURFACE, markeredgewidth=3, zorder=3)
+        ax.text(before, yy + 0.2, f"{fmt_num(before)}", ha="center", fontsize=18, color=INK2)
+        ax.text(after, yy + 0.2, f"{fmt_num(after)}", ha="center", fontsize=18, color=INK)
+        ax.text(after + 1800, yy, f"{after / before:.1f}× faster", va="center", fontsize=24, color=INK, fontweight="bold")
+    ax.set_yticks(y)
+    ax.set_yticklabels([r[0] for r in rows], fontsize=18)
+    ax.set_xlim(0, 52000)
+    ax.set_ylim(-0.6, len(rows) - 0.3)
+    simple_footer(fig, "FastAPI's default path runs a pure-Python encoder before orjson. Rust's sha2 crate defaults to software SHA-256; Go's standard library uses the hardware instructions.")
+    fig.savefig(out)
+    plt.close(fig)
+
+
+def render_simple(summary, baseline, out):
+    out.mkdir(parents=True, exist_ok=True)
+    simple_advantage(summary, out / "s1-rust-advantage.png")
+    simple_overload(summary, out / "s2-overload.png")
+    simple_tail(summary, out / "s3-tail-latency.png")
+    simple_io(summary, out / "s4-io-bound.png")
+    simple_memory(summary, out / "s5-memory.png")
+    if baseline:
+        simple_tuning(baseline, summary, out / "s6-tuning.png")
+
+
 # ------------------------------------------------------------------ render
 
 
@@ -386,6 +543,7 @@ def main():
     ap.add_argument("-o", "--out", default=str(ROOT / "content" / "charts"))
     ap.add_argument("--baseline", default=str(ROOT / "results" / "20261126-215740"))
     ap.add_argument("--no-gif", action="store_true")
+    ap.add_argument("--simple-only", action="store_true", help="render only the simplified PNG set")
     args = ap.parse_args()
     run = Path(args.run_dir)
     summary = json.loads((run / "summary.json").read_text())
@@ -393,6 +551,10 @@ def main():
     out = Path(args.out).resolve()
     out.mkdir(parents=True, exist_ok=True)
     gif = not args.no_gif
+    base = Path(args.baseline)
+    if args.simple_only:
+        render_simple(summary, json.loads((base / "summary.json").read_text()) if (base / "summary.json").exists() else None, out / "simple")
+        return
 
     render(lambda t, dpi: chart_ratios(summary, t, dpi), out, "01-where-rust-wins", gif, grow_frames=14, frame_ms=110)
     render(chart_small_multiples(summary, spread, "rps", "Throughput by workload",
@@ -405,11 +567,13 @@ def main():
     render(lambda t, dpi: chart_memory(summary, t, dpi), out, "05-memory", gif)
     render(lambda t, dpi: chart_saturation(summary, t, dpi), out, "06-overload", gif)
     render(lambda t, dpi: chart_complexity(summary, t, dpi), out, "07-complexity", gif)
-    base = Path(args.baseline)
     if (base / "summary.json").exists():
         render(chart_tuning(json.loads((base / "summary.json").read_text()), summary), out, "08-tuning", gif)
     chart_social(summary, out / "00-social-card.png")
+    render_simple(summary, json.loads((base / "summary.json").read_text()) if (base / "summary.json").exists() else None, out / "simple")
     for f in sorted(out.iterdir()):
+        if f.is_dir():
+            continue
         print(f"{f.name:28s} {f.stat().st_size/1e6:5.2f} MB")
 
 

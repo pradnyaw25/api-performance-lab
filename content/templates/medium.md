@@ -1,5 +1,7 @@
 # Benchmarking API Performance: Python vs Go vs Rust
 
+<!-- Medium: upload the six PNGs from content/charts/simple/ at each image marker; Medium does not play GIFs reliably. Cover image: content/charts/00-social-card.png -->
+
 ### Same API, three production stacks, nine metrics. Where Rust actually matters, and where it doesn't. A small experiment inspired by Anthropic's Rust migration.
 
 ![Rust vs Go vs Python for API services](charts/00-social-card.png)
@@ -14,27 +16,29 @@ So I built the same API three times: Rust with Axum, Go with the standard librar
 
 ## The whole study in one chart
 
-![Where Rust's advantage actually is](charts/01-where-rust-wins.gif)
+![How much faster is Rust? It depends on the workload](charts/simple/s1-rust-advantage.png)
 
-Every cell is a ratio against Rust on the same workload. Blue: Rust wins by that factor. Grey: the language did not matter.
-
-Look at the bottom two rows. When the request is *waiting* on something, the language does not decide how fast it goes. It decides what it costs while it waits.
+Each bar is Rust's throughput divided by the alternative's on the same workload. On CPU-bound work Rust is well ahead. On a simple lookup it ties Go. On a request that is *waiting* on something, it is slightly behind both. The language does not decide how fast a waiting request goes. It decides what it costs while it waits.
 
 ## Where Rust wins
 
 **CPU on the request path.** 5,000 rounds of SHA-256 per request: Rust {{rps_cpu_rust}} req/s, Go {{rps_cpu_go}}, Python with ten workers {{rps_cpu_py10}}. That is {{r_go_cpu_rps}}× Go and {{r_py10_cpu_rps}}× Python.
 
-![Under CPU overload, only Rust met the deadline for every request](charts/06-overload.gif)
+![Under CPU overload, only Rust met the deadline for every request](charts/simple/s2-overload.png)
 
 Push past saturation and it stops being a factor and becomes a behaviour. With 500 clients and a 1-second timeout, Rust missed the deadline on **zero** requests in every run. Go missed {{satcpu_err_go}}%, ten-worker Python {{satcpu_err_py10}}% (anywhere from {{satcpu_errrange_py10}}% run to run), single-worker Python {{satcpu_err_py1}}%. Go's median is close to Rust's but its p99 is four times worse: its scheduler lets a tail of requests wait out the deadline, while Tokio spreads the delay evenly. If you have an SLO, evenly is what you want.
 
 **Tail latency.** On a simple lookup, Rust's p99 is {{p99_get_rust}} ms and about {{tail_get_rust}}× its median. Go's is {{p99_get_go}} ms at {{tail_get_go}}×. Python's is {{p99_get_py10}} ms at {{tail_get_py10}}×. Under CPU load Go's p99 opens to {{tail_cpu_go}}× its median; Rust's stays at {{tail_cpu_rust}}×.
 
-![Tail latency: median to p99](charts/03-tail-latency.gif)
+![On a simple lookup, Rust's p99 is under a millisecond](charts/simple/s3-tail-latency.png)
+
+![Idle memory: ten Python workers are ten copies of everything](charts/simple/s5-memory.png)
 
 **Density.** Idle memory: Rust {{idle_rust}} MB, Go {{idle_go}} MB, ten Python workers {{idle_py10}} MB. CPU per 1,000 lookups: Rust {{cpu1k_get_rust}} ms, Go {{cpu1k_get_go}}, Python {{cpu1k_get_py10}}. Across a fleet, that is the bill, and it is the number Anthropic's 70% is made of.
 
 ## Where it does not
+
+![When the request is waiting on I/O, the language barely matters](charts/simple/s4-io-bound.png)
 
 - **Anything I/O-bound.** On a 10 ms wait all four land within {{io_spread_pct}}% on throughput and within a millisecond on p99. Rust is last, because Tokio's sleep overshoots by about 2 ms on macOS. Rust buys you {{r_cpu_io_go}} to {{r_cpu_io_py10}} less CPU *while waiting*. Not speed.
 - **Serialization.** {{r_go_list_rps}}× Go, {{r_py10_list_rps}}× tuned Python on a 200-item list. Not a reason on its own.
@@ -42,7 +46,7 @@ Push past saturation and it stops being a factor and becomes a behaviour. With 5
 
 ## Two one-line changes moved the numbers more than the language did
 
-![Two one-line changes](charts/08-tuning.gif)
+![Two one-line changes moved the numbers more than the language did](charts/simple/s6-tuning.png)
 
 I kept the first run, with every framework at its defaults, on purpose.
 
