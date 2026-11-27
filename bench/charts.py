@@ -395,7 +395,7 @@ def simple_advantage(summary, out):
     rows = [("CPU-bound request  (SHA-256 ×5000 per request)", "cpu"), ("Simple lookup  (GET /items/{id})", "get"),
             ("200-item list  (GET /items?limit=200)", "list"), ("I/O-bound request  (10 ms async wait)", "io")]
     fig, ax = plt.subplots(figsize=(16, 11), dpi=100)
-    fig.text(0.05, 0.95, "The whole study in one chart: who is fastest depends on the workload",
+    fig.text(0.05, 0.95, "The experiment in one chart: who is fastest depends on the workload",
              fontsize=30, fontweight="bold", color=INK, va="top", ha="left")
     fig.text(0.05, 0.875, "Throughput per workload, each bar as a share of the fastest implementation on that workload. "
              "Same API, same machine, 64 connections.", fontsize=17, color=INK2, va="top", ha="left")

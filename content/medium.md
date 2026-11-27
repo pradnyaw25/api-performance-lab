@@ -14,9 +14,9 @@ So I built the same API three times: Rust with Axum, Go with the standard librar
 
 **One thing first:** this is a lab benchmark on a laptop, not production traffic. It cannot tell you what a migration like Anthropic's would yield. It can tell you *where* the differences come from.
 
-## The whole study in one chart
+## The experiment in one chart
 
-![The whole study in one chart: who is fastest depends on the workload](charts/simple/s1-rust-advantage.png)
+![The experiment in one chart: who is fastest depends on the workload](charts/simple/s1-rust-advantage.png)
 
 Each group is one workload; each bar is that language's throughput as a share of the fastest on that workload, with the real requests per second on it. On CPU-bound work Rust is well ahead. On a simple lookup Rust and Go are tied. On a request that is *waiting* on something, all three are within 9% and Rust is last. The language does not decide how fast a waiting request goes. It decides what it costs while it waits.
 
