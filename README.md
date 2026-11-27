@@ -206,6 +206,42 @@ the differences come from.
   collected, and the one counterfactual run (GC off) rejected the first
   explanation offered.
 
+## Phase 2: the same contract on PostgreSQL
+
+Every service grows a database mode: with `DATABASE_URL` set, `/items/{id}`,
+`/items`, `POST /items` and `/mixed` go to PostgreSQL through each
+ecosystem's production driver and pool (Rust `sqlx` with a `PgPool`, Go
+`pgx/v5` with `pgxpool`, Python `asyncpg` with a pool), and `/mixed` drops
+its 5 ms simulated wait because the round-trip is the I/O. `/health`,
+`/compute/hash` and `/io/wait` are unchanged. The in-memory mode stays the
+default, so Phase 1 is still reproducible.
+
+This answers the shared-state critique directly: with one database behind all
+four, every implementation has identical semantics, and ten-worker Python
+passes the contract test without the process-local-state exception.
+
+| Implementation | Port | Pool |
+|---|---:|---|
+| `rust-axum-pg` | 8011 | 16 connections |
+| `go-nethttp-pg` | 8012 | 16 connections |
+| `python-fastapi-pg` (10 workers) | 8013 | 2 per worker, 20 for the service |
+| `python-fastapi-1w-pg` | 8014 | 16 connections |
+
+Pools are eager (all connections opened at start) and the per-service total is
+kept close to equal, because a connection budget, not a language, is what a
+database usually hands out. Ten-worker Python cannot share a pool across
+processes, so it gets a small pool per worker.
+
+```bash
+make db-up        # Homebrew postgresql@17 on port 5433 (pg_ctl, not brew services), role + database
+make db-reset     # reload schema and the 10k-row seed; run before every benchmark
+make bench-pg     # the four Postgres implementations -> results/<run>/
+```
+
+The cluster runs on port 5433 on purpose: another project on this machine
+owns 5432, and `brew services` would have fought it for the port.
+
+
 ## Quick start
 
 Prerequisites: Rust toolchain, Go 1.22+, Python 3.11+, [`oha`](https://github.com/hatoo/oha)
