@@ -1,4 +1,4 @@
-.PHONY: setup build contract bench bench-quick aggregate charts drafts clean
+.PHONY: setup build contract bench bench-quick aggregate charts drafts db-up db-reset bench-pg clean
 
 PY_DIR := services/python-fastapi
 
@@ -31,6 +31,20 @@ charts: .venv-bench
 
 drafts:
 	python3 bench/fill_numbers.py results/aggregate
+
+# Phase 2: the same contract on PostgreSQL. db-up starts Homebrew postgresql@17
+# and creates the apilab role and database; db-reset reloads the schema and the
+# 10k-row seed (run it before every benchmark so `create` rows do not pile up).
+DB_URL := postgres://apilab:apilab@127.0.0.1:5433/apilab
+
+db-up:
+	db/setup.sh
+
+db-reset:
+	psql "$(DB_URL)" -q -f db/schema.sql -f db/seed.sql
+
+bench-pg: db-reset
+	python3 bench/run.py --impl rust-axum-pg --impl go-nethttp-pg --impl python-fastapi-pg --impl python-fastapi-1w-pg
 
 clean:
 	cd services/rust-axum && cargo clean
