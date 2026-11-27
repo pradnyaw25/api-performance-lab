@@ -5,3 +5,4 @@ services/python-fastapi/.venv/
 __pycache__/
 *.pyc
 .DS_Store
+.claude/launch.json

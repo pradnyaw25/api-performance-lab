@@ -38,7 +38,8 @@ def table(L, header, rows):
     L.append("")
 
 
-def render(summary):
+def render(summary, spread=None):
+    spread = spread or {}
     impls = summary["implementations"]
     names = [n for n in impls if impls[n].get("scenarios")]
     failed = [n for n in impls if not impls[n].get("scenarios")]
@@ -49,6 +50,8 @@ def render(summary):
     L = []
     L.append(f"# API Performance Lab — results `{summary['run_id']}`\n")
     L.append(f"*{summary['started_at']}* · {m['cpu']} ({m['cpus']} cores) · {m['platform']}  ")
+    if st.get("runs"):
+        L.append(f"**Median of {len(st['runs'])} runs** ({', '.join(f'`{r}`' for r in st['runs'])}); throughput and p99 tables show min–max across runs.  ")
     L.append(f"Load: {st['load_generator']}, concurrency **{st['concurrency']}**, "
              f"**{st['duration_s']} s** per scenario after **{st['warmup_s']} s** warm-up, fresh process per scenario. "
              f"Load generator and services share the machine; read the numbers as relative.\n")
@@ -76,12 +79,19 @@ def render(summary):
 
     # ------------------------------------------------------------ throughput
     L.append("## Throughput (requests/s)\n")
-    table(L, ["Scenario"] + cols, [[sc] + [num(sc_get(n, sc, "rps")) for n in names] for sc in scenarios])
+    def with_spread(n, sc, key, fmt):
+        v = fmt(sc_get(n, sc, key))
+        sp = spread.get(f"{n}/scenarios/{sc}/{key}")
+        if sp and sp["n"] > 1:
+            v += f" <sub>({fmt(sp['min'])}–{fmt(sp['max'])})</sub>"
+        return v
+
+    table(L, ["Scenario"] + cols, [[sc] + [with_spread(n, sc, "rps", num) for n in names] for sc in scenarios])
 
     # --------------------------------------------------------------- latency
     L.append("## Latency: p50 / p95 / p99 (ms)\n")
     table(L, ["Scenario"] + cols,
-          [[sc] + [f"{ms(sc_get(n, sc, 'p50_ms'))} / {ms(sc_get(n, sc, 'p95_ms'))} / {ms(sc_get(n, sc, 'p99_ms'))}" for n in names]
+          [[sc] + [f"{ms(sc_get(n, sc, 'p50_ms'))} / {ms(sc_get(n, sc, 'p95_ms'))} / {with_spread(n, sc, 'p99_ms', ms)}" for n in names]
            for sc in scenarios])
 
     # ---------------------------------------------------------------- memory
