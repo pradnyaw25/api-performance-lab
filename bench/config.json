@@ -201,7 +201,16 @@
         "DATABASE_URL": "postgres://apilab:apilab@127.0.0.1:5433/apilab",
         "DB_POOL_SIZE": "16"
       },
-      "process_local_state": false
+      "process_local_state": false,
+      "reset": [
+        "psql",
+        "postgres://apilab:apilab@127.0.0.1:5433/apilab",
+        "-q",
+        "-f",
+        "db/schema.sql",
+        "-f",
+        "db/seed.sql"
+      ]
     },
     {
       "name": "go-nethttp-pg",
@@ -231,7 +240,16 @@
         "DATABASE_URL": "postgres://apilab:apilab@127.0.0.1:5433/apilab",
         "DB_POOL_SIZE": "16"
       },
-      "process_local_state": false
+      "process_local_state": false,
+      "reset": [
+        "psql",
+        "postgres://apilab:apilab@127.0.0.1:5433/apilab",
+        "-q",
+        "-f",
+        "db/schema.sql",
+        "-f",
+        "db/seed.sql"
+      ]
     },
     {
       "name": "python-fastapi-pg",
@@ -263,7 +281,16 @@
       "env": {
         "DATABASE_URL": "postgres://apilab:apilab@127.0.0.1:5433/apilab",
         "DB_POOL_SIZE": "2"
-      }
+      },
+      "reset": [
+        "psql",
+        "postgres://apilab:apilab@127.0.0.1:5433/apilab",
+        "-q",
+        "-f",
+        "db/schema.sql",
+        "-f",
+        "db/seed.sql"
+      ]
     },
     {
       "name": "python-fastapi-1w-pg",
@@ -295,7 +322,16 @@
         "DATABASE_URL": "postgres://apilab:apilab@127.0.0.1:5433/apilab",
         "DB_POOL_SIZE": "16"
       },
-      "process_local_state": false
+      "process_local_state": false,
+      "reset": [
+        "psql",
+        "postgres://apilab:apilab@127.0.0.1:5433/apilab",
+        "-q",
+        "-f",
+        "db/schema.sql",
+        "-f",
+        "db/seed.sql"
+      ]
     }
   ]
 }

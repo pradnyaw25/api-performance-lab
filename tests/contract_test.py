@@ -82,7 +82,7 @@ def run(base, process_local_state=False):
     check("get status", s == 200, s)
     check("get body", parse(raw) == seed_item(42), raw[:300])
 
-    s, raw, _ = call(base, "GET", "/items/999999")
+    s, raw, _ = call(base, "GET", "/items/9000000000")
     check("get 404 status", s == 404, s)
     check("get 404 body", parse(raw) == {"error": "not found"}, raw[:200])
 
@@ -162,7 +162,7 @@ def run(base, process_local_state=False):
     s, raw, _ = call(base, "GET", "/mixed")
     b = parse(raw)
     check("mixed default", s == 200 and isinstance(b, dict) and b.get("item") == seed_item(1), b)
-    s, raw, _ = call(base, "GET", "/mixed?id=999999")
+    s, raw, _ = call(base, "GET", "/mixed?id=9000000000")
     check("mixed 404", s == 404 and parse(raw) == {"error": "not found"}, s)
 
     return failures, notes
