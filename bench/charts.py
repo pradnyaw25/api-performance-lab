@@ -439,7 +439,7 @@ def simple_memory(summary, out):
     names = [n for n in ORDER if I[n].get("scenarios")]
     vals = [I[n]["idle_rss_bytes"] / 1e6 for n in names]
     fig, ax = simple_canvas("Idle memory: ten Python workers are ten copies of everything",
-                            "Resident memory of the whole process tree before any load, in MB. Rust and Go fit in the width of the first bar's label.")
+                            "Resident memory of the whole process tree before any load, in MB.")
     simple_bars(ax, names, vals, [f"{v:,.0f} MB" for v in vals])
     simple_footer(fig, "Each Uvicorn worker is a separate process with its own interpreter and its own copy of the data; they share nothing in memory.")
     fig.savefig(out)
