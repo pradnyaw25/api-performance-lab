@@ -298,7 +298,7 @@ Postgres the query is the wait (Rust 36.5k, Go 54.4k, Python ×10 17.6k req/s).
   `/health` answers; Go's `pgxpool` does the same and still starts in 12 ms.
 - **Identical semantics, finally.** With one database behind all four,
   ten-worker Python passes the contract test without the process-local-state
-  exception, so the Phase 2 rows are the fair comparison the reviewer asked for.
+  exception, so the Phase 2 rows are the fair, identical-semantics comparison.
 
 Hypothesis 2's second half ("the gaps narrow again behind a database") is
 therefore **half right**: Rust versus Python narrowed on lookups and writes,

@@ -60,7 +60,7 @@ Ten-worker Python has no shared memory. The contract test caught it: an item cre
 
 ## Phase 2: put a database behind all four
 
-The reviewer's second point was that ten-worker Python, with ten separate stores, is not the same comparison as the others. So every service gained a PostgreSQL mode (sqlx, pgx, asyncpg; 16 connections per single-process service, 2 per worker for ten-worker Python), and the benchmark ran again with one database behind all four.
+Ten-worker Python, with ten separate stores, is not the same comparison as the others. So every service gained a PostgreSQL mode (sqlx, pgx, asyncpg; 16 connections per single-process service, 2 per worker for ten-worker Python), and the benchmark ran again with one database behind all four.
 
 ![What a database on the request path does to the gap](charts-pg/simple/p1-memory-vs-postgres.png)
 
