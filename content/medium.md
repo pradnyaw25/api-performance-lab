@@ -1,6 +1,6 @@
 # Benchmarking API Performance: Python vs Go vs Rust
 
-<!-- Medium: upload the six PNGs from content/charts/simple/ at each image marker; Medium does not play GIFs reliably. Cover image: content/charts/00-social-card.png -->
+<!-- Medium: upload the six PNGs from content/charts/simple/ and content/charts-pg/simple/p1-memory-vs-postgres.png at each image marker; Medium does not play GIFs reliably. Cover image: content/charts/00-social-card.png -->
 
 ### Same API, three production stacks, nine metrics. Where Rust actually matters, and where it doesn't. A small experiment inspired by Anthropic's Rust migration.
 
@@ -58,6 +58,16 @@ I kept the first run, with every framework at its defaults, on purpose.
 
 Ten-worker Python has no shared memory. The contract test caught it: an item created on one Uvicorn worker is a 404 on the other nine. Python's only route to all your cores is ten processes, which means ten copies of everything and Redis for what Rust and Go get from a mutex. It also means the ten-worker write numbers are not the same guarantee as the others; compare the single-worker row for like-for-like.
 
+## Phase 2: put a database behind all four
+
+The reviewer's second point was that ten-worker Python, with ten separate stores, is not the same comparison as the others. So every service gained a PostgreSQL mode (sqlx, pgx, asyncpg; 16 connections per single-process service, 2 per worker for ten-worker Python), and the benchmark ran again with one database behind all four.
+
+![What a database on the request path does to the gap](charts-pg/simple/p1-memory-vs-postgres.png)
+
+Three things happened. Everyone slowed down: Rust's lookup dropped to 26% of its in-memory throughput, Go's to 40%, Python's to 33%. **Go overtook Rust** on the lookup (66.2k vs 41.9k req/s), on create and on the mixed endpoint, which is pgx versus sqlx rather than Go versus Rust: behind a database, the driver is where the request spends its time. And Rust versus Python narrowed on simple queries (2.2× → 1.7× on the lookup) but widened on the 200-row list (1.6× → 3.4×), because every row becomes a Python dict before orjson sees it.
+
+What the database did not change: memory (8.1 MB Rust, 17.3 MB Go, 699.5 MB for ten Python workers), the CPU-bound results, and ten-worker Python's p99, now 10.79 ms on a lookup. Behind a database you are choosing a driver and a pool size; the language decides memory, cold start and what happens when you are CPU-bound.
+
 ## What it costs
 
 Rust and Go took the same number of lines (177 and 182); Python 93. Rust ships 93 crates, Go 0, Python 21 packages. Clean build: 13.7 s Rust, 3.2 s Go. Cold start: 10 ms Rust, 13 ms Go, 416 ms for ten Python workers.
@@ -74,6 +84,6 @@ On ordinary endpoints Go's throughput is a tie with Rust (166.2k vs 163.6k req/s
 
 ## Caveats
 
-The study measures what differs, not why: every explanation of a tail is a hypothesis, and no profiles were taken. One laptop with the load generator on the same cores, 10-second windows, macOS, an in-memory store, medians of 4 runs with the ranges in the repo (Rust's lookup throughput swung 138.7k–186.5k req/s run to run, so Rust vs Go on ordinary endpoints is a tie, not a win). Small scale, not the production load of a large service. Phase 2 is the same contract on PostgreSQL.
+The study measures what differs, not why: every explanation of a tail is a hypothesis, and no profiles were taken. Phase 2 is two runs at one pool size. One laptop with the load generator on the same cores, 10-second windows, macOS, an in-memory store, medians of 4 runs with the ranges in the repo (Rust's lookup throughput swung 138.7k–186.5k req/s run to run, so Rust vs Go on ordinary endpoints is a tie, not a win). Small scale, not the production load of a large service. Next: a pool-size sweep and a second Rust driver (tokio-postgres).
 
 Everything is open, including the raw `oha` output, the untuned baseline, and the contract test: [github.com/pradnyaw25/api-performance-lab](https://github.com/pradnyaw25/api-performance-lab). The long version with every number and the methodology is on [pradnya.dev](https://pradnya.dev/blog/api-performance-lab/). If a configuration is unfair to your favourite language, open an issue.

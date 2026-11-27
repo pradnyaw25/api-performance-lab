@@ -328,8 +328,9 @@ def strip_suffix(summary, spread, suffix):
 def chart_memory_vs_postgres(mem, pg, out):
     """Per language, in-memory store vs PostgreSQL on the four endpoints that touch the store."""
     impls = ["rust-axum", "go-nethttp", "python-fastapi"]
-    scen = [("Simple lookup", "get"), ("200-item list", "list"), ("Create (insert)", "create"), ("Lookup + hash\n(mixed)", "mixed")]
-    fig, axes = plt.subplots(1, 3, figsize=(16, 9.5), dpi=100)
+    # mixed is left out: in memory it sleeps 5 ms, on Postgres the query is the wait, so the pair is not like for like.
+    scen = [("Simple lookup", "get"), ("200-item list", "list"), ("Create (insert)", "create")]
+    fig, axes = plt.subplots(1, 3, figsize=(16, 8.5), dpi=100)
     fig.text(0.05, 0.95, "What a database on the request path does to the gap", fontsize=30, fontweight="bold", color=INK, va="top")
     fig.text(0.05, 0.875, "Requests per second with the in-memory store (light) and with PostgreSQL behind the same endpoint (solid). Same API, same machine.",
              fontsize=17, color=INK2, va="top")
