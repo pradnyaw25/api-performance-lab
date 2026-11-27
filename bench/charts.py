@@ -337,27 +337,35 @@ def chart_tuning(baseline, tuned):
 
 
 def chart_social(summary, out):
-    impls = summary["implementations"]
-    r, g, p = impls["rust-axum"]["scenarios"], impls["go-nethttp"]["scenarios"], impls["python-fastapi"]["scenarios"]
+    """1600×900 cover: the finding itself as two mini bar groups, not number tiles."""
+    I = summary["implementations"]
+    impls = ["rust-axum", "go-nethttp", "python-fastapi"]
+    dark = {"rust-axum": "#3987e5", "go-nethttp": "#e8633a", "python-fastapi": "#22b37e"}
+    names = {"rust-axum": "Rust", "go-nethttp": "Go", "python-fastapi": "Python"}
+    bg, ink, ink2, ink3 = "#0b0b0b", "#f0efec", "#c3c2b7", "#8a8984"
     fig = plt.figure(figsize=(16, 9), dpi=100)
-    fig.patch.set_facecolor("#0b0b0b")
-    fig.text(0.06, 0.86, "Benchmarking API performance: Python vs Go vs Rust", fontsize=36, fontweight="bold", color="#f0efec", va="top")
-    fig.text(0.06, 0.745, "Same API, three production stacks, nine metrics. Where does Rust actually matter?", fontsize=20, color="#c3c2b7", va="top")
-    tiles = [
-        (f"{r['cpu']['rps']/g['cpu']['rps']:.1f}×", "Rust vs Go, CPU-bound requests", f"and {r['cpu']['rps']/p['cpu']['rps']:.1f}× vs Python ×10", "#3987e5"),
-        (f"{r['get']['p99_ms']:.2f} ms", "Rust p99 on a simple lookup", f"Go {g['get']['p99_ms']:.1f} ms · Python ×10 {p['get']['p99_ms']:.1f} ms", "#3987e5"),
-        ("≈ equal", "all three when I/O-bound", f"Rust {r['io']['rps']:,.0f} · Go {g['io']['rps']:,.0f} · Python {p['io']['rps']:,.0f} req/s", "#d95926"),
-    ]
-    for i, (big, lab, sub, col) in enumerate(tiles):
-        x = 0.06 + i * 0.31
-        fig.patches.append(plt.Rectangle((x, 0.26), 0.27, 0.4, transform=fig.transFigure, facecolor="#1a1a19", edgecolor="none", zorder=0))
-        fig.text(x + 0.02, 0.57, big, fontsize=52, fontweight="bold", color=col, va="center")
-        fig.text(x + 0.02, 0.43, lab, fontsize=19, color="#f0efec", va="center")
-        fig.text(x + 0.02, 0.36, sub, fontsize=14, color="#c3c2b7", va="center")
-    fig.text(0.06, 0.14, "API Performance Lab · github.com/pradnyaw25/api-performance-lab", fontsize=16, color="#8a8984")
-    fig.savefig(out, facecolor=fig.get_facecolor())
-    plt.close(fig)
+    fig.patch.set_facecolor(bg)
+    fig.text(0.06, 0.90, "Benchmarking API performance", fontsize=40, fontweight="bold", color=ink, va="top")
+    fig.text(0.06, 0.80, "Python vs Go vs Rust", fontsize=40, fontweight="bold", color=ink, va="top")
+    fig.text(0.06, 0.695, "Same API, three production stacks, one laptop. Who is fastest depends on the workload.", fontsize=19, color=ink2, va="top")
 
+    groups = [("CPU-bound request", "cpu", 0.06), ("I/O-bound request", "io", 0.53)]
+    for head, sc, x0 in groups:
+        vals = {n: I[n]["scenarios"][sc]["rps"] for n in impls}
+        best = max(vals.values())
+        fig.text(x0, 0.585, head, fontsize=21, fontweight="bold", color=ink, va="center")
+        width = 0.24
+        for i, n in enumerate(impls):
+            y = 0.50 - i * 0.095
+            w = width * vals[n] / best
+            fig.patches.append(plt.Rectangle((x0 + 0.085, y - 0.03), w, 0.06, transform=fig.transFigure, facecolor=dark[n], edgecolor="none"))
+            fig.text(x0 + 0.075, y, names[n], fontsize=18, color=ink2, ha="right", va="center")
+            fig.text(x0 + 0.085 + w + 0.008, y, f"{vals[n]:,.0f} req/s", fontsize=17, color=ink if vals[n] == best else ink2,
+                     fontweight="bold" if vals[n] == best else "normal", ha="left", va="center")
+    fig.text(0.06, 0.19, "Rust wins when the request computes. When it waits, the language barely matters.", fontsize=19, color=ink, va="center")
+    fig.text(0.06, 0.09, "7 workloads · 9 metrics · medians of 4 runs · github.com/pradnyaw25/api-performance-lab", fontsize=14, color=ink3, va="center")
+    fig.savefig(out, facecolor=bg)
+    plt.close(fig)
 
 # ------------------------------------------------- simplified set (Medium)
 # One message per chart, at most four bars, big type, no axes to read.
