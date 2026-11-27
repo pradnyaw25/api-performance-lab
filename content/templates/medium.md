@@ -16,9 +16,9 @@ So I built the same API three times: Rust with Axum, Go with the standard librar
 
 ## The whole study in one chart
 
-![How much faster is Rust? It depends on the workload](charts/simple/s1-rust-advantage.png)
+![The whole study in one chart: who is fastest depends on the workload](charts/simple/s1-rust-advantage.png)
 
-Each bar is Rust's throughput divided by the alternative's on the same workload. On CPU-bound work Rust is well ahead. On a simple lookup it ties Go. On a request that is *waiting* on something, it is slightly behind both. The language does not decide how fast a waiting request goes. It decides what it costs while it waits.
+Each group is one workload; each bar is that language's throughput as a share of the fastest on that workload, with the real requests per second on it. On CPU-bound work Rust is well ahead. On a simple lookup Rust and Go are tied. On a request that is *waiting* on something, all three are within 9% and Rust is last. The language does not decide how fast a waiting request goes. It decides what it costs while it waits.
 
 ## Where Rust wins
 

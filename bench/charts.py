@@ -388,27 +388,42 @@ def simple_footer(fig, text):
 
 
 def simple_advantage(summary, out):
+    """All three languages on four workloads; bars are throughput as a share of
+    the fastest on that workload, labelled with the real requests per second."""
     I = summary["implementations"]
-    r, g, p = I["rust-axum"]["scenarios"], I["go-nethttp"]["scenarios"], I["python-fastapi"]["scenarios"]
-    rows = [("CPU-bound request\n(SHA-256 ×5000)", "cpu"), ("Simple lookup", "get"), ("200-item list", "list"), ("I/O-bound request\n(10 ms wait)", "io")]
-    fig, ax = simple_canvas("How much faster is Rust? It depends on the workload.",
-                            "Rust's throughput ÷ the alternative's on the same API and machine. 1× means the language made no difference.", left=0.21)
-    y0 = list(range(len(rows)))[::-1]
-    h = 0.34
-    for i, (lab, sc) in enumerate(rows):
-        yy = y0[i]
-        vg, vp = r[sc]["rps"] / g[sc]["rps"], r[sc]["rps"] / p[sc]["rps"]
-        ax.barh(yy + h / 2 + 0.02, vg, height=h, color=SERIES["go-nethttp"], edgecolor=SURFACE, linewidth=2)
-        ax.barh(yy - h / 2 - 0.02, vp, height=h, color=SERIES["python-fastapi"], edgecolor=SURFACE, linewidth=2)
-        ax.text(vg + 0.1, yy + h / 2 + 0.02, f"{vg:.1f}× vs Go", va="center", fontsize=21, color=INK, fontweight="bold")
-        ax.text(vp + 0.1, yy - h / 2 - 0.02, f"{vp:.1f}× vs Python ×10", va="center", fontsize=21, color=INK, fontweight="bold")
-    ax.axvline(1, color=INK3, linewidth=1.5, linestyle=(0, (4, 4)))
-    ax.text(1, len(rows) - 0.35, "1× = same speed", ha="center", va="bottom", fontsize=14, color=INK3)
-    ax.set_yticks(y0)
-    ax.set_yticklabels([lab for lab, _ in rows])
-    ax.set_xlim(0, 9.4)
-    ax.set_ylim(-0.7, len(rows) - 0.3)
-    simple_footer(fig, "Medians of 4 runs, 64 concurrent connections, Apple M5. Both I/O bars are below 1×: on a waiting request Rust was slightly slower than both.")
+    impls = ["rust-axum", "go-nethttp", "python-fastapi"]
+    rows = [("CPU-bound request  (SHA-256 ×5000 per request)", "cpu"), ("Simple lookup  (GET /items/{id})", "get"),
+            ("200-item list  (GET /items?limit=200)", "list"), ("I/O-bound request  (10 ms async wait)", "io")]
+    fig, ax = plt.subplots(figsize=(16, 11), dpi=100)
+    fig.text(0.05, 0.95, "The whole study in one chart: who is fastest depends on the workload",
+             fontsize=30, fontweight="bold", color=INK, va="top", ha="left")
+    fig.text(0.05, 0.875, "Throughput per workload, each bar as a share of the fastest implementation on that workload. "
+             "Same API, same machine, 64 connections.", fontsize=17, color=INK2, va="top", ha="left")
+    fig.subplots_adjust(left=0.16, right=0.86, top=0.80, bottom=0.07)
+    gap = 1.4
+    yt, ylab = [], []
+    y = 0.0
+    for lab, sc in reversed(rows):
+        vals = {n: I[n]["scenarios"][sc]["rps"] for n in impls}
+        best = max(vals.values())
+        for n in reversed(impls):
+            v = vals[n]
+            ax.barh(y, v / best, height=0.72, color=SERIES[n], edgecolor=SURFACE, linewidth=2)
+            tag = f"{v:,.0f} req/s" + ("   fastest" if v == best else f"   {v / best:.0%} of fastest")
+            ax.text(v / best + 0.012, y, tag, va="center", fontsize=19, color=INK, fontweight="bold" if v == best else "normal")
+            yt.append(y); ylab.append({"rust-axum": "Rust", "go-nethttp": "Go", "python-fastapi": "Python ×10"}[n])
+            y += 1
+        ax.text(-0.01, y - 0.25, lab, ha="left", va="bottom", fontsize=20, fontweight="bold", color=INK, transform=ax.get_yaxis_transform())
+        y += gap
+    ax.set_yticks(yt)
+    ax.set_yticklabels(ylab, fontsize=19)
+    ax.tick_params(axis="y", length=0, colors=INK)
+    ax.set_xticks([])
+    ax.set_xlim(0, 1.5)
+    ax.set_ylim(-0.6, y - gap + 0.9)
+    for sp in ax.spines.values():
+        sp.set_visible(False)
+    simple_footer(fig, "Medians of 4 runs, Apple M5. Python ×10 is FastAPI on Uvicorn with ten workers. On the I/O-bound request all three are within 9%: the language barely matters while waiting.")
     fig.savefig(out)
     plt.close(fig)
 
