@@ -1,6 +1,6 @@
 # Benchmarking API Performance: Python vs Go vs Rust
 
-<!-- Medium: upload the six PNGs from content/charts/simple/ at each image marker; Medium does not play GIFs reliably. Cover image: content/charts/00-social-card.png -->
+<!-- Medium: upload the six PNGs from content/charts/simple/ plus charts/01-where-rust-wins.png at each image marker; Medium does not play GIFs reliably. Cover image: content/charts/00-social-card.png -->
 
 ### Same API, three production stacks, nine metrics. Where Rust actually matters, and where it doesn't. A small experiment inspired by Anthropic's Rust migration.
 
@@ -43,6 +43,12 @@ Push past saturation and it stops being a factor and becomes a behaviour. With 5
 - **Anything I/O-bound.** On a 10 ms wait all four land within {{io_spread_pct}}% on throughput and within a millisecond on p99. Rust is last, because Tokio's sleep overshoots by about 2 ms on macOS. Rust buys you {{r_cpu_io_go}} to {{r_cpu_io_py10}} less CPU *while waiting*. Not speed.
 - **Serialization.** {{r_go_list_rps}}× Go, {{r_py10_list_rps}}× tuned Python on a 200-item list. Not a reason on its own.
 - **Memory per connection.** Rust is the heaviest of the three ({{conn_rust}} KB per idle connection vs Go {{conn_go}}, Python {{conn_py10}}). My hypothesis had that backwards.
+
+## The full matrix, if you want every number
+
+![Everything compared to Rust, workload by workload](charts/01-where-rust-wins.png)
+
+Each cell is one language measured against the Rust baseline on the same workload, for throughput, p99, CPU per request and memory. Blue: Rust did better by that factor. Orange: the other language did better. Grey: no real difference. The two bottom rows are the I/O-bound workloads, and they are grey or orange everywhere except the CPU and memory columns.
 
 ## Two one-line changes moved the numbers more than the language did
 
