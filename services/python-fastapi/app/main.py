@@ -1,32 +1,44 @@
 """API Performance Lab — Python implementation (FastAPI on Uvicorn).
 
-Implements the contract in docs/API.md.
+Implements the contract in docs/API.md. With DATABASE_URL set, the item
+endpoints go to PostgreSQL through an asyncpg pool (Phase 2, one pool per
+worker process); otherwise an in-memory dict (Phase 1).
 
 Run: uvicorn app.main:app --port 8003 --workers <N> --loop uvloop --http httptools
 """
 
 import asyncio
+import contextlib
 import hashlib
 import itertools
+import os
 import threading
-from datetime import datetime, timezone
 
+import asyncpg
 from fastapi import FastAPI, Query
 from fastapi.responses import ORJSONResponse
 from pydantic import BaseModel
 
 SEED_COUNT = 10_000
 SEED_CREATED_AT = "2026-01-01T00:00:00Z"
+DATABASE_URL = os.environ.get("DATABASE_URL") or None
+DB_POOL_SIZE = int(os.environ.get("DB_POOL_SIZE", "16"))
+SELECT_COLS = "id, name, price, tags, created_at"
 
-app = FastAPI(title="api-lab-python", default_response_class=ORJSONResponse)
+POOL: asyncpg.Pool | None = None
 
 
-class Item(BaseModel):
-    id: int
-    name: str
-    price: float
-    tags: list[str]
-    created_at: str
+@contextlib.asynccontextmanager
+async def lifespan(app: FastAPI):
+    global POOL
+    if DATABASE_URL:
+        POOL = await asyncpg.create_pool(DATABASE_URL, min_size=DB_POOL_SIZE, max_size=DB_POOL_SIZE)
+    yield
+    if POOL:
+        await POOL.close()
+
+
+app = FastAPI(title="api-lab-python", default_response_class=ORJSONResponse, lifespan=lifespan)
 
 
 class NewItem(BaseModel):
@@ -57,9 +69,26 @@ def seed() -> dict[int, dict]:
 # in the baseline run (results/20261126-215740). Returning the response object
 # skips that pass. Both forms are common in production code; the difference is
 # one of the study's findings.
-ITEMS: dict[int, dict] = seed()
+ITEMS: dict[int, dict] = {} if DATABASE_URL else seed()
 _ids = itertools.count(SEED_COUNT + 1)
 _write_lock = threading.Lock()
+
+
+def row_to_item(row) -> dict:
+    return {
+        "id": row["id"],
+        "name": row["name"],
+        "price": row["price"],
+        "tags": list(row["tags"] or []),
+        "created_at": row["created_at"].strftime("%Y-%m-%dT%H:%M:%SZ"),
+    }
+
+
+async def fetch_item(item_id: int) -> dict | None:
+    if POOL is None:
+        return ITEMS.get(item_id)
+    row = await POOL.fetchrow(f"SELECT {SELECT_COLS} FROM items WHERE id = $1", item_id)
+    return row_to_item(row) if row else None
 
 
 def chained_sha256(seed_str: str, rounds: int) -> str:
@@ -80,7 +109,7 @@ async def health():
 
 @app.get("/items/{item_id}")
 async def get_item(item_id: int):
-    item = ITEMS.get(item_id)
+    item = await fetch_item(item_id)
     if item is None:
         return error(404, "not found")
     return ORJSONResponse(item)
@@ -89,7 +118,11 @@ async def get_item(item_id: int):
 @app.get("/items")
 async def list_items(limit: int = Query(20)):
     limit = max(1, min(limit, 1000))
-    out = [ITEMS[i] for i in range(1, limit + 1) if i in ITEMS]
+    if POOL is None:
+        out = [ITEMS[i] for i in range(1, limit + 1) if i in ITEMS]
+    else:
+        rows = await POOL.fetch(f"SELECT {SELECT_COLS} FROM items WHERE id <= $1 ORDER BY id", limit)
+        out = [row_to_item(r) for r in rows]
     return ORJSONResponse({"count": len(out), "items": out})
 
 
@@ -99,16 +132,24 @@ async def create_item(body: NewItem):
         return error(400, "name must not be empty")
     if body.price < 0:
         return error(400, "price must be >= 0")
-    with _write_lock:
-        item_id = next(_ids)
-        item = {
-            "id": item_id,
-            "name": body.name,
-            "price": body.price,
-            "tags": body.tags,
-            "created_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
-        }
-        ITEMS[item_id] = item
+    if POOL is None:
+        from datetime import datetime, timezone
+        with _write_lock:
+            item_id = next(_ids)
+            item = {
+                "id": item_id,
+                "name": body.name,
+                "price": body.price,
+                "tags": body.tags,
+                "created_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+            }
+            ITEMS[item_id] = item
+    else:
+        row = await POOL.fetchrow(
+            f"INSERT INTO items (name, price, tags) VALUES ($1, $2, $3) RETURNING {SELECT_COLS}",
+            body.name, body.price, body.tags,
+        )
+        item = row_to_item(row)
     return ORJSONResponse(item, status_code=201)
 
 
@@ -129,8 +170,11 @@ async def io_wait(ms: int = Query(10)):
 
 @app.get("/mixed")
 async def mixed(id: int = Query(1)):
-    await asyncio.sleep(0.005)
-    item = ITEMS.get(id)
+    # In-memory mode simulates a 5 ms database wait; in Postgres mode the
+    # round-trip is the I/O.
+    if POOL is None:
+        await asyncio.sleep(0.005)
+    item = await fetch_item(id)
     if item is None:
         return error(404, "not found")
     return ORJSONResponse({"item": item, "digest": chained_sha256(str(id), 200)})

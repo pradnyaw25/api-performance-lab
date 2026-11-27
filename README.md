@@ -103,7 +103,7 @@ Publication drafts and charts built from the aggregate are in [`content/`](conte
 | # | Hypothesis | Verdict |
 |---|---|---|
 | 1 | CPU-bound: Rust and Go an order of magnitude ahead of Python; Rust leads Go by a small constant | **Mostly right, with a twist.** Rust 20.5k req/s, Go 11.0k, Python×10 3.1k, Python×1 927. Rust leads Go by **1.9×**, not a small constant, but only after enabling the `sha2` crate's `asm` feature. With the crate's default software SHA-256, Rust was **slower than Go** (8.4k vs 14.7k in the baseline) because Go's standard library uses the ARM SHA-2 instructions out of the box. The language sets the ceiling; the library decides whether you reach it. |
-| 2 | I/O-bound: all three converge; differences are memory and tail, not req/s | **Confirmed, and Rust was the slowest.** `io` throughput spans 5.2k–5.7k req/s (9%); p99 spans 12.7–14.6 ms. Rust is last because Tokio's `sleep(10 ms)` completes in 12.3 ms even at concurrency 1 on this macOS build, while Go and uvloop sleep 11.3 ms. What Rust wins while waiting is cost: **31 ms CPU per 1k requests vs 64 (Go) and 110 (Python×10)**, at 13 MB vs 27 MB vs 720 MB. |
+| 2 | I/O-bound: all three converge; differences are memory and tail, not req/s | **Confirmed, and Rust was the slowest** (the "gaps narrow behind a database" half is scored under Phase 2 below). `io` throughput spans 5.2k–5.7k req/s (9%); p99 spans 12.7–14.6 ms. Rust is last because Tokio's `sleep(10 ms)` completes in 12.3 ms even at concurrency 1 on this macOS build, while Go and uvloop sleep 11.3 ms. What Rust wins while waiting is cost: **31 ms CPU per 1k requests vs 64 (Go) and 110 (Python×10)**, at 13 MB vs 27 MB vs 720 MB. |
 | 3 | Serialization: Rust > Go > Python, but orjson narrows the gap more than expected | **Confirmed, dramatically.** Baseline Python `list` was **14× slower** than Rust and burned 1.7 ms CPU per request. Returning `ORJSONResponse` directly, so FastAPI skips its pure-Python `jsonable_encoder` pass, took that to **1.6×** (60.2k vs 37.5k req/s). Rust over Go on serialization: 1.1×. Serialization alone is not a reason to choose Rust; knowing your framework's hot path is worth 7× in Python. |
 | 4 | Tail latency: Rust flattest p99/p50; Go's tail shows GC; Python degrades fastest | **Confirmed.** On `get`, p99/p50 is **2.6× Rust, 6.5× Go, 8.5× Python×10**. Absolute p99: 0.91 / 1.98 / 5.30 ms (Rust's ranged 0.71–2.04 ms across runs; the comparison holds at its worst run). Under CPU saturation Go's p99/p50 reaches **24×** while Rust stays at 2×. The tail is measured; its cause is not. The hypothesis in the first draft, Go's garbage collector, did not survive a `GOGC=off` counterfactual (see Findings). |
 | 5 | Memory: Rust < Go << Python×N; the ratio matters for density | **Confirmed at the baseline, wrong per connection.** Idle RSS: **9.9 MB Rust, 13.4 MB Go, 66 MB Python×1, 711 MB Python×10** (72× Rust). Per *idle connection* the order inverts: **Rust 31.6 KB, Go 22.9 KB, Python 18.5 KB**; hyper's per-connection buffers are the largest of the three. At 100k connections that is 3.2 GB vs 2.3 GB vs 1.9 GB, so the fixed cost, not the per-connection cost, is the story. |
@@ -205,6 +205,108 @@ the differences come from.
   scheduler, allocator) is a hypothesis: no profiles or runtime traces were
   collected, and the one counterfactual run (GC off) rejected the first
   explanation offered.
+
+## Phase 2: the same contract on PostgreSQL
+
+Every service grows a database mode: with `DATABASE_URL` set, `/items/{id}`,
+`/items`, `POST /items` and `/mixed` go to PostgreSQL through each
+ecosystem's production driver and pool (Rust `sqlx` with a `PgPool`, Go
+`pgx/v5` with `pgxpool`, Python `asyncpg` with a pool), and `/mixed` drops
+its 5 ms simulated wait because the round-trip is the I/O. `/health`,
+`/compute/hash` and `/io/wait` are unchanged. The in-memory mode stays the
+default, so Phase 1 is still reproducible.
+
+This answers the shared-state critique directly: with one database behind all
+four, every implementation has identical semantics, and ten-worker Python
+passes the contract test without the process-local-state exception.
+
+| Implementation | Port | Pool |
+|---|---:|---|
+| `rust-axum-pg` | 8011 | 16 connections |
+| `go-nethttp-pg` | 8012 | 16 connections |
+| `python-fastapi-pg` (10 workers) | 8013 | 2 per worker, 20 for the service |
+| `python-fastapi-1w-pg` | 8014 | 16 connections |
+
+Pools are eager (all connections opened at start) and the per-service total is
+kept close to equal, because a connection budget, not a language, is what a
+database usually hands out. Ten-worker Python cannot share a pool across
+processes, so it gets a small pool per worker.
+
+```bash
+make db-up        # Homebrew postgresql@17 on port 5433 (pg_ctl, not brew services), role + database
+make db-reset     # reload schema and the 10k-row seed; run before every benchmark
+make bench-pg     # the four Postgres implementations -> results/<run>/
+```
+
+The cluster runs on port 5433 on purpose: another project on this machine
+owns 5432, and `brew services` would have fought it for the port.
+
+### Phase 2 results (medians of 2 runs, same machine)
+
+Full tables: [`results/aggregate-pg/REPORT.md`](results/aggregate-pg/REPORT.md).
+Runs `20261127-002012` and `20261127-002947`. Every scenario of every
+implementation starts from a freshly reloaded 10k-row table. Two earlier pg
+runs (`20261127-000906`, `20261127-001352`) are kept but superseded: their
+table grew across implementations and the Python variants failed a contract
+probe that assumed id 999999 could not exist.
+
+| Scenario | Rust (in-mem → pg) | Go (in-mem → pg) | Python ×10 (in-mem → pg) | Python ×1 (in-mem → pg) |
+|---|---:|---:|---:|---:|
+| get, req/s | 163.6k → **41.9k** (26%) | 166.2k → **66.2k** (40%) | 73.4k → **24.1k** (33%) | 28.8k → **14.1k** (49%) |
+| list, req/s | 60.2k → **17.7k** (29%) | 54.1k → **15.0k** (28%) | 37.5k → **5.2k** (14%) | 14.9k → **2.2k** (15%) |
+| create, req/s | 160.4k → **35.6k** (22%) | 140.5k → **47.9k** (34%) | 49.2k → **18.5k** (38%) | 19.7k → **11.1k** (56%) |
+| get, p99 ms | 0.91 → **1.96** | 1.98 → **1.71** | 5.30 → **10.79** | 4.35 → **7.74** |
+| get, CPU ms/1k | 22 → **78** | 29 → **66** | 96 → **269** | 35 → **71** |
+| idle RSS MB | 9.9 → 8.1 | 13.4 → 17.3 | 711 → 700 | 66 → 65 |
+| cold start ms | 10 → 23 | 13 → 12 | 416 → 328 | 173 → 157 |
+
+`health`, `cpu` and `io` do not touch the store and are unchanged within
+noise. `mixed` is not comparable across phases: in-memory it sleeps 5 ms, on
+Postgres the query is the wait (Rust 36.5k, Go 54.4k, Python ×10 17.6k req/s).
+
+**What the database does to the gap.**
+
+- **The language stops being the first-order variable.** With PostgreSQL on
+  the path, every implementation lands at 14–56% of its in-memory throughput
+  on the store endpoints, and the ordering changes: **Go leads Rust on the
+  lookup (66k vs 42k), on create (48k vs 36k) and on mixed (54k vs 36k)**,
+  and only trails on the 200-row list (15.0k vs 17.7k). Rust also spends more
+  CPU per lookup than Go now (78 vs 66 ms per 1k). This is `sqlx` versus
+  `pgx`, not Rust versus Go: both are the mainstream production choice in
+  their ecosystem, and the driver's wire-protocol and row-decoding path is
+  what the request spends its time in. `tokio-postgres` is widely reported to
+  be faster than `sqlx`; it was not tested here.
+- **Rust versus Python narrows on simple queries and widens on wide ones.**
+  On the lookup the gap went from 2.2× to 1.7×; on create from 3.3× to 1.9×.
+  On the 200-row list it went from 1.6× to **3.4×**, because every row that
+  comes back from asyncpg becomes a Python dict before orjson sees it:
+  1,415 ms of CPU per 1k list requests against 329 for Rust. Row
+  materialisation is the new serialisation tax.
+- **Tails on Postgres.** Go's lookup p99 (1.71 ms, 1.8× its median) is now
+  flatter than Rust's (1.96 ms, 1.3× its median but a higher median), and
+  ten-worker Python's p99 is 10.8 ms (5.6× its median). Under connection
+  overload on the lookup (1000 clients, 1 s timeout) nobody timed out; p99 was
+  34 / 23 / 150 / 191 ms for Rust / Go / Python ×10 / Python ×1.
+- **The pool is the knob.** Medians of 1–2 ms on a query that Postgres
+  answers in well under a millisecond are 64 clients queueing for 16
+  connections. The per-service connection budget was held near-equal on
+  purpose; a pool-size sweep is the obvious next experiment, and Python's
+  per-worker pools mean its total (20) is the one that cannot be shared.
+- **Memory and startup are the runtime's, not the database's.** Idle RSS is
+  unchanged (Rust 8 MB, Go 17 MB, Python ×10 700 MB). Rust's cold start
+  doubled to 23 ms because the pool opens 16 connections eagerly before
+  `/health` answers; Go's `pgxpool` does the same and still starts in 12 ms.
+- **Identical semantics, finally.** With one database behind all four,
+  ten-worker Python passes the contract test without the process-local-state
+  exception, so the Phase 2 rows are the fair comparison the reviewer asked for.
+
+Hypothesis 2's second half ("the gaps narrow again behind a database") is
+therefore **half right**: Rust versus Python narrowed on lookups and writes,
+widened on wide reads, and Rust versus Go inverted. What Phase 2 really
+shows is that behind a database you are choosing a driver and a pool size,
+and the language decides memory, cold start and what happens when you are
+CPU-bound, which it already did in Phase 1.
+
 
 ## Quick start
 

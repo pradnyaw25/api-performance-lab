@@ -11,6 +11,7 @@ serde_json = "1"
 sha2 = { version = "0.10", features = ["asm"] }
 hex = "0.4"
 chrono = { version = "0.4", default-features = false, features = ["clock"] }
+sqlx = { version = "0.8", default-features = false, features = ["runtime-tokio", "postgres", "chrono"] }
 
 [profile.release]
 lto = true

@@ -1,0 +1,684 @@
+{
+  "run_id": "20261127-000906",
+  "started_at": "2026-11-27T05:09:06+00:00",
+  "machine": {
+    "platform": "macOS-26.5-arm64-arm-64bit-Mach-O",
+    "machine": "arm64",
+    "cpus": 10,
+    "cpu": "Apple M5",
+    "fd_limit": 1048576,
+    "somaxconn": "128"
+  },
+  "settings": {
+    "duration_s": 10,
+    "warmup_s": 3,
+    "concurrency": 64,
+    "cold_start_runs": 5,
+    "load_generator": "oha 1.17.0",
+    "connections": {
+      "count": 1000,
+      "hold_s": 1
+    },
+    "recovery": {
+      "probe_path": "/items/42",
+      "probe_requests": 300,
+      "spike_path": "/items?limit=200",
+      "spike_concurrency": 256,
+      "spike_s": 5,
+      "settle_s": 10
+    }
+  },
+  "scenarios": [
+    {
+      "name": "health",
+      "path": "/health"
+    },
+    {
+      "name": "get",
+      "path": "/items/42"
+    },
+    {
+      "name": "list",
+      "path": "/items?limit=200"
+    },
+    {
+      "name": "create",
+      "path": "/items",
+      "method": "POST",
+      "body": {
+        "name": "bench",
+        "price": 1.5,
+        "tags": [
+          "a",
+          "b"
+        ]
+      }
+    },
+    {
+      "name": "cpu",
+      "path": "/compute/hash?n=5000"
+    },
+    {
+      "name": "io",
+      "path": "/io/wait?ms=10"
+    },
+    {
+      "name": "mixed",
+      "path": "/mixed?id=42"
+    }
+  ],
+  "saturation": [
+    {
+      "name": "sat-get",
+      "path": "/items/42",
+      "concurrency": 1000,
+      "timeout_s": 1,
+      "duration_s": 10
+    },
+    {
+      "name": "sat-cpu",
+      "path": "/compute/hash?n=20000",
+      "concurrency": 500,
+      "timeout_s": 1,
+      "duration_s": 10
+    }
+  ],
+  "implementations": {
+    "rust-axum-pg": {
+      "port": 8011,
+      "loc": 256,
+      "deps": 207,
+      "toolchain": "rustc 1.98.0",
+      "cold_start_ms": [
+        26.7,
+        35.2,
+        37.0,
+        35.2,
+        40.1
+      ],
+      "cold_start_median_ms": 35.2,
+      "idle_rss_bytes": 8093696.0,
+      "contract": "pass",
+      "contract_notes": [
+        "non-numeric id -> 400 'Invalid URL: Cannot parse `not-a-number` to a `u64`'",
+        "malformed json -> 400 'Failed to parse the request body as JSON: key must be a string at line 1 column 2'",
+        "wrong types -> 422 'Failed to deserialize the JSON body into the target type: name: invalid type: integer `123`, expected a string at line 1 column 12'"
+      ],
+      "scenarios": {
+        "health": {
+          "rps": 190432.5,
+          "total": 1904766,
+          "errors": 0,
+          "error_pct": 0.0,
+          "p50_ms": 0.316,
+          "p90_ms": 0.45,
+          "p95_ms": 0.524,
+          "p99_ms": 0.793,
+          "p999_ms": 1.583,
+          "max_ms": 5.916,
+          "mean_ms": 0.335,
+          "status_codes": {
+            "200": 1904766
+          },
+          "error_kinds": {},
+          "concurrency": 64,
+          "peak_rss_bytes": 12206080.0,
+          "idle_rss_bytes": 12173312.0,
+          "rss_growth_per_req_bytes": 0,
+          "cpu_seconds": 39.23,
+          "cpu_ms_per_1k_req": 20.6,
+          "server_cpu_util": 0.386
+        },
+        "get": {
+          "rps": 44218.3,
+          "total": 442304,
+          "errors": 0,
+          "error_pct": 0.0,
+          "p50_ms": 1.42,
+          "p90_ms": 1.526,
+          "p95_ms": 1.571,
+          "p99_ms": 1.859,
+          "p999_ms": 5.667,
+          "max_ms": 94.96,
+          "mean_ms": 1.446,
+          "status_codes": {
+            "200": 442304
+          },
+          "error_kinds": {},
+          "concurrency": 64,
+          "peak_rss_bytes": 11763712.0,
+          "idle_rss_bytes": 11599872.0,
+          "rss_growth_per_req_bytes": 0,
+          "cpu_seconds": 32.96,
+          "cpu_ms_per_1k_req": 74.52,
+          "server_cpu_util": 0.328
+        },
+        "list": {
+          "rps": 18774.9,
+          "total": 187721,
+          "errors": 0,
+          "error_pct": 0.0,
+          "p50_ms": 3.176,
+          "p90_ms": 3.963,
+          "p95_ms": 4.58,
+          "p99_ms": 7.283,
+          "p999_ms": 17.483,
+          "max_ms": 78.907,
+          "mean_ms": 3.408,
+          "status_codes": {
+            "200": 187721
+          },
+          "error_kinds": {},
+          "concurrency": 64,
+          "peak_rss_bytes": 14139392.0,
+          "idle_rss_bytes": 14139392.0,
+          "rss_growth_per_req_bytes": 0,
+          "cpu_seconds": 57.53,
+          "cpu_ms_per_1k_req": 306.47,
+          "server_cpu_util": 0.574
+        },
+        "create": {
+          "rps": 39159.7,
+          "total": 391647,
+          "errors": 0,
+          "error_pct": 0.0,
+          "p50_ms": 1.606,
+          "p90_ms": 1.764,
+          "p95_ms": 1.837,
+          "p99_ms": 2.268,
+          "p999_ms": 4.521,
+          "max_ms": 13.595,
+          "mean_ms": 1.633,
+          "status_codes": {
+            "201": 391647
+          },
+          "error_kinds": {},
+          "concurrency": 64,
+          "peak_rss_bytes": 11862016.0,
+          "idle_rss_bytes": 11730944.0,
+          "rss_growth_per_req_bytes": 0,
+          "cpu_seconds": 32.14,
+          "cpu_ms_per_1k_req": 82.06,
+          "server_cpu_util": 0.32
+        },
+        "cpu": {
+          "rps": 23852.1,
+          "total": 238537,
+          "errors": 0,
+          "error_pct": 0.0,
+          "p50_ms": 2.626,
+          "p90_ms": 3.945,
+          "p95_ms": 4.391,
+          "p99_ms": 5.39,
+          "p999_ms": 7.93,
+          "max_ms": 68.079,
+          "mean_ms": 2.682,
+          "status_codes": {
+            "200": 238537
+          },
+          "error_kinds": {},
+          "concurrency": 64,
+          "peak_rss_bytes": 11534336.0,
+          "idle_rss_bytes": 11272192.0,
+          "rss_growth_per_req_bytes": 1,
+          "cpu_seconds": 88.58,
+          "cpu_ms_per_1k_req": 371.35,
+          "server_cpu_util": 0.883
+        },
+        "io": {
+          "rps": 5245.9,
+          "total": 52416,
+          "errors": 0,
+          "error_pct": 0.0,
+          "p50_ms": 12.158,
+          "p90_ms": 12.95,
+          "p95_ms": 13.109,
+          "p99_ms": 13.365,
+          "p999_ms": 13.658,
+          "max_ms": 14.182,
+          "mean_ms": 12.199,
+          "status_codes": {
+            "200": 52416
+          },
+          "error_kinds": {},
+          "concurrency": 64,
+          "peak_rss_bytes": 11436032.0,
+          "idle_rss_bytes": 11091968.0,
+          "rss_growth_per_req_bytes": 7,
+          "cpu_seconds": 1.75,
+          "cpu_ms_per_1k_req": 33.39,
+          "server_cpu_util": 0.017
+        },
+        "mixed": {
+          "rps": 43889.9,
+          "total": 438952,
+          "errors": 0,
+          "error_pct": 0.0,
+          "p50_ms": 1.45,
+          "p90_ms": 1.555,
+          "p95_ms": 1.593,
+          "p99_ms": 1.693,
+          "p999_ms": 2.127,
+          "max_ms": 5.573,
+          "mean_ms": 1.457,
+          "status_codes": {
+            "200": 438952
+          },
+          "error_kinds": {},
+          "concurrency": 64,
+          "peak_rss_bytes": 11894784.0,
+          "idle_rss_bytes": 11829248.0,
+          "rss_growth_per_req_bytes": 0,
+          "cpu_seconds": 38.47,
+          "cpu_ms_per_1k_req": 87.64,
+          "server_cpu_util": 0.383
+        }
+      },
+      "saturation": {
+        "sat-get": {
+          "rps": 43750.9,
+          "total": 436792,
+          "errors": 0,
+          "error_pct": 0.0,
+          "p50_ms": 22.821,
+          "p90_ms": 23.203,
+          "p95_ms": 23.356,
+          "p99_ms": 25.002,
+          "p999_ms": 45.94,
+          "max_ms": 117.748,
+          "mean_ms": 22.856,
+          "status_codes": {
+            "200": 436792
+          },
+          "error_kinds": {},
+          "concurrency": 1000,
+          "peak_rss_bytes": 51347456.0,
+          "idle_rss_bytes": 8093696.0,
+          "rss_growth_per_req_bytes": 99,
+          "cpu_seconds": 33.44,
+          "cpu_ms_per_1k_req": 76.56,
+          "server_cpu_util": 0.333
+        },
+        "sat-cpu": {
+          "rps": 7783.5,
+          "total": 77392,
+          "errors": 0,
+          "error_pct": 0.0,
+          "p50_ms": 57.864,
+          "p90_ms": 113.834,
+          "p95_ms": 135.278,
+          "p99_ms": 180.838,
+          "p999_ms": 234.709,
+          "max_ms": 261.358,
+          "mean_ms": 64.349,
+          "status_codes": {
+            "200": 77392
+          },
+          "error_kinds": {},
+          "concurrency": 500,
+          "peak_rss_bytes": 28819456.0,
+          "idle_rss_bytes": 8110080.0,
+          "rss_growth_per_req_bytes": 268,
+          "cpu_seconds": 94.76,
+          "cpu_ms_per_1k_req": 1224.42,
+          "server_cpu_util": 0.945
+        }
+      },
+      "connections": {
+        "connections": 1000,
+        "failed": 0,
+        "idle_rss_bytes": 8093696.0,
+        "held_rss_bytes": 40452096.0,
+        "after_close_rss_bytes": 40468480.0,
+        "bytes_per_conn": 32358
+      },
+      "recovery": {
+        "spike": {
+          "path": "/items?limit=200",
+          "concurrency": 256,
+          "seconds": 5,
+          "rps": 19771,
+          "errors": 0
+        },
+        "idle_rss_bytes": 8060928.0,
+        "peak_rss_bytes": 22659072.0,
+        "rss_after_spike_bytes": 22659072.0,
+        "rss_after_settle_bytes": 22659072.0,
+        "settle_s": 10,
+        "retained_pct": 100.0,
+        "probe_pre": {
+          "p50_ms": 0.163,
+          "p99_ms": 0.993
+        },
+        "probe_after_spike": {
+          "p50_ms": 0.083,
+          "p99_ms": 0.123
+        },
+        "probe_after_settle": {
+          "p50_ms": 0.148,
+          "p99_ms": 0.382
+        }
+      }
+    },
+    "go-nethttp-pg": {
+      "port": 8012,
+      "loc": 283,
+      "deps": 15,
+      "toolchain": "go1.27.4",
+      "cold_start_ms": [
+        27.9,
+        21.9,
+        21.9,
+        22.5,
+        22.4
+      ],
+      "cold_start_median_ms": 22.4,
+      "idle_rss_bytes": 17252352.0,
+      "contract": "pass",
+      "contract_notes": [
+        "non-numeric id -> 400 {'error': 'invalid id'}",
+        "malformed json -> 400 {'error': 'invalid json'}",
+        "wrong types -> 400 {'error': 'invalid json'}"
+      ],
+      "scenarios": {
+        "health": {
+          "rps": 171752.4,
+          "total": 1718100,
+          "errors": 0,
+          "error_pct": 0.0,
+          "p50_ms": 0.267,
+          "p90_ms": 0.646,
+          "p95_ms": 0.995,
+          "p99_ms": 2.163,
+          "p999_ms": 4.643,
+          "max_ms": 11.827,
+          "mean_ms": 0.372,
+          "status_codes": {
+            "200": 1718100
+          },
+          "error_kinds": {},
+          "concurrency": 64,
+          "peak_rss_bytes": 31490048.0,
+          "idle_rss_bytes": 30195712.0,
+          "rss_growth_per_req_bytes": 1,
+          "cpu_seconds": 48.09,
+          "cpu_ms_per_1k_req": 27.99,
+          "server_cpu_util": 0.473
+        },
+        "get": {
+          "rps": 75519.3,
+          "total": 755350,
+          "errors": 0,
+          "error_pct": 0.0,
+          "p50_ms": 0.787,
+          "p90_ms": 1.099,
+          "p95_ms": 1.277,
+          "p99_ms": 1.888,
+          "p999_ms": 4.989,
+          "max_ms": 26.582,
+          "mean_ms": 0.846,
+          "status_codes": {
+            "200": 755350
+          },
+          "error_kinds": {},
+          "concurrency": 64,
+          "peak_rss_bytes": 30605312.0,
+          "idle_rss_bytes": 30031872.0,
+          "rss_growth_per_req_bytes": 1,
+          "cpu_seconds": 41.09,
+          "cpu_ms_per_1k_req": 54.4,
+          "server_cpu_util": 0.408
+        },
+        "list": {
+          "rps": 16592.3,
+          "total": 165908,
+          "errors": 0,
+          "error_pct": 0.0,
+          "p50_ms": 3.674,
+          "p90_ms": 4.806,
+          "p95_ms": 5.358,
+          "p99_ms": 7.118,
+          "p999_ms": 14.93,
+          "max_ms": 37.701,
+          "mean_ms": 3.856,
+          "status_codes": {
+            "200": 165908
+          },
+          "error_kinds": {},
+          "concurrency": 64,
+          "peak_rss_bytes": 39698432.0,
+          "idle_rss_bytes": 38371328.0,
+          "rss_growth_per_req_bytes": 8,
+          "cpu_seconds": 50.5,
+          "cpu_ms_per_1k_req": 304.39,
+          "server_cpu_util": 0.503
+        },
+        "create": {
+          "rps": 54506.3,
+          "total": 545177,
+          "errors": 0,
+          "error_pct": 0.0,
+          "p50_ms": 1.102,
+          "p90_ms": 1.491,
+          "p95_ms": 1.68,
+          "p99_ms": 2.381,
+          "p999_ms": 5.725,
+          "max_ms": 36.699,
+          "mean_ms": 1.172,
+          "status_codes": {
+            "201": 545177
+          },
+          "error_kinds": {},
+          "concurrency": 64,
+          "peak_rss_bytes": 31571968.0,
+          "idle_rss_bytes": 30490624.0,
+          "rss_growth_per_req_bytes": 2,
+          "cpu_seconds": 32.93,
+          "cpu_ms_per_1k_req": 60.4,
+          "server_cpu_util": 0.327
+        },
+        "cpu": {
+          "rps": 11321.3,
+          "total": 113184,
+          "errors": 0,
+          "error_pct": 0.0,
+          "p50_ms": 1.652,
+          "p90_ms": 16.119,
+          "p95_ms": 23.111,
+          "p99_ms": 37.889,
+          "p999_ms": 59.652,
+          "max_ms": 96.61,
+          "mean_ms": 5.65,
+          "status_codes": {
+            "200": 113184
+          },
+          "error_kinds": {},
+          "concurrency": 64,
+          "peak_rss_bytes": 43450368.0,
+          "idle_rss_bytes": 41107456.0,
+          "rss_growth_per_req_bytes": 21,
+          "cpu_seconds": 67.8,
+          "cpu_ms_per_1k_req": 599.02,
+          "server_cpu_util": 0.676
+        },
+        "io": {
+          "rps": 5591.3,
+          "total": 55872,
+          "errors": 0,
+          "error_pct": 0.0,
+          "p50_ms": 11.402,
+          "p90_ms": 12.052,
+          "p95_ms": 12.268,
+          "p99_ms": 12.902,
+          "p999_ms": 21.035,
+          "max_ms": 23.284,
+          "mean_ms": 11.446,
+          "status_codes": {
+            "200": 55872
+          },
+          "error_kinds": {},
+          "concurrency": 64,
+          "peak_rss_bytes": 28475392.0,
+          "idle_rss_bytes": 27770880.0,
+          "rss_growth_per_req_bytes": 13,
+          "cpu_seconds": 3.29,
+          "cpu_ms_per_1k_req": 58.88,
+          "server_cpu_util": 0.033
+        },
+        "mixed": {
+          "rps": 56060.7,
+          "total": 560731,
+          "errors": 0,
+          "error_pct": 0.0,
+          "p50_ms": 1.046,
+          "p90_ms": 1.612,
+          "p95_ms": 1.834,
+          "p99_ms": 2.432,
+          "p999_ms": 4.486,
+          "max_ms": 52.13,
+          "mean_ms": 1.14,
+          "status_codes": {
+            "200": 560731
+          },
+          "error_kinds": {},
+          "concurrency": 64,
+          "peak_rss_bytes": 34783232.0,
+          "idle_rss_bytes": 32718848.0,
+          "rss_growth_per_req_bytes": 4,
+          "cpu_seconds": 47.89,
+          "cpu_ms_per_1k_req": 85.41,
+          "server_cpu_util": 0.475
+        }
+      },
+      "saturation": {
+        "sat-get": {
+          "rps": 68439.0,
+          "total": 683762,
+          "errors": 0,
+          "error_pct": 0.0,
+          "p50_ms": 14.469,
+          "p90_ms": 16.163,
+          "p95_ms": 17.306,
+          "p99_ms": 21.302,
+          "p999_ms": 55.157,
+          "max_ms": 74.72,
+          "mean_ms": 14.607,
+          "status_codes": {
+            "200": 683762
+          },
+          "error_kinds": {},
+          "concurrency": 1000,
+          "peak_rss_bytes": 74727424.0,
+          "idle_rss_bytes": 17530880.0,
+          "rss_growth_per_req_bytes": 84,
+          "cpu_seconds": 40.99,
+          "cpu_ms_per_1k_req": 59.95,
+          "server_cpu_util": 0.406
+        },
+        "sat-cpu": {
+          "rps": 3802.6,
+          "total": 37549,
+          "errors": 93,
+          "error_pct": 0.248,
+          "p50_ms": 34.897,
+          "p90_ms": 374.483,
+          "p95_ms": 496.603,
+          "p99_ms": 733.218,
+          "p999_ms": 954.146,
+          "max_ms": 999.888,
+          "mean_ms": 128.247,
+          "status_codes": {
+            "200": 37456
+          },
+          "error_kinds": {
+            "timeout": 93
+          },
+          "concurrency": 500,
+          "peak_rss_bytes": 77332480.0,
+          "idle_rss_bytes": 17268736.0,
+          "rss_growth_per_req_bytes": 1600,
+          "cpu_seconds": 82.16,
+          "cpu_ms_per_1k_req": 2188.07,
+          "server_cpu_util": 0.82
+        }
+      },
+      "connections": {
+        "connections": 1000,
+        "failed": 0,
+        "idle_rss_bytes": 17563648.0,
+        "held_rss_bytes": 38846464.0,
+        "after_close_rss_bytes": 39501824.0,
+        "bytes_per_conn": 21283
+      },
+      "recovery": {
+        "spike": {
+          "path": "/items?limit=200",
+          "concurrency": 256,
+          "seconds": 5,
+          "rps": 20255,
+          "errors": 0
+        },
+        "idle_rss_bytes": 17678336.0,
+        "peak_rss_bytes": 48889856.0,
+        "rss_after_spike_bytes": 48889856.0,
+        "rss_after_settle_bytes": 48955392.0,
+        "settle_s": 10,
+        "retained_pct": 100.2,
+        "probe_pre": {
+          "p50_ms": 0.128,
+          "p99_ms": 0.311
+        },
+        "probe_after_spike": {
+          "p50_ms": 0.112,
+          "p99_ms": 0.249
+        },
+        "probe_after_settle": {
+          "p50_ms": 0.131,
+          "p99_ms": 0.328
+        }
+      }
+    },
+    "python-fastapi-pg": {
+      "port": 8013,
+      "loc": 129,
+      "deps": 22,
+      "toolchain": "Python 3.14.6, FastAPI 0.165.0, Uvicorn 0.54.0",
+      "cold_start_ms": [
+        316.4,
+        434.1,
+        415.0,
+        416.3,
+        416.0
+      ],
+      "cold_start_median_ms": 416.0,
+      "idle_rss_bytes": 699514880.0,
+      "contract": "fail",
+      "contract_notes": [
+        "non-numeric id -> 422 b'{\"detail\":[{\"type\":\"int_parsing\",\"loc\":[\"path\",\"item_id\"],\"msg\":\"Input should be a valid integer, unable to parse string'",
+        "malformed json -> 422 b'{\"detail\":[{\"type\":\"json_invalid\",\"loc\":[\"body\",1],\"msg\":\"JSON decode error\",\"input\":{},\"ctx\":{\"error\":\"Expecting proper'",
+        "wrong types -> 422 b'{\"detail\":[{\"type\":\"string_type\",\"loc\":[\"body\",\"name\"],\"msg\":\"Input should be a valid string\",\"input\":123},{\"type\":\"float_parsing\",\"loc\":[\"body\",\"price\"],\"msg\":'"
+      ]
+    },
+    "python-fastapi-1w-pg": {
+      "port": 8014,
+      "loc": 129,
+      "deps": 22,
+      "toolchain": "Python 3.14.6, FastAPI 0.165.0, Uvicorn 0.54.0",
+      "cold_start_ms": [
+        153.2,
+        187.2,
+        182.5,
+        185.3,
+        185.0
+      ],
+      "cold_start_median_ms": 185.0,
+      "idle_rss_bytes": 65306624.0,
+      "contract": "fail",
+      "contract_notes": [
+        "non-numeric id -> 422 b'{\"detail\":[{\"type\":\"int_parsing\",\"loc\":[\"path\",\"item_id\"],\"msg\":\"Input should be a valid integer, unable to parse string'",
+        "malformed json -> 422 b'{\"detail\":[{\"type\":\"json_invalid\",\"loc\":[\"body\",1],\"msg\":\"JSON decode error\",\"input\":{},\"ctx\":{\"error\":\"Expecting proper'",
+        "wrong types -> 422 b'{\"detail\":[{\"type\":\"string_type\",\"loc\":[\"body\",\"name\"],\"msg\":\"Input should be a valid string\",\"input\":123},{\"type\":\"float_parsing\",\"loc\":[\"body\",\"price\"],\"msg\":'"
+      ]
+    }
+  }
+}

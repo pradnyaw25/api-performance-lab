@@ -158,6 +158,10 @@ def start_impl(impl, quiet=False):
     if not port_free(port):
         raise RuntimeError(f"port {port} already in use; stop whatever is on it")
     cwd = ROOT / impl["cwd"]
+    if impl.get("reset"):
+        # e.g. reload the database schema and seed, so every scenario of every
+        # implementation starts from the same 10k rows
+        subprocess.run(impl["reset"], cwd=ROOT, check=True, capture_output=True)
     cmd = [c.format(port=port, cpus=CPUS) for c in impl["cmd"]]
     env = dict(os.environ, PORT=str(port), **{k: str(v) for k, v in impl.get("env", {}).items()})
     if not quiet:

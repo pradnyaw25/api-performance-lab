@@ -5,57 +5,333 @@
   "restart_per_scenario": true,
   "cold_start_runs": 5,
   "scenarios": [
-    {"name": "health", "path": "/health"},
-    {"name": "get",    "path": "/items/42"},
-    {"name": "list",   "path": "/items?limit=200"},
-    {"name": "create", "path": "/items", "method": "POST",
-     "body": {"name": "bench", "price": 1.5, "tags": ["a", "b"]}},
-    {"name": "cpu",    "path": "/compute/hash?n=5000"},
-    {"name": "io",     "path": "/io/wait?ms=10"},
-    {"name": "mixed",  "path": "/mixed?id=42"}
+    {
+      "name": "health",
+      "path": "/health"
+    },
+    {
+      "name": "get",
+      "path": "/items/42"
+    },
+    {
+      "name": "list",
+      "path": "/items?limit=200"
+    },
+    {
+      "name": "create",
+      "path": "/items",
+      "method": "POST",
+      "body": {
+        "name": "bench",
+        "price": 1.5,
+        "tags": [
+          "a",
+          "b"
+        ]
+      }
+    },
+    {
+      "name": "cpu",
+      "path": "/compute/hash?n=5000"
+    },
+    {
+      "name": "io",
+      "path": "/io/wait?ms=10"
+    },
+    {
+      "name": "mixed",
+      "path": "/mixed?id=42"
+    }
   ],
   "saturation": [
-    {"name": "sat-get", "path": "/items/42",             "concurrency": 1000, "timeout_s": 1, "duration_s": 10},
-    {"name": "sat-cpu", "path": "/compute/hash?n=20000", "concurrency": 500,  "timeout_s": 1, "duration_s": 10}
+    {
+      "name": "sat-get",
+      "path": "/items/42",
+      "concurrency": 1000,
+      "timeout_s": 1,
+      "duration_s": 10
+    },
+    {
+      "name": "sat-cpu",
+      "path": "/compute/hash?n=20000",
+      "concurrency": 500,
+      "timeout_s": 1,
+      "duration_s": 10
+    }
   ],
-  "connections": {"count": 1000, "hold_s": 1},
+  "connections": {
+    "count": 1000,
+    "hold_s": 1
+  },
   "recovery": {
-    "probe_path": "/items/42", "probe_requests": 300,
-    "spike_path": "/items?limit=200", "spike_concurrency": 256, "spike_s": 5,
+    "probe_path": "/items/42",
+    "probe_requests": 300,
+    "spike_path": "/items?limit=200",
+    "spike_concurrency": 256,
+    "spike_s": 5,
     "settle_s": 10
   },
   "implementations": [
     {
-      "name": "rust-axum", "port": 8001, "cwd": "services/rust-axum",
-      "build": ["cargo", "build", "--release"],
-      "clean": ["cargo", "clean"],
+      "name": "rust-axum",
+      "port": 8001,
+      "cwd": "services/rust-axum",
+      "build": [
+        "cargo",
+        "build",
+        "--release"
+      ],
+      "clean": [
+        "cargo",
+        "clean"
+      ],
       "deps": "cargo",
       "artifact": "target/release/api-lab-rust",
-      "cmd": ["target/release/api-lab-rust"],
-      "src": ["src/main.rs", "Cargo.toml"]
+      "cmd": [
+        "target/release/api-lab-rust"
+      ],
+      "src": [
+        "src/main.rs",
+        "Cargo.toml"
+      ]
     },
     {
-      "name": "go-nethttp", "port": 8002, "cwd": "services/go-nethttp",
-      "build": ["go", "build", "-o", "bin/api-lab-go", "."],
-      "clean": ["go", "clean", "-cache"],
+      "name": "go-nethttp",
+      "port": 8002,
+      "cwd": "services/go-nethttp",
+      "build": [
+        "go",
+        "build",
+        "-o",
+        "bin/api-lab-go",
+        "."
+      ],
+      "clean": [
+        "go",
+        "clean",
+        "-cache"
+      ],
       "deps": "go",
       "artifact": "bin/api-lab-go",
-      "cmd": ["bin/api-lab-go"],
-      "src": ["main.go"]
+      "cmd": [
+        "bin/api-lab-go"
+      ],
+      "src": [
+        "main.go"
+      ]
     },
     {
-      "name": "python-fastapi", "port": 8003, "cwd": "services/python-fastapi",
-      "build": null, "artifact": null, "deps": "pip", "process_local_state": true,
-      "cmd": [".venv/bin/uvicorn", "app.main:app", "--host", "127.0.0.1", "--port", "{port}",
-              "--workers", "{cpus}", "--loop", "uvloop", "--http", "httptools", "--log-level", "warning"],
-      "src": ["app/main.py"]
+      "name": "python-fastapi",
+      "port": 8003,
+      "cwd": "services/python-fastapi",
+      "build": null,
+      "artifact": null,
+      "deps": "pip",
+      "process_local_state": true,
+      "cmd": [
+        ".venv/bin/uvicorn",
+        "app.main:app",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "{port}",
+        "--workers",
+        "{cpus}",
+        "--loop",
+        "uvloop",
+        "--http",
+        "httptools",
+        "--log-level",
+        "warning"
+      ],
+      "src": [
+        "app/main.py"
+      ]
     },
     {
-      "name": "python-fastapi-1w", "port": 8004, "cwd": "services/python-fastapi",
-      "build": null, "artifact": null, "deps": "pip",
-      "cmd": [".venv/bin/uvicorn", "app.main:app", "--host", "127.0.0.1", "--port", "{port}",
-              "--workers", "1", "--loop", "uvloop", "--http", "httptools", "--log-level", "warning"],
-      "src": ["app/main.py"]
+      "name": "python-fastapi-1w",
+      "port": 8004,
+      "cwd": "services/python-fastapi",
+      "build": null,
+      "artifact": null,
+      "deps": "pip",
+      "cmd": [
+        ".venv/bin/uvicorn",
+        "app.main:app",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "{port}",
+        "--workers",
+        "1",
+        "--loop",
+        "uvloop",
+        "--http",
+        "httptools",
+        "--log-level",
+        "warning"
+      ],
+      "src": [
+        "app/main.py"
+      ]
+    },
+    {
+      "name": "rust-axum-pg",
+      "port": 8011,
+      "cwd": "services/rust-axum",
+      "build": [
+        "cargo",
+        "build",
+        "--release"
+      ],
+      "clean": [
+        "cargo",
+        "clean"
+      ],
+      "deps": "cargo",
+      "artifact": "target/release/api-lab-rust",
+      "cmd": [
+        "target/release/api-lab-rust"
+      ],
+      "src": [
+        "src/main.rs",
+        "Cargo.toml"
+      ],
+      "env": {
+        "DATABASE_URL": "postgres://apilab:apilab@127.0.0.1:5433/apilab",
+        "DB_POOL_SIZE": "16"
+      },
+      "process_local_state": false,
+      "reset": [
+        "psql",
+        "postgres://apilab:apilab@127.0.0.1:5433/apilab",
+        "-q",
+        "-f",
+        "db/schema.sql",
+        "-f",
+        "db/seed.sql"
+      ]
+    },
+    {
+      "name": "go-nethttp-pg",
+      "port": 8012,
+      "cwd": "services/go-nethttp",
+      "build": [
+        "go",
+        "build",
+        "-o",
+        "bin/api-lab-go",
+        "."
+      ],
+      "clean": [
+        "go",
+        "clean",
+        "-cache"
+      ],
+      "deps": "go",
+      "artifact": "bin/api-lab-go",
+      "cmd": [
+        "bin/api-lab-go"
+      ],
+      "src": [
+        "main.go"
+      ],
+      "env": {
+        "DATABASE_URL": "postgres://apilab:apilab@127.0.0.1:5433/apilab",
+        "DB_POOL_SIZE": "16"
+      },
+      "process_local_state": false,
+      "reset": [
+        "psql",
+        "postgres://apilab:apilab@127.0.0.1:5433/apilab",
+        "-q",
+        "-f",
+        "db/schema.sql",
+        "-f",
+        "db/seed.sql"
+      ]
+    },
+    {
+      "name": "python-fastapi-pg",
+      "port": 8013,
+      "cwd": "services/python-fastapi",
+      "build": null,
+      "artifact": null,
+      "deps": "pip",
+      "process_local_state": false,
+      "cmd": [
+        ".venv/bin/uvicorn",
+        "app.main:app",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "{port}",
+        "--workers",
+        "{cpus}",
+        "--loop",
+        "uvloop",
+        "--http",
+        "httptools",
+        "--log-level",
+        "warning"
+      ],
+      "src": [
+        "app/main.py"
+      ],
+      "env": {
+        "DATABASE_URL": "postgres://apilab:apilab@127.0.0.1:5433/apilab",
+        "DB_POOL_SIZE": "2"
+      },
+      "reset": [
+        "psql",
+        "postgres://apilab:apilab@127.0.0.1:5433/apilab",
+        "-q",
+        "-f",
+        "db/schema.sql",
+        "-f",
+        "db/seed.sql"
+      ]
+    },
+    {
+      "name": "python-fastapi-1w-pg",
+      "port": 8014,
+      "cwd": "services/python-fastapi",
+      "build": null,
+      "artifact": null,
+      "deps": "pip",
+      "cmd": [
+        ".venv/bin/uvicorn",
+        "app.main:app",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "{port}",
+        "--workers",
+        "1",
+        "--loop",
+        "uvloop",
+        "--http",
+        "httptools",
+        "--log-level",
+        "warning"
+      ],
+      "src": [
+        "app/main.py"
+      ],
+      "env": {
+        "DATABASE_URL": "postgres://apilab:apilab@127.0.0.1:5433/apilab",
+        "DB_POOL_SIZE": "16"
+      },
+      "process_local_state": false,
+      "reset": [
+        "psql",
+        "postgres://apilab:apilab@127.0.0.1:5433/apilab",
+        "-q",
+        "-f",
+        "db/schema.sql",
+        "-f",
+        "db/seed.sql"
+      ]
     }
   ]
 }

@@ -127,6 +127,41 @@ def values(summary, spread, baseline):
     return V
 
 
+def pg_values(pg, mem):
+    """pg_* placeholders from the Phase 2 aggregate, plus pgshare_* (pg ÷ in-memory)."""
+    V = {}
+    P, M = pg["implementations"], mem["implementations"]
+    V["pg_n_runs"] = str(len(pg["settings"].get("runs", [pg["run_id"]])))
+    for short, name in IMPL.items():
+        e = P.get(name + "-pg")
+        if not e:
+            continue
+        s, ms_ = e["scenarios"], M[name]["scenarios"]
+        for sc in SCEN:
+            r = s[sc]
+            V[f"pg_rps_{sc}_{short}"] = k(r["rps"])
+            V[f"pg_rpsfull_{sc}_{short}"] = n0(r["rps"])
+            V[f"pg_p50_{sc}_{short}"] = n2(r["p50_ms"])
+            V[f"pg_p99_{sc}_{short}"] = n2(r["p99_ms"])
+            V[f"pg_cpu1k_{sc}_{short}"] = n0(r["cpu_ms_per_1k_req"])
+            V[f"pg_peak_{sc}_{short}"] = n1(r["peak_rss_bytes"] / 1e6)
+            V[f"pgshare_{sc}_{short}"] = n0(100 * r["rps"] / ms_[sc]["rps"])
+        V[f"pg_idle_{short}"] = n1(e["idle_rss_bytes"] / 1e6)
+        V[f"pg_cold_{short}"] = n0(e["cold_start_median_ms"])
+        t = e["saturation"]["sat-get"]
+        V[f"pg_satget_err_{short}"] = n2(t["error_pct"])
+        V[f"pg_satget_p99_{short}"] = n0(t["p99_ms"])
+        V[f"pg_satget_rps_{short}"] = k(t["rps"])
+    rust = P["rust-axum-pg"]["scenarios"]
+    for sc in ("get", "list", "create", "mixed"):
+        for short in ("go", "py10", "py1"):
+            o = P[IMPL[short] + "-pg"]["scenarios"][sc]
+            V[f"pg_r_rps_{sc}_{short}"] = x1(rust[sc]["rps"] / o["rps"])
+            V[f"pg_r_p99_{sc}_{short}"] = x1(o["p99_ms"] / rust[sc]["p99_ms"])
+            V[f"pg_r_cpu_{sc}_{short}"] = x1(o["cpu_ms_per_1k_req"] / rust[sc]["cpu_ms_per_1k_req"])
+    return V
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("run_dir")
@@ -134,6 +169,7 @@ def main():
     ap.add_argument("--templates", default=str(ROOT / "content" / "templates"))
     ap.add_argument("-o", "--out", default=str(ROOT / "content"))
     ap.add_argument("--list", action="store_true", help="print every placeholder name and value")
+    ap.add_argument("--pg", default=str(ROOT / "results" / "aggregate-pg"), help="Phase 2 (PostgreSQL) aggregate dir; adds pg_* placeholders when present")
     args = ap.parse_args()
     run = Path(args.run_dir)
     summary = json.loads((run / "summary.json").read_text())
@@ -141,6 +177,9 @@ def main():
     bpath = Path(args.baseline) / "summary.json"
     baseline = json.loads(bpath.read_text()) if bpath.exists() else None
     V = values(summary, spread, baseline)
+    pgp = Path(args.pg) / "summary.json"
+    if pgp.exists():
+        V.update(pg_values(json.loads(pgp.read_text()), summary))
     if args.list:
         for kk in sorted(V):
             print(f"{kk:28s} {V[kk]}")

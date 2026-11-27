@@ -1,0 +1,7225 @@
+{
+ "rust-axum-pg/port": {
+  "min": 8011,
+  "max": 8011,
+  "n": 2,
+  "values": [
+   8011,
+   8011
+  ]
+ },
+ "rust-axum-pg/loc": {
+  "min": 256,
+  "max": 256,
+  "n": 2,
+  "values": [
+   256,
+   256
+  ]
+ },
+ "rust-axum-pg/deps": {
+  "min": 207,
+  "max": 207,
+  "n": 2,
+  "values": [
+   207,
+   207
+  ]
+ },
+ "rust-axum-pg/cold_start_ms": {
+  "min": 20.4,
+  "max": 32.9,
+  "n": 10,
+  "values": [
+   21.4,
+   21.3,
+   20.9,
+   20.4,
+   24.0,
+   32.9,
+   23.9,
+   23.2,
+   23.7,
+   21.1
+  ]
+ },
+ "rust-axum-pg/cold_start_median_ms": {
+  "min": 21.3,
+  "max": 23.7,
+  "n": 2,
+  "values": [
+   21.3,
+   23.7
+  ]
+ },
+ "rust-axum-pg/idle_rss_bytes": {
+  "min": 8060928.0,
+  "max": 8093696.0,
+  "n": 2,
+  "values": [
+   8093696.0,
+   8060928.0
+  ]
+ },
+ "rust-axum-pg/scenarios/health/rps": {
+  "min": 173523.4,
+  "max": 178757.7,
+  "n": 2,
+  "values": [
+   178757.7,
+   173523.4
+  ]
+ },
+ "rust-axum-pg/scenarios/health/total": {
+  "min": 1735584,
+  "max": 1788327,
+  "n": 2,
+  "values": [
+   1788327,
+   1735584
+  ]
+ },
+ "rust-axum-pg/scenarios/health/errors": {
+  "min": 0,
+  "max": 0,
+  "n": 2,
+  "values": [
+   0,
+   0
+  ]
+ },
+ "rust-axum-pg/scenarios/health/error_pct": {
+  "min": 0.0,
+  "max": 0.0,
+  "n": 2,
+  "values": [
+   0.0,
+   0.0
+  ]
+ },
+ "rust-axum-pg/scenarios/health/p50_ms": {
+  "min": 0.313,
+  "max": 0.354,
+  "n": 2,
+  "values": [
+   0.313,
+   0.354
+  ]
+ },
+ "rust-axum-pg/scenarios/health/p90_ms": {
+  "min": 0.466,
+  "max": 0.523,
+  "n": 2,
+  "values": [
+   0.523,
+   0.466
+  ]
+ },
+ "rust-axum-pg/scenarios/health/p95_ms": {
+  "min": 0.53,
+  "max": 0.65,
+  "n": 2,
+  "values": [
+   0.65,
+   0.53
+  ]
+ },
+ "rust-axum-pg/scenarios/health/p99_ms": {
+  "min": 0.786,
+  "max": 1.255,
+  "n": 2,
+  "values": [
+   1.255,
+   0.786
+  ]
+ },
+ "rust-axum-pg/scenarios/health/p999_ms": {
+  "min": 1.905,
+  "max": 3.929,
+  "n": 2,
+  "values": [
+   3.929,
+   1.905
+  ]
+ },
+ "rust-axum-pg/scenarios/health/max_ms": {
+  "min": 13.451,
+  "max": 38.237,
+  "n": 2,
+  "values": [
+   38.237,
+   13.451
+  ]
+ },
+ "rust-axum-pg/scenarios/health/mean_ms": {
+  "min": 0.357,
+  "max": 0.368,
+  "n": 2,
+  "values": [
+   0.357,
+   0.368
+  ]
+ },
+ "rust-axum-pg/scenarios/health/status_codes/200": {
+  "min": 1735584,
+  "max": 1788327,
+  "n": 2,
+  "values": [
+   1788327,
+   1735584
+  ]
+ },
+ "rust-axum-pg/scenarios/health/concurrency": {
+  "min": 64,
+  "max": 64,
+  "n": 2,
+  "values": [
+   64,
+   64
+  ]
+ },
+ "rust-axum-pg/scenarios/health/peak_rss_bytes": {
+  "min": 12369920.0,
+  "max": 12386304.0,
+  "n": 2,
+  "values": [
+   12369920.0,
+   12386304.0
+  ]
+ },
+ "rust-axum-pg/scenarios/health/idle_rss_bytes": {
+  "min": 12337152.0,
+  "max": 12353536.0,
+  "n": 2,
+  "values": [
+   12337152.0,
+   12353536.0
+  ]
+ },
+ "rust-axum-pg/scenarios/health/rss_growth_per_req_bytes": {
+  "min": 0,
+  "max": 0,
+  "n": 2,
+  "values": [
+   0,
+   0
+  ]
+ },
+ "rust-axum-pg/scenarios/health/cpu_seconds": {
+  "min": 34.39,
+  "max": 37.22,
+  "n": 2,
+  "values": [
+   34.39,
+   37.22
+  ]
+ },
+ "rust-axum-pg/scenarios/health/cpu_ms_per_1k_req": {
+  "min": 19.23,
+  "max": 21.45,
+  "n": 2,
+  "values": [
+   19.23,
+   21.45
+  ]
+ },
+ "rust-axum-pg/scenarios/health/server_cpu_util": {
+  "min": 0.338,
+  "max": 0.366,
+  "n": 2,
+  "values": [
+   0.338,
+   0.366
+  ]
+ },
+ "rust-axum-pg/scenarios/get/rps": {
+  "min": 40455.8,
+  "max": 43310.4,
+  "n": 2,
+  "values": [
+   43310.4,
+   40455.8
+  ]
+ },
+ "rust-axum-pg/scenarios/get/total": {
+  "min": 404645,
+  "max": 433170,
+  "n": 2,
+  "values": [
+   433170,
+   404645
+  ]
+ },
+ "rust-axum-pg/scenarios/get/errors": {
+  "min": 0,
+  "max": 0,
+  "n": 2,
+  "values": [
+   0,
+   0
+  ]
+ },
+ "rust-axum-pg/scenarios/get/error_pct": {
+  "min": 0.0,
+  "max": 0.0,
+  "n": 2,
+  "values": [
+   0.0,
+   0.0
+  ]
+ },
+ "rust-axum-pg/scenarios/get/p50_ms": {
+  "min": 1.462,
+  "max": 1.556,
+  "n": 2,
+  "values": [
+   1.462,
+   1.556
+  ]
+ },
+ "rust-axum-pg/scenarios/get/p90_ms": {
+  "min": 1.57,
+  "max": 1.688,
+  "n": 2,
+  "values": [
+   1.57,
+   1.688
+  ]
+ },
+ "rust-axum-pg/scenarios/get/p95_ms": {
+  "min": 1.614,
+  "max": 1.754,
+  "n": 2,
+  "values": [
+   1.614,
+   1.754
+  ]
+ },
+ "rust-axum-pg/scenarios/get/p99_ms": {
+  "min": 1.804,
+  "max": 2.111,
+  "n": 2,
+  "values": [
+   1.804,
+   2.111
+  ]
+ },
+ "rust-axum-pg/scenarios/get/p999_ms": {
+  "min": 3.721,
+  "max": 3.884,
+  "n": 2,
+  "values": [
+   3.721,
+   3.884
+  ]
+ },
+ "rust-axum-pg/scenarios/get/max_ms": {
+  "min": 9.348,
+  "max": 20.158,
+  "n": 2,
+  "values": [
+   9.348,
+   20.158
+  ]
+ },
+ "rust-axum-pg/scenarios/get/mean_ms": {
+  "min": 1.477,
+  "max": 1.581,
+  "n": 2,
+  "values": [
+   1.477,
+   1.581
+  ]
+ },
+ "rust-axum-pg/scenarios/get/status_codes/200": {
+  "min": 404645,
+  "max": 433170,
+  "n": 2,
+  "values": [
+   433170,
+   404645
+  ]
+ },
+ "rust-axum-pg/scenarios/get/concurrency": {
+  "min": 64,
+  "max": 64,
+  "n": 2,
+  "values": [
+   64,
+   64
+  ]
+ },
+ "rust-axum-pg/scenarios/get/peak_rss_bytes": {
+  "min": 11681792.0,
+  "max": 11829248.0,
+  "n": 2,
+  "values": [
+   11681792.0,
+   11829248.0
+  ]
+ },
+ "rust-axum-pg/scenarios/get/idle_rss_bytes": {
+  "min": 11583488.0,
+  "max": 11632640.0,
+  "n": 2,
+  "values": [
+   11583488.0,
+   11632640.0
+  ]
+ },
+ "rust-axum-pg/scenarios/get/rss_growth_per_req_bytes": {
+  "min": 0,
+  "max": 0,
+  "n": 2,
+  "values": [
+   0,
+   0
+  ]
+ },
+ "rust-axum-pg/scenarios/get/cpu_seconds": {
+  "min": 32.26,
+  "max": 32.97,
+  "n": 2,
+  "values": [
+   32.97,
+   32.26
+  ]
+ },
+ "rust-axum-pg/scenarios/get/cpu_ms_per_1k_req": {
+  "min": 76.11,
+  "max": 79.72,
+  "n": 2,
+  "values": [
+   76.11,
+   79.72
+  ]
+ },
+ "rust-axum-pg/scenarios/get/server_cpu_util": {
+  "min": 0.321,
+  "max": 0.328,
+  "n": 2,
+  "values": [
+   0.328,
+   0.321
+  ]
+ },
+ "rust-axum-pg/scenarios/list/rps": {
+  "min": 17088.5,
+  "max": 18370.7,
+  "n": 2,
+  "values": [
+   18370.7,
+   17088.5
+  ]
+ },
+ "rust-axum-pg/scenarios/list/total": {
+  "min": 170873,
+  "max": 183711,
+  "n": 2,
+  "values": [
+   183711,
+   170873
+  ]
+ },
+ "rust-axum-pg/scenarios/list/errors": {
+  "min": 0,
+  "max": 0,
+  "n": 2,
+  "values": [
+   0,
+   0
+  ]
+ },
+ "rust-axum-pg/scenarios/list/error_pct": {
+  "min": 0.0,
+  "max": 0.0,
+  "n": 2,
+  "values": [
+   0.0,
+   0.0
+  ]
+ },
+ "rust-axum-pg/scenarios/list/p50_ms": {
+  "min": 3.291,
+  "max": 3.618,
+  "n": 2,
+  "values": [
+   3.291,
+   3.618
+  ]
+ },
+ "rust-axum-pg/scenarios/list/p90_ms": {
+  "min": 3.977,
+  "max": 4.155,
+  "n": 2,
+  "values": [
+   3.977,
+   4.155
+  ]
+ },
+ "rust-axum-pg/scenarios/list/p95_ms": {
+  "min": 4.439,
+  "max": 4.454,
+  "n": 2,
+  "values": [
+   4.439,
+   4.454
+  ]
+ },
+ "rust-axum-pg/scenarios/list/p99_ms": {
+  "min": 6.17,
+  "max": 6.526,
+  "n": 2,
+  "values": [
+   6.526,
+   6.17
+  ]
+ },
+ "rust-axum-pg/scenarios/list/p999_ms": {
+  "min": 11.958,
+  "max": 14.966,
+  "n": 2,
+  "values": [
+   14.966,
+   11.958
+  ]
+ },
+ "rust-axum-pg/scenarios/list/max_ms": {
+  "min": 32.153,
+  "max": 51.763,
+  "n": 2,
+  "values": [
+   51.763,
+   32.153
+  ]
+ },
+ "rust-axum-pg/scenarios/list/mean_ms": {
+  "min": 3.483,
+  "max": 3.745,
+  "n": 2,
+  "values": [
+   3.483,
+   3.745
+  ]
+ },
+ "rust-axum-pg/scenarios/list/status_codes/200": {
+  "min": 170873,
+  "max": 183711,
+  "n": 2,
+  "values": [
+   183711,
+   170873
+  ]
+ },
+ "rust-axum-pg/scenarios/list/concurrency": {
+  "min": 64,
+  "max": 64,
+  "n": 2,
+  "values": [
+   64,
+   64
+  ]
+ },
+ "rust-axum-pg/scenarios/list/peak_rss_bytes": {
+  "min": 14434304.0,
+  "max": 14532608.0,
+  "n": 2,
+  "values": [
+   14434304.0,
+   14532608.0
+  ]
+ },
+ "rust-axum-pg/scenarios/list/idle_rss_bytes": {
+  "min": 14303232.0,
+  "max": 14368768.0,
+  "n": 2,
+  "values": [
+   14368768.0,
+   14303232.0
+  ]
+ },
+ "rust-axum-pg/scenarios/list/rss_growth_per_req_bytes": {
+  "min": 0,
+  "max": 1,
+  "n": 2,
+  "values": [
+   0,
+   1
+  ]
+ },
+ "rust-axum-pg/scenarios/list/cpu_seconds": {
+  "min": 58.04,
+  "max": 58.3,
+  "n": 2,
+  "values": [
+   58.04,
+   58.3
+  ]
+ },
+ "rust-axum-pg/scenarios/list/cpu_ms_per_1k_req": {
+  "min": 315.93,
+  "max": 341.19,
+  "n": 2,
+  "values": [
+   315.93,
+   341.19
+  ]
+ },
+ "rust-axum-pg/scenarios/list/server_cpu_util": {
+  "min": 0.579,
+  "max": 0.581,
+  "n": 2,
+  "values": [
+   0.579,
+   0.581
+  ]
+ },
+ "rust-axum-pg/scenarios/create/rps": {
+  "min": 33813.6,
+  "max": 37416.0,
+  "n": 2,
+  "values": [
+   37416.0,
+   33813.6
+  ]
+ },
+ "rust-axum-pg/scenarios/create/total": {
+  "min": 338164,
+  "max": 374224,
+  "n": 2,
+  "values": [
+   374224,
+   338164
+  ]
+ },
+ "rust-axum-pg/scenarios/create/errors": {
+  "min": 0,
+  "max": 0,
+  "n": 2,
+  "values": [
+   0,
+   0
+  ]
+ },
+ "rust-axum-pg/scenarios/create/error_pct": {
+  "min": 0.0,
+  "max": 0.0,
+  "n": 2,
+  "values": [
+   0.0,
+   0.0
+  ]
+ },
+ "rust-axum-pg/scenarios/create/p50_ms": {
+  "min": 1.682,
+  "max": 1.883,
+  "n": 2,
+  "values": [
+   1.682,
+   1.883
+  ]
+ },
+ "rust-axum-pg/scenarios/create/p90_ms": {
+  "min": 1.861,
+  "max": 2.053,
+  "n": 2,
+  "values": [
+   1.861,
+   2.053
+  ]
+ },
+ "rust-axum-pg/scenarios/create/p95_ms": {
+  "min": 1.939,
+  "max": 2.107,
+  "n": 2,
+  "values": [
+   1.939,
+   2.107
+  ]
+ },
+ "rust-axum-pg/scenarios/create/p99_ms": {
+  "min": 2.229,
+  "max": 2.394,
+  "n": 2,
+  "values": [
+   2.394,
+   2.229
+  ]
+ },
+ "rust-axum-pg/scenarios/create/p999_ms": {
+  "min": 2.575,
+  "max": 4.361,
+  "n": 2,
+  "values": [
+   4.361,
+   2.575
+  ]
+ },
+ "rust-axum-pg/scenarios/create/max_ms": {
+  "min": 6.28,
+  "max": 26.627,
+  "n": 2,
+  "values": [
+   26.627,
+   6.28
+  ]
+ },
+ "rust-axum-pg/scenarios/create/mean_ms": {
+  "min": 1.709,
+  "max": 1.891,
+  "n": 2,
+  "values": [
+   1.709,
+   1.891
+  ]
+ },
+ "rust-axum-pg/scenarios/create/status_codes/201": {
+  "min": 338164,
+  "max": 374224,
+  "n": 2,
+  "values": [
+   374224,
+   338164
+  ]
+ },
+ "rust-axum-pg/scenarios/create/concurrency": {
+  "min": 64,
+  "max": 64,
+  "n": 2,
+  "values": [
+   64,
+   64
+  ]
+ },
+ "rust-axum-pg/scenarios/create/peak_rss_bytes": {
+  "min": 11862016.0,
+  "max": 11878400.0,
+  "n": 2,
+  "values": [
+   11862016.0,
+   11878400.0
+  ]
+ },
+ "rust-axum-pg/scenarios/create/idle_rss_bytes": {
+  "min": 11665408.0,
+  "max": 11796480.0,
+  "n": 2,
+  "values": [
+   11796480.0,
+   11665408.0
+  ]
+ },
+ "rust-axum-pg/scenarios/create/rss_growth_per_req_bytes": {
+  "min": 0,
+  "max": 1,
+  "n": 2,
+  "values": [
+   0,
+   1
+  ]
+ },
+ "rust-axum-pg/scenarios/create/cpu_seconds": {
+  "min": 31.01,
+  "max": 31.37,
+  "n": 2,
+  "values": [
+   31.37,
+   31.01
+  ]
+ },
+ "rust-axum-pg/scenarios/create/cpu_ms_per_1k_req": {
+  "min": 83.83,
+  "max": 91.7,
+  "n": 2,
+  "values": [
+   83.83,
+   91.7
+  ]
+ },
+ "rust-axum-pg/scenarios/create/server_cpu_util": {
+  "min": 0.309,
+  "max": 0.312,
+  "n": 2,
+  "values": [
+   0.312,
+   0.309
+  ]
+ },
+ "rust-axum-pg/scenarios/cpu/rps": {
+  "min": 20524.7,
+  "max": 23267.2,
+  "n": 2,
+  "values": [
+   23267.2,
+   20524.7
+  ]
+ },
+ "rust-axum-pg/scenarios/cpu/total": {
+  "min": 205212,
+  "max": 232741,
+  "n": 2,
+  "values": [
+   232741,
+   205212
+  ]
+ },
+ "rust-axum-pg/scenarios/cpu/errors": {
+  "min": 0,
+  "max": 0,
+  "n": 2,
+  "values": [
+   0,
+   0
+  ]
+ },
+ "rust-axum-pg/scenarios/cpu/error_pct": {
+  "min": 0.0,
+  "max": 0.0,
+  "n": 2,
+  "values": [
+   0.0,
+   0.0
+  ]
+ },
+ "rust-axum-pg/scenarios/cpu/p50_ms": {
+  "min": 2.639,
+  "max": 3.04,
+  "n": 2,
+  "values": [
+   2.639,
+   3.04
+  ]
+ },
+ "rust-axum-pg/scenarios/cpu/p90_ms": {
+  "min": 4.13,
+  "max": 4.589,
+  "n": 2,
+  "values": [
+   4.13,
+   4.589
+  ]
+ },
+ "rust-axum-pg/scenarios/cpu/p95_ms": {
+  "min": 4.656,
+  "max": 5.09,
+  "n": 2,
+  "values": [
+   4.656,
+   5.09
+  ]
+ },
+ "rust-axum-pg/scenarios/cpu/p99_ms": {
+  "min": 5.795,
+  "max": 6.201,
+  "n": 2,
+  "values": [
+   5.795,
+   6.201
+  ]
+ },
+ "rust-axum-pg/scenarios/cpu/p999_ms": {
+  "min": 8.189,
+  "max": 8.832,
+  "n": 2,
+  "values": [
+   8.189,
+   8.832
+  ]
+ },
+ "rust-axum-pg/scenarios/cpu/max_ms": {
+  "min": 32.929,
+  "max": 33.882,
+  "n": 2,
+  "values": [
+   33.882,
+   32.929
+  ]
+ },
+ "rust-axum-pg/scenarios/cpu/mean_ms": {
+  "min": 2.75,
+  "max": 3.117,
+  "n": 2,
+  "values": [
+   2.75,
+   3.117
+  ]
+ },
+ "rust-axum-pg/scenarios/cpu/status_codes/200": {
+  "min": 205212,
+  "max": 232741,
+  "n": 2,
+  "values": [
+   232741,
+   205212
+  ]
+ },
+ "rust-axum-pg/scenarios/cpu/concurrency": {
+  "min": 64,
+  "max": 64,
+  "n": 2,
+  "values": [
+   64,
+   64
+  ]
+ },
+ "rust-axum-pg/scenarios/cpu/peak_rss_bytes": {
+  "min": 11321344.0,
+  "max": 11419648.0,
+  "n": 2,
+  "values": [
+   11419648.0,
+   11321344.0
+  ]
+ },
+ "rust-axum-pg/scenarios/cpu/idle_rss_bytes": {
+  "min": 11272192.0,
+  "max": 11288576.0,
+  "n": 2,
+  "values": [
+   11272192.0,
+   11288576.0
+  ]
+ },
+ "rust-axum-pg/scenarios/cpu/rss_growth_per_req_bytes": {
+  "min": 0,
+  "max": 1,
+  "n": 2,
+  "values": [
+   1,
+   0
+  ]
+ },
+ "rust-axum-pg/scenarios/cpu/cpu_seconds": {
+  "min": 87.12,
+  "max": 88.93,
+  "n": 2,
+  "values": [
+   87.12,
+   88.93
+  ]
+ },
+ "rust-axum-pg/scenarios/cpu/cpu_ms_per_1k_req": {
+  "min": 374.32,
+  "max": 433.36,
+  "n": 2,
+  "values": [
+   374.32,
+   433.36
+  ]
+ },
+ "rust-axum-pg/scenarios/cpu/server_cpu_util": {
+  "min": 0.868,
+  "max": 0.886,
+  "n": 2,
+  "values": [
+   0.868,
+   0.886
+  ]
+ },
+ "rust-axum-pg/scenarios/io/rps": {
+  "min": 5181.7,
+  "max": 5226.7,
+  "n": 2,
+  "values": [
+   5181.7,
+   5226.7
+  ]
+ },
+ "rust-axum-pg/scenarios/io/total": {
+  "min": 51776,
+  "max": 52224,
+  "n": 2,
+  "values": [
+   51776,
+   52224
+  ]
+ },
+ "rust-axum-pg/scenarios/io/errors": {
+  "min": 0,
+  "max": 0,
+  "n": 2,
+  "values": [
+   0,
+   0
+  ]
+ },
+ "rust-axum-pg/scenarios/io/error_pct": {
+  "min": 0.0,
+  "max": 0.0,
+  "n": 2,
+  "values": [
+   0.0,
+   0.0
+  ]
+ },
+ "rust-axum-pg/scenarios/io/p50_ms": {
+  "min": 12.213,
+  "max": 12.39,
+  "n": 2,
+  "values": [
+   12.39,
+   12.213
+  ]
+ },
+ "rust-axum-pg/scenarios/io/p90_ms": {
+  "min": 12.976,
+  "max": 13.07,
+  "n": 2,
+  "values": [
+   13.07,
+   12.976
+  ]
+ },
+ "rust-axum-pg/scenarios/io/p95_ms": {
+  "min": 13.142,
+  "max": 13.258,
+  "n": 2,
+  "values": [
+   13.258,
+   13.142
+  ]
+ },
+ "rust-axum-pg/scenarios/io/p99_ms": {
+  "min": 13.421,
+  "max": 13.559,
+  "n": 2,
+  "values": [
+   13.559,
+   13.421
+  ]
+ },
+ "rust-axum-pg/scenarios/io/p999_ms": {
+  "min": 14.377,
+  "max": 23.679,
+  "n": 2,
+  "values": [
+   14.377,
+   23.679
+  ]
+ },
+ "rust-axum-pg/scenarios/io/max_ms": {
+  "min": 14.63,
+  "max": 24.071,
+  "n": 2,
+  "values": [
+   14.63,
+   24.071
+  ]
+ },
+ "rust-axum-pg/scenarios/io/mean_ms": {
+  "min": 12.255,
+  "max": 12.349,
+  "n": 2,
+  "values": [
+   12.349,
+   12.255
+  ]
+ },
+ "rust-axum-pg/scenarios/io/status_codes/200": {
+  "min": 51776,
+  "max": 52224,
+  "n": 2,
+  "values": [
+   51776,
+   52224
+  ]
+ },
+ "rust-axum-pg/scenarios/io/concurrency": {
+  "min": 64,
+  "max": 64,
+  "n": 2,
+  "values": [
+   64,
+   64
+  ]
+ },
+ "rust-axum-pg/scenarios/io/peak_rss_bytes": {
+  "min": 11255808.0,
+  "max": 11354112.0,
+  "n": 2,
+  "values": [
+   11255808.0,
+   11354112.0
+  ]
+ },
+ "rust-axum-pg/scenarios/io/idle_rss_bytes": {
+  "min": 11108352.0,
+  "max": 11141120.0,
+  "n": 2,
+  "values": [
+   11141120.0,
+   11108352.0
+  ]
+ },
+ "rust-axum-pg/scenarios/io/rss_growth_per_req_bytes": {
+  "min": 2,
+  "max": 5,
+  "n": 2,
+  "values": [
+   2,
+   5
+  ]
+ },
+ "rust-axum-pg/scenarios/io/cpu_seconds": {
+  "min": 1.58,
+  "max": 1.67,
+  "n": 2,
+  "values": [
+   1.58,
+   1.67
+  ]
+ },
+ "rust-axum-pg/scenarios/io/cpu_ms_per_1k_req": {
+  "min": 30.52,
+  "max": 31.98,
+  "n": 2,
+  "values": [
+   30.52,
+   31.98
+  ]
+ },
+ "rust-axum-pg/scenarios/io/server_cpu_util": {
+  "min": 0.016,
+  "max": 0.017,
+  "n": 2,
+  "values": [
+   0.016,
+   0.017
+  ]
+ },
+ "rust-axum-pg/scenarios/mixed/rps": {
+  "min": 35891.5,
+  "max": 37066.2,
+  "n": 2,
+  "values": [
+   37066.2,
+   35891.5
+  ]
+ },
+ "rust-axum-pg/scenarios/mixed/total": {
+  "min": 358947,
+  "max": 370678,
+  "n": 2,
+  "values": [
+   370678,
+   358947
+  ]
+ },
+ "rust-axum-pg/scenarios/mixed/errors": {
+  "min": 0,
+  "max": 0,
+  "n": 2,
+  "values": [
+   0,
+   0
+  ]
+ },
+ "rust-axum-pg/scenarios/mixed/error_pct": {
+  "min": 0.0,
+  "max": 0.0,
+  "n": 2,
+  "values": [
+   0.0,
+   0.0
+  ]
+ },
+ "rust-axum-pg/scenarios/mixed/p50_ms": {
+  "min": 1.711,
+  "max": 1.778,
+  "n": 2,
+  "values": [
+   1.711,
+   1.778
+  ]
+ },
+ "rust-axum-pg/scenarios/mixed/p90_ms": {
+  "min": 1.864,
+  "max": 1.996,
+  "n": 2,
+  "values": [
+   1.864,
+   1.996
+  ]
+ },
+ "rust-axum-pg/scenarios/mixed/p95_ms": {
+  "min": 1.922,
+  "max": 2.076,
+  "n": 2,
+  "values": [
+   1.922,
+   2.076
+  ]
+ },
+ "rust-axum-pg/scenarios/mixed/p99_ms": {
+  "min": 2.082,
+  "max": 2.199,
+  "n": 2,
+  "values": [
+   2.082,
+   2.199
+  ]
+ },
+ "rust-axum-pg/scenarios/mixed/p999_ms": {
+  "min": 2.432,
+  "max": 2.682,
+  "n": 2,
+  "values": [
+   2.682,
+   2.432
+  ]
+ },
+ "rust-axum-pg/scenarios/mixed/max_ms": {
+  "min": 5.281,
+  "max": 8.469,
+  "n": 2,
+  "values": [
+   8.469,
+   5.281
+  ]
+ },
+ "rust-axum-pg/scenarios/mixed/mean_ms": {
+  "min": 1.726,
+  "max": 1.782,
+  "n": 2,
+  "values": [
+   1.726,
+   1.782
+  ]
+ },
+ "rust-axum-pg/scenarios/mixed/status_codes/200": {
+  "min": 358947,
+  "max": 370678,
+  "n": 2,
+  "values": [
+   370678,
+   358947
+  ]
+ },
+ "rust-axum-pg/scenarios/mixed/concurrency": {
+  "min": 64,
+  "max": 64,
+  "n": 2,
+  "values": [
+   64,
+   64
+  ]
+ },
+ "rust-axum-pg/scenarios/mixed/peak_rss_bytes": {
+  "min": 11763712.0,
+  "max": 11894784.0,
+  "n": 2,
+  "values": [
+   11894784.0,
+   11763712.0
+  ]
+ },
+ "rust-axum-pg/scenarios/mixed/idle_rss_bytes": {
+  "min": 11714560.0,
+  "max": 11730944.0,
+  "n": 2,
+  "values": [
+   11714560.0,
+   11730944.0
+  ]
+ },
+ "rust-axum-pg/scenarios/mixed/rss_growth_per_req_bytes": {
+  "min": 0,
+  "max": 0,
+  "n": 2,
+  "values": [
+   0,
+   0
+  ]
+ },
+ "rust-axum-pg/scenarios/mixed/cpu_seconds": {
+  "min": 36.51,
+  "max": 36.98,
+  "n": 2,
+  "values": [
+   36.51,
+   36.98
+  ]
+ },
+ "rust-axum-pg/scenarios/mixed/cpu_ms_per_1k_req": {
+  "min": 98.5,
+  "max": 103.02,
+  "n": 2,
+  "values": [
+   98.5,
+   103.02
+  ]
+ },
+ "rust-axum-pg/scenarios/mixed/server_cpu_util": {
+  "min": 0.363,
+  "max": 0.368,
+  "n": 2,
+  "values": [
+   0.363,
+   0.368
+  ]
+ },
+ "rust-axum-pg/saturation/sat-get/rps": {
+  "min": 36838.2,
+  "max": 38297.7,
+  "n": 2,
+  "values": [
+   38297.7,
+   36838.2
+  ]
+ },
+ "rust-axum-pg/saturation/sat-get/total": {
+  "min": 367569,
+  "max": 382320,
+  "n": 2,
+  "values": [
+   382320,
+   367569
+  ]
+ },
+ "rust-axum-pg/saturation/sat-get/errors": {
+  "min": 0,
+  "max": 0,
+  "n": 2,
+  "values": [
+   0,
+   0
+  ]
+ },
+ "rust-axum-pg/saturation/sat-get/error_pct": {
+  "min": 0.0,
+  "max": 0.0,
+  "n": 2,
+  "values": [
+   0.0,
+   0.0
+  ]
+ },
+ "rust-axum-pg/saturation/sat-get/p50_ms": {
+  "min": 26.006,
+  "max": 27.665,
+  "n": 2,
+  "values": [
+   26.006,
+   27.665
+  ]
+ },
+ "rust-axum-pg/saturation/sat-get/p90_ms": {
+  "min": 28.058,
+  "max": 29.165,
+  "n": 2,
+  "values": [
+   28.058,
+   29.165
+  ]
+ },
+ "rust-axum-pg/saturation/sat-get/p95_ms": {
+  "min": 28.767,
+  "max": 29.408,
+  "n": 2,
+  "values": [
+   28.767,
+   29.408
+  ]
+ },
+ "rust-axum-pg/saturation/sat-get/p99_ms": {
+  "min": 29.905,
+  "max": 37.743,
+  "n": 2,
+  "values": [
+   37.743,
+   29.905
+  ]
+ },
+ "rust-axum-pg/saturation/sat-get/p999_ms": {
+  "min": 49.062,
+  "max": 80.984,
+  "n": 2,
+  "values": [
+   49.062,
+   80.984
+  ]
+ },
+ "rust-axum-pg/saturation/sat-get/max_ms": {
+  "min": 84.587,
+  "max": 183.35,
+  "n": 2,
+  "values": [
+   84.587,
+   183.35
+  ]
+ },
+ "rust-axum-pg/saturation/sat-get/mean_ms": {
+  "min": 26.107,
+  "max": 27.149,
+  "n": 2,
+  "values": [
+   26.107,
+   27.149
+  ]
+ },
+ "rust-axum-pg/saturation/sat-get/status_codes/200": {
+  "min": 367569,
+  "max": 382320,
+  "n": 2,
+  "values": [
+   382320,
+   367569
+  ]
+ },
+ "rust-axum-pg/saturation/sat-get/concurrency": {
+  "min": 1000,
+  "max": 1000,
+  "n": 2,
+  "values": [
+   1000,
+   1000
+  ]
+ },
+ "rust-axum-pg/saturation/sat-get/peak_rss_bytes": {
+  "min": 51249152.0,
+  "max": 51363840.0,
+  "n": 2,
+  "values": [
+   51363840.0,
+   51249152.0
+  ]
+ },
+ "rust-axum-pg/saturation/sat-get/idle_rss_bytes": {
+  "min": 8044544.0,
+  "max": 8060928.0,
+  "n": 2,
+  "values": [
+   8044544.0,
+   8060928.0
+  ]
+ },
+ "rust-axum-pg/saturation/sat-get/rss_growth_per_req_bytes": {
+  "min": 113,
+  "max": 117,
+  "n": 2,
+  "values": [
+   113,
+   117
+  ]
+ },
+ "rust-axum-pg/saturation/sat-get/cpu_seconds": {
+  "min": 31.68,
+  "max": 31.81,
+  "n": 2,
+  "values": [
+   31.68,
+   31.81
+  ]
+ },
+ "rust-axum-pg/saturation/sat-get/cpu_ms_per_1k_req": {
+  "min": 82.86,
+  "max": 86.54,
+  "n": 2,
+  "values": [
+   82.86,
+   86.54
+  ]
+ },
+ "rust-axum-pg/saturation/sat-get/server_cpu_util": {
+  "min": 0.315,
+  "max": 0.316,
+  "n": 2,
+  "values": [
+   0.315,
+   0.316
+  ]
+ },
+ "rust-axum-pg/saturation/sat-cpu/rps": {
+  "min": 4037.1,
+  "max": 4733.7,
+  "n": 2,
+  "values": [
+   4733.7,
+   4037.1
+  ]
+ },
+ "rust-axum-pg/saturation/sat-cpu/total": {
+  "min": 39894,
+  "max": 46929,
+  "n": 2,
+  "values": [
+   46929,
+   39894
+  ]
+ },
+ "rust-axum-pg/saturation/sat-cpu/errors": {
+  "min": 0,
+  "max": 0,
+  "n": 2,
+  "values": [
+   0,
+   0
+  ]
+ },
+ "rust-axum-pg/saturation/sat-cpu/error_pct": {
+  "min": 0.0,
+  "max": 0.0,
+  "n": 2,
+  "values": [
+   0.0,
+   0.0
+  ]
+ },
+ "rust-axum-pg/saturation/sat-cpu/p50_ms": {
+  "min": 97.78,
+  "max": 113.25,
+  "n": 2,
+  "values": [
+   97.78,
+   113.25
+  ]
+ },
+ "rust-axum-pg/saturation/sat-cpu/p90_ms": {
+  "min": 184.306,
+  "max": 218.843,
+  "n": 2,
+  "values": [
+   184.306,
+   218.843
+  ]
+ },
+ "rust-axum-pg/saturation/sat-cpu/p95_ms": {
+  "min": 214.346,
+  "max": 260.601,
+  "n": 2,
+  "values": [
+   214.346,
+   260.601
+  ]
+ },
+ "rust-axum-pg/saturation/sat-cpu/p99_ms": {
+  "min": 275.879,
+  "max": 345.367,
+  "n": 2,
+  "values": [
+   275.879,
+   345.367
+  ]
+ },
+ "rust-axum-pg/saturation/sat-cpu/p999_ms": {
+  "min": 347.03,
+  "max": 456.096,
+  "n": 2,
+  "values": [
+   347.03,
+   456.096
+  ]
+ },
+ "rust-axum-pg/saturation/sat-cpu/max_ms": {
+  "min": 408.303,
+  "max": 511.681,
+  "n": 2,
+  "values": [
+   408.303,
+   511.681
+  ]
+ },
+ "rust-axum-pg/saturation/sat-cpu/mean_ms": {
+  "min": 105.865,
+  "max": 124.365,
+  "n": 2,
+  "values": [
+   105.865,
+   124.365
+  ]
+ },
+ "rust-axum-pg/saturation/sat-cpu/status_codes/200": {
+  "min": 39894,
+  "max": 46929,
+  "n": 2,
+  "values": [
+   46929,
+   39894
+  ]
+ },
+ "rust-axum-pg/saturation/sat-cpu/concurrency": {
+  "min": 500,
+  "max": 500,
+  "n": 2,
+  "values": [
+   500,
+   500
+  ]
+ },
+ "rust-axum-pg/saturation/sat-cpu/peak_rss_bytes": {
+  "min": 28737536.0,
+  "max": 28835840.0,
+  "n": 2,
+  "values": [
+   28835840.0,
+   28737536.0
+  ]
+ },
+ "rust-axum-pg/saturation/sat-cpu/idle_rss_bytes": {
+  "min": 8044544.0,
+  "max": 8060928.0,
+  "n": 2,
+  "values": [
+   8060928.0,
+   8044544.0
+  ]
+ },
+ "rust-axum-pg/saturation/sat-cpu/rss_growth_per_req_bytes": {
+  "min": 443,
+  "max": 519,
+  "n": 2,
+  "values": [
+   443,
+   519
+  ]
+ },
+ "rust-axum-pg/saturation/sat-cpu/cpu_seconds": {
+  "min": 94.76,
+  "max": 96.45,
+  "n": 2,
+  "values": [
+   94.76,
+   96.45
+  ]
+ },
+ "rust-axum-pg/saturation/sat-cpu/cpu_ms_per_1k_req": {
+  "min": 2019.22,
+  "max": 2417.66,
+  "n": 2,
+  "values": [
+   2019.22,
+   2417.66
+  ]
+ },
+ "rust-axum-pg/saturation/sat-cpu/server_cpu_util": {
+  "min": 0.944,
+  "max": 0.962,
+  "n": 2,
+  "values": [
+   0.944,
+   0.962
+  ]
+ },
+ "rust-axum-pg/connections/connections": {
+  "min": 1000,
+  "max": 1000,
+  "n": 2,
+  "values": [
+   1000,
+   1000
+  ]
+ },
+ "rust-axum-pg/connections/failed": {
+  "min": 0,
+  "max": 0,
+  "n": 2,
+  "values": [
+   0,
+   0
+  ]
+ },
+ "rust-axum-pg/connections/idle_rss_bytes": {
+  "min": 8028160.0,
+  "max": 8044544.0,
+  "n": 2,
+  "values": [
+   8044544.0,
+   8028160.0
+  ]
+ },
+ "rust-axum-pg/connections/held_rss_bytes": {
+  "min": 40386560.0,
+  "max": 40419328.0,
+  "n": 2,
+  "values": [
+   40419328.0,
+   40386560.0
+  ]
+ },
+ "rust-axum-pg/connections/after_close_rss_bytes": {
+  "min": 40386560.0,
+  "max": 40435712.0,
+  "n": 2,
+  "values": [
+   40435712.0,
+   40386560.0
+  ]
+ },
+ "rust-axum-pg/connections/bytes_per_conn": {
+  "min": 32358,
+  "max": 32375,
+  "n": 2,
+  "values": [
+   32375,
+   32358
+  ]
+ },
+ "rust-axum-pg/recovery/spike/concurrency": {
+  "min": 256,
+  "max": 256,
+  "n": 2,
+  "values": [
+   256,
+   256
+  ]
+ },
+ "rust-axum-pg/recovery/spike/seconds": {
+  "min": 5,
+  "max": 5,
+  "n": 2,
+  "values": [
+   5,
+   5
+  ]
+ },
+ "rust-axum-pg/recovery/spike/rps": {
+  "min": 17775,
+  "max": 17949,
+  "n": 2,
+  "values": [
+   17949,
+   17775
+  ]
+ },
+ "rust-axum-pg/recovery/spike/errors": {
+  "min": 0,
+  "max": 0,
+  "n": 2,
+  "values": [
+   0,
+   0
+  ]
+ },
+ "rust-axum-pg/recovery/idle_rss_bytes": {
+  "min": 8077312.0,
+  "max": 8093696.0,
+  "n": 2,
+  "values": [
+   8093696.0,
+   8077312.0
+  ]
+ },
+ "rust-axum-pg/recovery/peak_rss_bytes": {
+  "min": 22347776.0,
+  "max": 22544384.0,
+  "n": 2,
+  "values": [
+   22347776.0,
+   22544384.0
+  ]
+ },
+ "rust-axum-pg/recovery/rss_after_spike_bytes": {
+  "min": 22347776.0,
+  "max": 22544384.0,
+  "n": 2,
+  "values": [
+   22347776.0,
+   22544384.0
+  ]
+ },
+ "rust-axum-pg/recovery/rss_after_settle_bytes": {
+  "min": 22347776.0,
+  "max": 22544384.0,
+  "n": 2,
+  "values": [
+   22347776.0,
+   22544384.0
+  ]
+ },
+ "rust-axum-pg/recovery/settle_s": {
+  "min": 10,
+  "max": 10,
+  "n": 2,
+  "values": [
+   10,
+   10
+  ]
+ },
+ "rust-axum-pg/recovery/retained_pct": {
+  "min": 100.0,
+  "max": 100.0,
+  "n": 2,
+  "values": [
+   100.0,
+   100.0
+  ]
+ },
+ "rust-axum-pg/recovery/probe_pre/p50_ms": {
+  "min": 0.176,
+  "max": 0.178,
+  "n": 2,
+  "values": [
+   0.178,
+   0.176
+  ]
+ },
+ "rust-axum-pg/recovery/probe_pre/p99_ms": {
+  "min": 0.957,
+  "max": 0.976,
+  "n": 2,
+  "values": [
+   0.957,
+   0.976
+  ]
+ },
+ "rust-axum-pg/recovery/probe_after_spike/p50_ms": {
+  "min": 0.153,
+  "max": 0.154,
+  "n": 2,
+  "values": [
+   0.154,
+   0.153
+  ]
+ },
+ "rust-axum-pg/recovery/probe_after_spike/p99_ms": {
+  "min": 0.245,
+  "max": 0.299,
+  "n": 2,
+  "values": [
+   0.245,
+   0.299
+  ]
+ },
+ "rust-axum-pg/recovery/probe_after_settle/p50_ms": {
+  "min": 0.104,
+  "max": 0.153,
+  "n": 2,
+  "values": [
+   0.104,
+   0.153
+  ]
+ },
+ "rust-axum-pg/recovery/probe_after_settle/p99_ms": {
+  "min": 0.348,
+  "max": 0.409,
+  "n": 2,
+  "values": [
+   0.409,
+   0.348
+  ]
+ },
+ "go-nethttp-pg/port": {
+  "min": 8012,
+  "max": 8012,
+  "n": 2,
+  "values": [
+   8012,
+   8012
+  ]
+ },
+ "go-nethttp-pg/loc": {
+  "min": 283,
+  "max": 283,
+  "n": 2,
+  "values": [
+   283,
+   283
+  ]
+ },
+ "go-nethttp-pg/deps": {
+  "min": 15,
+  "max": 15,
+  "n": 2,
+  "values": [
+   15,
+   15
+  ]
+ },
+ "go-nethttp-pg/cold_start_ms": {
+  "min": 10.0,
+  "max": 28.9,
+  "n": 10,
+  "values": [
+   28.9,
+   10.3,
+   10.6,
+   12.5,
+   13.0,
+   28.4,
+   10.0,
+   10.6,
+   10.5,
+   10.1
+  ]
+ },
+ "go-nethttp-pg/cold_start_median_ms": {
+  "min": 10.5,
+  "max": 12.5,
+  "n": 2,
+  "values": [
+   12.5,
+   10.5
+  ]
+ },
+ "go-nethttp-pg/idle_rss_bytes": {
+  "min": 17121280.0,
+  "max": 17448960.0,
+  "n": 2,
+  "values": [
+   17448960.0,
+   17121280.0
+  ]
+ },
+ "go-nethttp-pg/scenarios/health/rps": {
+  "min": 143142.9,
+  "max": 144253.0,
+  "n": 2,
+  "values": [
+   144253.0,
+   143142.9
+  ]
+ },
+ "go-nethttp-pg/scenarios/health/total": {
+  "min": 1431979,
+  "max": 1442932,
+  "n": 2,
+  "values": [
+   1442932,
+   1431979
+  ]
+ },
+ "go-nethttp-pg/scenarios/health/errors": {
+  "min": 0,
+  "max": 0,
+  "n": 2,
+  "values": [
+   0,
+   0
+  ]
+ },
+ "go-nethttp-pg/scenarios/health/error_pct": {
+  "min": 0.0,
+  "max": 0.0,
+  "n": 2,
+  "values": [
+   0.0,
+   0.0
+  ]
+ },
+ "go-nethttp-pg/scenarios/health/p50_ms": {
+  "min": 0.372,
+  "max": 0.379,
+  "n": 2,
+  "values": [
+   0.379,
+   0.372
+  ]
+ },
+ "go-nethttp-pg/scenarios/health/p90_ms": {
+  "min": 0.676,
+  "max": 0.698,
+  "n": 2,
+  "values": [
+   0.676,
+   0.698
+  ]
+ },
+ "go-nethttp-pg/scenarios/health/p95_ms": {
+  "min": 0.959,
+  "max": 1.015,
+  "n": 2,
+  "values": [
+   0.959,
+   1.015
+  ]
+ },
+ "go-nethttp-pg/scenarios/health/p99_ms": {
+  "min": 1.743,
+  "max": 1.869,
+  "n": 2,
+  "values": [
+   1.743,
+   1.869
+  ]
+ },
+ "go-nethttp-pg/scenarios/health/p999_ms": {
+  "min": 3.541,
+  "max": 4.134,
+  "n": 2,
+  "values": [
+   3.541,
+   4.134
+  ]
+ },
+ "go-nethttp-pg/scenarios/health/max_ms": {
+  "min": 10.702,
+  "max": 26.853,
+  "n": 2,
+  "values": [
+   10.702,
+   26.853
+  ]
+ },
+ "go-nethttp-pg/scenarios/health/mean_ms": {
+  "min": 0.443,
+  "max": 0.446,
+  "n": 2,
+  "values": [
+   0.443,
+   0.446
+  ]
+ },
+ "go-nethttp-pg/scenarios/health/status_codes/200": {
+  "min": 1431979,
+  "max": 1442932,
+  "n": 2,
+  "values": [
+   1442932,
+   1431979
+  ]
+ },
+ "go-nethttp-pg/scenarios/health/concurrency": {
+  "min": 64,
+  "max": 64,
+  "n": 2,
+  "values": [
+   64,
+   64
+  ]
+ },
+ "go-nethttp-pg/scenarios/health/peak_rss_bytes": {
+  "min": 29655040.0,
+  "max": 29900800.0,
+  "n": 2,
+  "values": [
+   29900800.0,
+   29655040.0
+  ]
+ },
+ "go-nethttp-pg/scenarios/health/idle_rss_bytes": {
+  "min": 28737536.0,
+  "max": 29212672.0,
+  "n": 2,
+  "values": [
+   29212672.0,
+   28737536.0
+  ]
+ },
+ "go-nethttp-pg/scenarios/health/rss_growth_per_req_bytes": {
+  "min": 0,
+  "max": 1,
+  "n": 2,
+  "values": [
+   0,
+   1
+  ]
+ },
+ "go-nethttp-pg/scenarios/health/cpu_seconds": {
+  "min": 47.54,
+  "max": 48.37,
+  "n": 2,
+  "values": [
+   48.37,
+   47.54
+  ]
+ },
+ "go-nethttp-pg/scenarios/health/cpu_ms_per_1k_req": {
+  "min": 33.2,
+  "max": 33.52,
+  "n": 2,
+  "values": [
+   33.52,
+   33.2
+  ]
+ },
+ "go-nethttp-pg/scenarios/health/server_cpu_util": {
+  "min": 0.467,
+  "max": 0.474,
+  "n": 2,
+  "values": [
+   0.474,
+   0.467
+  ]
+ },
+ "go-nethttp-pg/scenarios/get/rps": {
+  "min": 66167.1,
+  "max": 66302.6,
+  "n": 2,
+  "values": [
+   66167.1,
+   66302.6
+  ]
+ },
+ "go-nethttp-pg/scenarios/get/total": {
+  "min": 661822,
+  "max": 663159,
+  "n": 2,
+  "values": [
+   661822,
+   663159
+  ]
+ },
+ "go-nethttp-pg/scenarios/get/errors": {
+  "min": 0,
+  "max": 0,
+  "n": 2,
+  "values": [
+   0,
+   0
+  ]
+ },
+ "go-nethttp-pg/scenarios/get/error_pct": {
+  "min": 0.0,
+  "max": 0.0,
+  "n": 2,
+  "values": [
+   0.0,
+   0.0
+  ]
+ },
+ "go-nethttp-pg/scenarios/get/p50_ms": {
+  "min": 0.923,
+  "max": 0.931,
+  "n": 2,
+  "values": [
+   0.931,
+   0.923
+  ]
+ },
+ "go-nethttp-pg/scenarios/get/p90_ms": {
+  "min": 1.173,
+  "max": 1.188,
+  "n": 2,
+  "values": [
+   1.173,
+   1.188
+  ]
+ },
+ "go-nethttp-pg/scenarios/get/p95_ms": {
+  "min": 1.316,
+  "max": 1.345,
+  "n": 2,
+  "values": [
+   1.316,
+   1.345
+  ]
+ },
+ "go-nethttp-pg/scenarios/get/p99_ms": {
+  "min": 1.653,
+  "max": 1.759,
+  "n": 2,
+  "values": [
+   1.653,
+   1.759
+  ]
+ },
+ "go-nethttp-pg/scenarios/get/p999_ms": {
+  "min": 2.222,
+  "max": 3.271,
+  "n": 2,
+  "values": [
+   2.222,
+   3.271
+  ]
+ },
+ "go-nethttp-pg/scenarios/get/max_ms": {
+  "min": 6.918,
+  "max": 15.33,
+  "n": 2,
+  "values": [
+   6.918,
+   15.33
+  ]
+ },
+ "go-nethttp-pg/scenarios/get/mean_ms": {
+  "min": 0.964,
+  "max": 0.966,
+  "n": 2,
+  "values": [
+   0.966,
+   0.964
+  ]
+ },
+ "go-nethttp-pg/scenarios/get/status_codes/200": {
+  "min": 661822,
+  "max": 663159,
+  "n": 2,
+  "values": [
+   661822,
+   663159
+  ]
+ },
+ "go-nethttp-pg/scenarios/get/concurrency": {
+  "min": 64,
+  "max": 64,
+  "n": 2,
+  "values": [
+   64,
+   64
+  ]
+ },
+ "go-nethttp-pg/scenarios/get/peak_rss_bytes": {
+  "min": 31162368.0,
+  "max": 31473664.0,
+  "n": 2,
+  "values": [
+   31162368.0,
+   31473664.0
+  ]
+ },
+ "go-nethttp-pg/scenarios/get/idle_rss_bytes": {
+  "min": 30572544.0,
+  "max": 30801920.0,
+  "n": 2,
+  "values": [
+   30801920.0,
+   30572544.0
+  ]
+ },
+ "go-nethttp-pg/scenarios/get/rss_growth_per_req_bytes": {
+  "min": 1,
+  "max": 1,
+  "n": 2,
+  "values": [
+   1,
+   1
+  ]
+ },
+ "go-nethttp-pg/scenarios/get/cpu_seconds": {
+  "min": 43.09,
+  "max": 43.79,
+  "n": 2,
+  "values": [
+   43.79,
+   43.09
+  ]
+ },
+ "go-nethttp-pg/scenarios/get/cpu_ms_per_1k_req": {
+  "min": 64.98,
+  "max": 66.17,
+  "n": 2,
+  "values": [
+   66.17,
+   64.98
+  ]
+ },
+ "go-nethttp-pg/scenarios/get/server_cpu_util": {
+  "min": 0.427,
+  "max": 0.434,
+  "n": 2,
+  "values": [
+   0.434,
+   0.427
+  ]
+ },
+ "go-nethttp-pg/scenarios/list/rps": {
+  "min": 14961.0,
+  "max": 15007.9,
+  "n": 2,
+  "values": [
+   14961.0,
+   15007.9
+  ]
+ },
+ "go-nethttp-pg/scenarios/list/total": {
+  "min": 149588,
+  "max": 150057,
+  "n": 2,
+  "values": [
+   149588,
+   150057
+  ]
+ },
+ "go-nethttp-pg/scenarios/list/errors": {
+  "min": 0,
+  "max": 0,
+  "n": 2,
+  "values": [
+   0,
+   0
+  ]
+ },
+ "go-nethttp-pg/scenarios/list/error_pct": {
+  "min": 0.0,
+  "max": 0.0,
+  "n": 2,
+  "values": [
+   0.0,
+   0.0
+  ]
+ },
+ "go-nethttp-pg/scenarios/list/p50_ms": {
+  "min": 4.147,
+  "max": 4.165,
+  "n": 2,
+  "values": [
+   4.165,
+   4.147
+  ]
+ },
+ "go-nethttp-pg/scenarios/list/p90_ms": {
+  "min": 5.221,
+  "max": 5.235,
+  "n": 2,
+  "values": [
+   5.235,
+   5.221
+  ]
+ },
+ "go-nethttp-pg/scenarios/list/p95_ms": {
+  "min": 5.696,
+  "max": 5.701,
+  "n": 2,
+  "values": [
+   5.696,
+   5.701
+  ]
+ },
+ "go-nethttp-pg/scenarios/list/p99_ms": {
+  "min": 6.772,
+  "max": 6.875,
+  "n": 2,
+  "values": [
+   6.772,
+   6.875
+  ]
+ },
+ "go-nethttp-pg/scenarios/list/p999_ms": {
+  "min": 8.668,
+  "max": 9.402,
+  "n": 2,
+  "values": [
+   8.668,
+   9.402
+  ]
+ },
+ "go-nethttp-pg/scenarios/list/max_ms": {
+  "min": 20.382,
+  "max": 23.024,
+  "n": 2,
+  "values": [
+   23.024,
+   20.382
+  ]
+ },
+ "go-nethttp-pg/scenarios/list/mean_ms": {
+  "min": 4.263,
+  "max": 4.276,
+  "n": 2,
+  "values": [
+   4.276,
+   4.263
+  ]
+ },
+ "go-nethttp-pg/scenarios/list/status_codes/200": {
+  "min": 149588,
+  "max": 150057,
+  "n": 2,
+  "values": [
+   149588,
+   150057
+  ]
+ },
+ "go-nethttp-pg/scenarios/list/concurrency": {
+  "min": 64,
+  "max": 64,
+  "n": 2,
+  "values": [
+   64,
+   64
+  ]
+ },
+ "go-nethttp-pg/scenarios/list/peak_rss_bytes": {
+  "min": 38076416.0,
+  "max": 38273024.0,
+  "n": 2,
+  "values": [
+   38076416.0,
+   38273024.0
+  ]
+ },
+ "go-nethttp-pg/scenarios/list/idle_rss_bytes": {
+  "min": 36962304.0,
+  "max": 37175296.0,
+  "n": 2,
+  "values": [
+   36962304.0,
+   37175296.0
+  ]
+ },
+ "go-nethttp-pg/scenarios/list/rss_growth_per_req_bytes": {
+  "min": 7,
+  "max": 7,
+  "n": 2,
+  "values": [
+   7,
+   7
+  ]
+ },
+ "go-nethttp-pg/scenarios/list/cpu_seconds": {
+  "min": 52.63,
+  "max": 53.14,
+  "n": 2,
+  "values": [
+   53.14,
+   52.63
+  ]
+ },
+ "go-nethttp-pg/scenarios/list/cpu_ms_per_1k_req": {
+  "min": 350.73,
+  "max": 355.24,
+  "n": 2,
+  "values": [
+   355.24,
+   350.73
+  ]
+ },
+ "go-nethttp-pg/scenarios/list/server_cpu_util": {
+  "min": 0.525,
+  "max": 0.529,
+  "n": 2,
+  "values": [
+   0.529,
+   0.525
+  ]
+ },
+ "go-nethttp-pg/scenarios/create/rps": {
+  "min": 47235.4,
+  "max": 48564.4,
+  "n": 2,
+  "values": [
+   47235.4,
+   48564.4
+  ]
+ },
+ "go-nethttp-pg/scenarios/create/total": {
+  "min": 472391,
+  "max": 485750,
+  "n": 2,
+  "values": [
+   472391,
+   485750
+  ]
+ },
+ "go-nethttp-pg/scenarios/create/errors": {
+  "min": 0,
+  "max": 0,
+  "n": 2,
+  "values": [
+   0,
+   0
+  ]
+ },
+ "go-nethttp-pg/scenarios/create/error_pct": {
+  "min": 0.0,
+  "max": 0.0,
+  "n": 2,
+  "values": [
+   0.0,
+   0.0
+  ]
+ },
+ "go-nethttp-pg/scenarios/create/p50_ms": {
+  "min": 1.26,
+  "max": 1.293,
+  "n": 2,
+  "values": [
+   1.293,
+   1.26
+  ]
+ },
+ "go-nethttp-pg/scenarios/create/p90_ms": {
+  "min": 1.65,
+  "max": 1.695,
+  "n": 2,
+  "values": [
+   1.695,
+   1.65
+  ]
+ },
+ "go-nethttp-pg/scenarios/create/p95_ms": {
+  "min": 1.843,
+  "max": 1.894,
+  "n": 2,
+  "values": [
+   1.894,
+   1.843
+  ]
+ },
+ "go-nethttp-pg/scenarios/create/p99_ms": {
+  "min": 2.403,
+  "max": 2.496,
+  "n": 2,
+  "values": [
+   2.496,
+   2.403
+  ]
+ },
+ "go-nethttp-pg/scenarios/create/p999_ms": {
+  "min": 4.421,
+  "max": 4.423,
+  "n": 2,
+  "values": [
+   4.423,
+   4.421
+  ]
+ },
+ "go-nethttp-pg/scenarios/create/max_ms": {
+  "min": 9.848,
+  "max": 17.646,
+  "n": 2,
+  "values": [
+   17.646,
+   9.848
+  ]
+ },
+ "go-nethttp-pg/scenarios/create/mean_ms": {
+  "min": 1.316,
+  "max": 1.353,
+  "n": 2,
+  "values": [
+   1.353,
+   1.316
+  ]
+ },
+ "go-nethttp-pg/scenarios/create/status_codes/201": {
+  "min": 472391,
+  "max": 485750,
+  "n": 2,
+  "values": [
+   472391,
+   485750
+  ]
+ },
+ "go-nethttp-pg/scenarios/create/concurrency": {
+  "min": 64,
+  "max": 64,
+  "n": 2,
+  "values": [
+   64,
+   64
+  ]
+ },
+ "go-nethttp-pg/scenarios/create/peak_rss_bytes": {
+  "min": 30851072.0,
+  "max": 31227904.0,
+  "n": 2,
+  "values": [
+   30851072.0,
+   31227904.0
+  ]
+ },
+ "go-nethttp-pg/scenarios/create/idle_rss_bytes": {
+  "min": 30408704.0,
+  "max": 30408704.0,
+  "n": 2,
+  "values": [
+   30408704.0,
+   30408704.0
+  ]
+ },
+ "go-nethttp-pg/scenarios/create/rss_growth_per_req_bytes": {
+  "min": 1,
+  "max": 2,
+  "n": 2,
+  "values": [
+   1,
+   2
+  ]
+ },
+ "go-nethttp-pg/scenarios/create/cpu_seconds": {
+  "min": 33.16,
+  "max": 33.2,
+  "n": 2,
+  "values": [
+   33.16,
+   33.2
+  ]
+ },
+ "go-nethttp-pg/scenarios/create/cpu_ms_per_1k_req": {
+  "min": 68.35,
+  "max": 70.2,
+  "n": 2,
+  "values": [
+   70.2,
+   68.35
+  ]
+ },
+ "go-nethttp-pg/scenarios/create/server_cpu_util": {
+  "min": 0.329,
+  "max": 0.33,
+  "n": 2,
+  "values": [
+   0.329,
+   0.33
+  ]
+ },
+ "go-nethttp-pg/scenarios/cpu/rps": {
+  "min": 10146.6,
+  "max": 10669.4,
+  "n": 2,
+  "values": [
+   10146.6,
+   10669.4
+  ]
+ },
+ "go-nethttp-pg/scenarios/cpu/total": {
+  "min": 101429,
+  "max": 106661,
+  "n": 2,
+  "values": [
+   101429,
+   106661
+  ]
+ },
+ "go-nethttp-pg/scenarios/cpu/errors": {
+  "min": 0,
+  "max": 0,
+  "n": 2,
+  "values": [
+   0,
+   0
+  ]
+ },
+ "go-nethttp-pg/scenarios/cpu/error_pct": {
+  "min": 0.0,
+  "max": 0.0,
+  "n": 2,
+  "values": [
+   0.0,
+   0.0
+  ]
+ },
+ "go-nethttp-pg/scenarios/cpu/p50_ms": {
+  "min": 1.766,
+  "max": 1.854,
+  "n": 2,
+  "values": [
+   1.854,
+   1.766
+  ]
+ },
+ "go-nethttp-pg/scenarios/cpu/p90_ms": {
+  "min": 16.826,
+  "max": 17.971,
+  "n": 2,
+  "values": [
+   17.971,
+   16.826
+  ]
+ },
+ "go-nethttp-pg/scenarios/cpu/p95_ms": {
+  "min": 23.924,
+  "max": 25.457,
+  "n": 2,
+  "values": [
+   25.457,
+   23.924
+  ]
+ },
+ "go-nethttp-pg/scenarios/cpu/p99_ms": {
+  "min": 39.563,
+  "max": 41.637,
+  "n": 2,
+  "values": [
+   41.637,
+   39.563
+  ]
+ },
+ "go-nethttp-pg/scenarios/cpu/p999_ms": {
+  "min": 61.853,
+  "max": 65.188,
+  "n": 2,
+  "values": [
+   65.188,
+   61.853
+  ]
+ },
+ "go-nethttp-pg/scenarios/cpu/max_ms": {
+  "min": 91.024,
+  "max": 112.403,
+  "n": 2,
+  "values": [
+   112.403,
+   91.024
+  ]
+ },
+ "go-nethttp-pg/scenarios/cpu/mean_ms": {
+  "min": 5.994,
+  "max": 6.304,
+  "n": 2,
+  "values": [
+   6.304,
+   5.994
+  ]
+ },
+ "go-nethttp-pg/scenarios/cpu/status_codes/200": {
+  "min": 101429,
+  "max": 106661,
+  "n": 2,
+  "values": [
+   101429,
+   106661
+  ]
+ },
+ "go-nethttp-pg/scenarios/cpu/concurrency": {
+  "min": 64,
+  "max": 64,
+  "n": 2,
+  "values": [
+   64,
+   64
+  ]
+ },
+ "go-nethttp-pg/scenarios/cpu/peak_rss_bytes": {
+  "min": 40943616.0,
+  "max": 41566208.0,
+  "n": 2,
+  "values": [
+   41566208.0,
+   40943616.0
+  ]
+ },
+ "go-nethttp-pg/scenarios/cpu/idle_rss_bytes": {
+  "min": 36700160.0,
+  "max": 37175296.0,
+  "n": 2,
+  "values": [
+   36700160.0,
+   37175296.0
+  ]
+ },
+ "go-nethttp-pg/scenarios/cpu/rss_growth_per_req_bytes": {
+  "min": 35,
+  "max": 48,
+  "n": 2,
+  "values": [
+   48,
+   35
+  ]
+ },
+ "go-nethttp-pg/scenarios/cpu/cpu_seconds": {
+  "min": 68.98,
+  "max": 69.85,
+  "n": 2,
+  "values": [
+   68.98,
+   69.85
+  ]
+ },
+ "go-nethttp-pg/scenarios/cpu/cpu_ms_per_1k_req": {
+  "min": 654.88,
+  "max": 680.08,
+  "n": 2,
+  "values": [
+   680.08,
+   654.88
+  ]
+ },
+ "go-nethttp-pg/scenarios/cpu/server_cpu_util": {
+  "min": 0.688,
+  "max": 0.697,
+  "n": 2,
+  "values": [
+   0.688,
+   0.697
+  ]
+ },
+ "go-nethttp-pg/scenarios/io/rps": {
+  "min": 5572.2,
+  "max": 5636.8,
+  "n": 2,
+  "values": [
+   5572.2,
+   5636.8
+  ]
+ },
+ "go-nethttp-pg/scenarios/io/total": {
+  "min": 55680,
+  "max": 56326,
+  "n": 2,
+  "values": [
+   55680,
+   56326
+  ]
+ },
+ "go-nethttp-pg/scenarios/io/errors": {
+  "min": 0,
+  "max": 0,
+  "n": 2,
+  "values": [
+   0,
+   0
+  ]
+ },
+ "go-nethttp-pg/scenarios/io/error_pct": {
+  "min": 0.0,
+  "max": 0.0,
+  "n": 2,
+  "values": [
+   0.0,
+   0.0
+  ]
+ },
+ "go-nethttp-pg/scenarios/io/p50_ms": {
+  "min": 11.34,
+  "max": 11.469,
+  "n": 2,
+  "values": [
+   11.469,
+   11.34
+  ]
+ },
+ "go-nethttp-pg/scenarios/io/p90_ms": {
+  "min": 11.938,
+  "max": 12.062,
+  "n": 2,
+  "values": [
+   12.062,
+   11.938
+  ]
+ },
+ "go-nethttp-pg/scenarios/io/p95_ms": {
+  "min": 12.121,
+  "max": 12.246,
+  "n": 2,
+  "values": [
+   12.246,
+   12.121
+  ]
+ },
+ "go-nethttp-pg/scenarios/io/p99_ms": {
+  "min": 12.597,
+  "max": 12.746,
+  "n": 2,
+  "values": [
+   12.746,
+   12.597
+  ]
+ },
+ "go-nethttp-pg/scenarios/io/p999_ms": {
+  "min": 14.442,
+  "max": 20.423,
+  "n": 2,
+  "values": [
+   20.423,
+   14.442
+  ]
+ },
+ "go-nethttp-pg/scenarios/io/max_ms": {
+  "min": 19.552,
+  "max": 22.076,
+  "n": 2,
+  "values": [
+   22.076,
+   19.552
+  ]
+ },
+ "go-nethttp-pg/scenarios/io/mean_ms": {
+  "min": 11.353,
+  "max": 11.491,
+  "n": 2,
+  "values": [
+   11.491,
+   11.353
+  ]
+ },
+ "go-nethttp-pg/scenarios/io/status_codes/200": {
+  "min": 55680,
+  "max": 56326,
+  "n": 2,
+  "values": [
+   55680,
+   56326
+  ]
+ },
+ "go-nethttp-pg/scenarios/io/concurrency": {
+  "min": 64,
+  "max": 64,
+  "n": 2,
+  "values": [
+   64,
+   64
+  ]
+ },
+ "go-nethttp-pg/scenarios/io/peak_rss_bytes": {
+  "min": 28491776.0,
+  "max": 28540928.0,
+  "n": 2,
+  "values": [
+   28491776.0,
+   28540928.0
+  ]
+ },
+ "go-nethttp-pg/scenarios/io/idle_rss_bytes": {
+  "min": 27590656.0,
+  "max": 27770880.0,
+  "n": 2,
+  "values": [
+   27590656.0,
+   27770880.0
+  ]
+ },
+ "go-nethttp-pg/scenarios/io/rss_growth_per_req_bytes": {
+  "min": 14,
+  "max": 16,
+  "n": 2,
+  "values": [
+   16,
+   14
+  ]
+ },
+ "go-nethttp-pg/scenarios/io/cpu_seconds": {
+  "min": 3.28,
+  "max": 3.73,
+  "n": 2,
+  "values": [
+   3.28,
+   3.73
+  ]
+ },
+ "go-nethttp-pg/scenarios/io/cpu_ms_per_1k_req": {
+  "min": 58.91,
+  "max": 66.22,
+  "n": 2,
+  "values": [
+   58.91,
+   66.22
+  ]
+ },
+ "go-nethttp-pg/scenarios/io/server_cpu_util": {
+  "min": 0.033,
+  "max": 0.037,
+  "n": 2,
+  "values": [
+   0.033,
+   0.037
+  ]
+ },
+ "go-nethttp-pg/scenarios/mixed/rps": {
+  "min": 53887.0,
+  "max": 54990.2,
+  "n": 2,
+  "values": [
+   53887.0,
+   54990.2
+  ]
+ },
+ "go-nethttp-pg/scenarios/mixed/total": {
+  "min": 538961,
+  "max": 550012,
+  "n": 2,
+  "values": [
+   538961,
+   550012
+  ]
+ },
+ "go-nethttp-pg/scenarios/mixed/errors": {
+  "min": 0,
+  "max": 0,
+  "n": 2,
+  "values": [
+   0,
+   0
+  ]
+ },
+ "go-nethttp-pg/scenarios/mixed/error_pct": {
+  "min": 0.0,
+  "max": 0.0,
+  "n": 2,
+  "values": [
+   0.0,
+   0.0
+  ]
+ },
+ "go-nethttp-pg/scenarios/mixed/p50_ms": {
+  "min": 1.078,
+  "max": 1.099,
+  "n": 2,
+  "values": [
+   1.099,
+   1.078
+  ]
+ },
+ "go-nethttp-pg/scenarios/mixed/p90_ms": {
+  "min": 1.628,
+  "max": 1.665,
+  "n": 2,
+  "values": [
+   1.665,
+   1.628
+  ]
+ },
+ "go-nethttp-pg/scenarios/mixed/p95_ms": {
+  "min": 1.838,
+  "max": 1.881,
+  "n": 2,
+  "values": [
+   1.881,
+   1.838
+  ]
+ },
+ "go-nethttp-pg/scenarios/mixed/p99_ms": {
+  "min": 2.388,
+  "max": 2.48,
+  "n": 2,
+  "values": [
+   2.48,
+   2.388
+  ]
+ },
+ "go-nethttp-pg/scenarios/mixed/p999_ms": {
+  "min": 3.665,
+  "max": 4.446,
+  "n": 2,
+  "values": [
+   4.446,
+   3.665
+  ]
+ },
+ "go-nethttp-pg/scenarios/mixed/max_ms": {
+  "min": 17.609,
+  "max": 20.976,
+  "n": 2,
+  "values": [
+   20.976,
+   17.609
+  ]
+ },
+ "go-nethttp-pg/scenarios/mixed/mean_ms": {
+  "min": 1.163,
+  "max": 1.186,
+  "n": 2,
+  "values": [
+   1.186,
+   1.163
+  ]
+ },
+ "go-nethttp-pg/scenarios/mixed/status_codes/200": {
+  "min": 538961,
+  "max": 550012,
+  "n": 2,
+  "values": [
+   538961,
+   550012
+  ]
+ },
+ "go-nethttp-pg/scenarios/mixed/concurrency": {
+  "min": 64,
+  "max": 64,
+  "n": 2,
+  "values": [
+   64,
+   64
+  ]
+ },
+ "go-nethttp-pg/scenarios/mixed/peak_rss_bytes": {
+  "min": 33521664.0,
+  "max": 34816000.0,
+  "n": 2,
+  "values": [
+   34816000.0,
+   33521664.0
+  ]
+ },
+ "go-nethttp-pg/scenarios/mixed/idle_rss_bytes": {
+  "min": 32604160.0,
+  "max": 32866304.0,
+  "n": 2,
+  "values": [
+   32604160.0,
+   32866304.0
+  ]
+ },
+ "go-nethttp-pg/scenarios/mixed/rss_growth_per_req_bytes": {
+  "min": 1,
+  "max": 4,
+  "n": 2,
+  "values": [
+   4,
+   1
+  ]
+ },
+ "go-nethttp-pg/scenarios/mixed/cpu_seconds": {
+  "min": 49.02,
+  "max": 49.63,
+  "n": 2,
+  "values": [
+   49.02,
+   49.63
+  ]
+ },
+ "go-nethttp-pg/scenarios/mixed/cpu_ms_per_1k_req": {
+  "min": 90.23,
+  "max": 90.95,
+  "n": 2,
+  "values": [
+   90.95,
+   90.23
+  ]
+ },
+ "go-nethttp-pg/scenarios/mixed/server_cpu_util": {
+  "min": 0.486,
+  "max": 0.492,
+  "n": 2,
+  "values": [
+   0.486,
+   0.492
+  ]
+ },
+ "go-nethttp-pg/saturation/sat-get/rps": {
+  "min": 61628.4,
+  "max": 68506.8,
+  "n": 2,
+  "values": [
+   68506.8,
+   61628.4
+  ]
+ },
+ "go-nethttp-pg/saturation/sat-get/total": {
+  "min": 615719,
+  "max": 684422,
+  "n": 2,
+  "values": [
+   684422,
+   615719
+  ]
+ },
+ "go-nethttp-pg/saturation/sat-get/errors": {
+  "min": 0,
+  "max": 0,
+  "n": 2,
+  "values": [
+   0,
+   0
+  ]
+ },
+ "go-nethttp-pg/saturation/sat-get/error_pct": {
+  "min": 0.0,
+  "max": 0.0,
+  "n": 2,
+  "values": [
+   0.0,
+   0.0
+  ]
+ },
+ "go-nethttp-pg/saturation/sat-get/p50_ms": {
+  "min": 14.662,
+  "max": 15.349,
+  "n": 2,
+  "values": [
+   14.662,
+   15.349
+  ]
+ },
+ "go-nethttp-pg/saturation/sat-get/p90_ms": {
+  "min": 15.801,
+  "max": 18.584,
+  "n": 2,
+  "values": [
+   15.801,
+   18.584
+  ]
+ },
+ "go-nethttp-pg/saturation/sat-get/p95_ms": {
+  "min": 16.045,
+  "max": 20.461,
+  "n": 2,
+  "values": [
+   16.045,
+   20.461
+  ]
+ },
+ "go-nethttp-pg/saturation/sat-get/p99_ms": {
+  "min": 16.929,
+  "max": 28.678,
+  "n": 2,
+  "values": [
+   16.929,
+   28.678
+  ]
+ },
+ "go-nethttp-pg/saturation/sat-get/p999_ms": {
+  "min": 18.639,
+  "max": 98.164,
+  "n": 2,
+  "values": [
+   18.639,
+   98.164
+  ]
+ },
+ "go-nethttp-pg/saturation/sat-get/max_ms": {
+  "min": 189.201,
+  "max": 236.411,
+  "n": 2,
+  "values": [
+   189.201,
+   236.411
+  ]
+ },
+ "go-nethttp-pg/saturation/sat-get/mean_ms": {
+  "min": 14.593,
+  "max": 16.221,
+  "n": 2,
+  "values": [
+   14.593,
+   16.221
+  ]
+ },
+ "go-nethttp-pg/saturation/sat-get/status_codes/200": {
+  "min": 615719,
+  "max": 684422,
+  "n": 2,
+  "values": [
+   684422,
+   615719
+  ]
+ },
+ "go-nethttp-pg/saturation/sat-get/concurrency": {
+  "min": 1000,
+  "max": 1000,
+  "n": 2,
+  "values": [
+   1000,
+   1000
+  ]
+ },
+ "go-nethttp-pg/saturation/sat-get/peak_rss_bytes": {
+  "min": 73613312.0,
+  "max": 74530816.0,
+  "n": 2,
+  "values": [
+   74530816.0,
+   73613312.0
+  ]
+ },
+ "go-nethttp-pg/saturation/sat-get/idle_rss_bytes": {
+  "min": 16908288.0,
+  "max": 17498112.0,
+  "n": 2,
+  "values": [
+   16908288.0,
+   17498112.0
+  ]
+ },
+ "go-nethttp-pg/saturation/sat-get/rss_growth_per_req_bytes": {
+  "min": 84,
+  "max": 91,
+  "n": 2,
+  "values": [
+   84,
+   91
+  ]
+ },
+ "go-nethttp-pg/saturation/sat-get/cpu_seconds": {
+  "min": 38.36,
+  "max": 44.46,
+  "n": 2,
+  "values": [
+   44.46,
+   38.36
+  ]
+ },
+ "go-nethttp-pg/saturation/sat-get/cpu_ms_per_1k_req": {
+  "min": 62.3,
+  "max": 64.96,
+  "n": 2,
+  "values": [
+   64.96,
+   62.3
+  ]
+ },
+ "go-nethttp-pg/saturation/sat-get/server_cpu_util": {
+  "min": 0.38,
+  "max": 0.44,
+  "n": 2,
+  "values": [
+   0.44,
+   0.38
+  ]
+ },
+ "go-nethttp-pg/saturation/sat-cpu/rps": {
+  "min": 3589.3,
+  "max": 3730.5,
+  "n": 2,
+  "values": [
+   3730.5,
+   3589.3
+  ]
+ },
+ "go-nethttp-pg/saturation/sat-cpu/total": {
+  "min": 35406,
+  "max": 36830,
+  "n": 2,
+  "values": [
+   36830,
+   35406
+  ]
+ },
+ "go-nethttp-pg/saturation/sat-cpu/errors": {
+  "min": 165,
+  "max": 181,
+  "n": 2,
+  "values": [
+   165,
+   181
+  ]
+ },
+ "go-nethttp-pg/saturation/sat-cpu/error_pct": {
+  "min": 0.448,
+  "max": 0.511,
+  "n": 2,
+  "values": [
+   0.448,
+   0.511
+  ]
+ },
+ "go-nethttp-pg/saturation/sat-cpu/p50_ms": {
+  "min": 10.611,
+  "max": 29.304,
+  "n": 2,
+  "values": [
+   10.611,
+   29.304
+  ]
+ },
+ "go-nethttp-pg/saturation/sat-cpu/p90_ms": {
+  "min": 389.461,
+  "max": 394.288,
+  "n": 2,
+  "values": [
+   389.461,
+   394.288
+  ]
+ },
+ "go-nethttp-pg/saturation/sat-cpu/p95_ms": {
+  "min": 519.611,
+  "max": 525.61,
+  "n": 2,
+  "values": [
+   519.611,
+   525.61
+  ]
+ },
+ "go-nethttp-pg/saturation/sat-cpu/p99_ms": {
+  "min": 779.37,
+  "max": 786.378,
+  "n": 2,
+  "values": [
+   779.37,
+   786.378
+  ]
+ },
+ "go-nethttp-pg/saturation/sat-cpu/p999_ms": {
+  "min": 955.233,
+  "max": 969.488,
+  "n": 2,
+  "values": [
+   955.233,
+   969.488
+  ]
+ },
+ "go-nethttp-pg/saturation/sat-cpu/max_ms": {
+  "min": 999.071,
+  "max": 1000.03,
+  "n": 2,
+  "values": [
+   999.071,
+   1000.03
+  ]
+ },
+ "go-nethttp-pg/saturation/sat-cpu/mean_ms": {
+  "min": 129.081,
+  "max": 133.869,
+  "n": 2,
+  "values": [
+   129.081,
+   133.869
+  ]
+ },
+ "go-nethttp-pg/saturation/sat-cpu/status_codes/200": {
+  "min": 35225,
+  "max": 36665,
+  "n": 2,
+  "values": [
+   36665,
+   35225
+  ]
+ },
+ "go-nethttp-pg/saturation/sat-cpu/error_kinds/timeout": {
+  "min": 165,
+  "max": 181,
+  "n": 2,
+  "values": [
+   165,
+   181
+  ]
+ },
+ "go-nethttp-pg/saturation/sat-cpu/concurrency": {
+  "min": 500,
+  "max": 500,
+  "n": 2,
+  "values": [
+   500,
+   500
+  ]
+ },
+ "go-nethttp-pg/saturation/sat-cpu/peak_rss_bytes": {
+  "min": 74907648.0,
+  "max": 78036992.0,
+  "n": 2,
+  "values": [
+   74907648.0,
+   78036992.0
+  ]
+ },
+ "go-nethttp-pg/saturation/sat-cpu/idle_rss_bytes": {
+  "min": 17137664.0,
+  "max": 17252352.0,
+  "n": 2,
+  "values": [
+   17137664.0,
+   17252352.0
+  ]
+ },
+ "go-nethttp-pg/saturation/sat-cpu/rss_growth_per_req_bytes": {
+  "min": 1569,
+  "max": 1717,
+  "n": 2,
+  "values": [
+   1569,
+   1717
+  ]
+ },
+ "go-nethttp-pg/saturation/sat-cpu/cpu_seconds": {
+  "min": 81.28,
+  "max": 85.1,
+  "n": 2,
+  "values": [
+   85.1,
+   81.28
+  ]
+ },
+ "go-nethttp-pg/saturation/sat-cpu/cpu_ms_per_1k_req": {
+  "min": 2295.66,
+  "max": 2310.62,
+  "n": 2,
+  "values": [
+   2310.62,
+   2295.66
+  ]
+ },
+ "go-nethttp-pg/saturation/sat-cpu/server_cpu_util": {
+  "min": 0.811,
+  "max": 0.849,
+  "n": 2,
+  "values": [
+   0.849,
+   0.811
+  ]
+ },
+ "go-nethttp-pg/connections/connections": {
+  "min": 1000,
+  "max": 1000,
+  "n": 2,
+  "values": [
+   1000,
+   1000
+  ]
+ },
+ "go-nethttp-pg/connections/failed": {
+  "min": 0,
+  "max": 0,
+  "n": 2,
+  "values": [
+   0,
+   0
+  ]
+ },
+ "go-nethttp-pg/connections/idle_rss_bytes": {
+  "min": 17186816.0,
+  "max": 17268736.0,
+  "n": 2,
+  "values": [
+   17268736.0,
+   17186816.0
+  ]
+ },
+ "go-nethttp-pg/connections/held_rss_bytes": {
+  "min": 38699008.0,
+  "max": 39108608.0,
+  "n": 2,
+  "values": [
+   38699008.0,
+   39108608.0
+  ]
+ },
+ "go-nethttp-pg/connections/after_close_rss_bytes": {
+  "min": 39043072.0,
+  "max": 39288832.0,
+  "n": 2,
+  "values": [
+   39043072.0,
+   39288832.0
+  ]
+ },
+ "go-nethttp-pg/connections/bytes_per_conn": {
+  "min": 21430,
+  "max": 21922,
+  "n": 2,
+  "values": [
+   21430,
+   21922
+  ]
+ },
+ "go-nethttp-pg/recovery/spike/concurrency": {
+  "min": 256,
+  "max": 256,
+  "n": 2,
+  "values": [
+   256,
+   256
+  ]
+ },
+ "go-nethttp-pg/recovery/spike/seconds": {
+  "min": 5,
+  "max": 5,
+  "n": 2,
+  "values": [
+   5,
+   5
+  ]
+ },
+ "go-nethttp-pg/recovery/spike/rps": {
+  "min": 17993,
+  "max": 18998,
+  "n": 2,
+  "values": [
+   18998,
+   17993
+  ]
+ },
+ "go-nethttp-pg/recovery/spike/errors": {
+  "min": 0,
+  "max": 0,
+  "n": 2,
+  "values": [
+   0,
+   0
+  ]
+ },
+ "go-nethttp-pg/recovery/idle_rss_bytes": {
+  "min": 17154048.0,
+  "max": 17170432.0,
+  "n": 2,
+  "values": [
+   17170432.0,
+   17154048.0
+  ]
+ },
+ "go-nethttp-pg/recovery/peak_rss_bytes": {
+  "min": 48758784.0,
+  "max": 51740672.0,
+  "n": 2,
+  "values": [
+   48758784.0,
+   51740672.0
+  ]
+ },
+ "go-nethttp-pg/recovery/rss_after_spike_bytes": {
+  "min": 48758784.0,
+  "max": 51740672.0,
+  "n": 2,
+  "values": [
+   48758784.0,
+   51740672.0
+  ]
+ },
+ "go-nethttp-pg/recovery/rss_after_settle_bytes": {
+  "min": 48824320.0,
+  "max": 51871744.0,
+  "n": 2,
+  "values": [
+   48824320.0,
+   51871744.0
+  ]
+ },
+ "go-nethttp-pg/recovery/settle_s": {
+  "min": 10,
+  "max": 10,
+  "n": 2,
+  "values": [
+   10,
+   10
+  ]
+ },
+ "go-nethttp-pg/recovery/retained_pct": {
+  "min": 100.2,
+  "max": 100.4,
+  "n": 2,
+  "values": [
+   100.2,
+   100.4
+  ]
+ },
+ "go-nethttp-pg/recovery/probe_pre/p50_ms": {
+  "min": 0.125,
+  "max": 0.125,
+  "n": 2,
+  "values": [
+   0.125,
+   0.125
+  ]
+ },
+ "go-nethttp-pg/recovery/probe_pre/p99_ms": {
+  "min": 0.329,
+  "max": 0.353,
+  "n": 2,
+  "values": [
+   0.329,
+   0.353
+  ]
+ },
+ "go-nethttp-pg/recovery/probe_after_spike/p50_ms": {
+  "min": 0.14,
+  "max": 0.14,
+  "n": 2,
+  "values": [
+   0.14,
+   0.14
+  ]
+ },
+ "go-nethttp-pg/recovery/probe_after_spike/p99_ms": {
+  "min": 0.237,
+  "max": 0.248,
+  "n": 2,
+  "values": [
+   0.237,
+   0.248
+  ]
+ },
+ "go-nethttp-pg/recovery/probe_after_settle/p50_ms": {
+  "min": 0.122,
+  "max": 0.133,
+  "n": 2,
+  "values": [
+   0.133,
+   0.122
+  ]
+ },
+ "go-nethttp-pg/recovery/probe_after_settle/p99_ms": {
+  "min": 0.271,
+  "max": 0.35,
+  "n": 2,
+  "values": [
+   0.35,
+   0.271
+  ]
+ },
+ "python-fastapi-pg/port": {
+  "min": 8013,
+  "max": 8013,
+  "n": 2,
+  "values": [
+   8013,
+   8013
+  ]
+ },
+ "python-fastapi-pg/loc": {
+  "min": 129,
+  "max": 129,
+  "n": 2,
+  "values": [
+   129,
+   129
+  ]
+ },
+ "python-fastapi-pg/deps": {
+  "min": 22,
+  "max": 22,
+  "n": 2,
+  "values": [
+   22,
+   22
+  ]
+ },
+ "python-fastapi-pg/cold_start_ms": {
+  "min": 293.2,
+  "max": 401.9,
+  "n": 10,
+  "values": [
+   401.9,
+   396.4,
+   319.5,
+   324.3,
+   304.1,
+   389.5,
+   397.8,
+   293.2,
+   314.5,
+   332.6
+  ]
+ },
+ "python-fastapi-pg/cold_start_median_ms": {
+  "min": 324.3,
+  "max": 332.6,
+  "n": 2,
+  "values": [
+   324.3,
+   332.6
+  ]
+ },
+ "python-fastapi-pg/idle_rss_bytes": {
+  "min": 699432960.0,
+  "max": 699564032.0,
+  "n": 2,
+  "values": [
+   699432960.0,
+   699564032.0
+  ]
+ },
+ "python-fastapi-pg/scenarios/health/rps": {
+  "min": 77310.1,
+  "max": 79313.8,
+  "n": 2,
+  "values": [
+   79313.8,
+   77310.1
+  ]
+ },
+ "python-fastapi-pg/scenarios/health/total": {
+  "min": 773219,
+  "max": 793269,
+  "n": 2,
+  "values": [
+   793269,
+   773219
+  ]
+ },
+ "python-fastapi-pg/scenarios/health/errors": {
+  "min": 0,
+  "max": 0,
+  "n": 2,
+  "values": [
+   0,
+   0
+  ]
+ },
+ "python-fastapi-pg/scenarios/health/error_pct": {
+  "min": 0.0,
+  "max": 0.0,
+  "n": 2,
+  "values": [
+   0.0,
+   0.0
+  ]
+ },
+ "python-fastapi-pg/scenarios/health/p50_ms": {
+  "min": 0.54,
+  "max": 0.616,
+  "n": 2,
+  "values": [
+   0.54,
+   0.616
+  ]
+ },
+ "python-fastapi-pg/scenarios/health/p90_ms": {
+  "min": 1.363,
+  "max": 1.531,
+  "n": 2,
+  "values": [
+   1.363,
+   1.531
+  ]
+ },
+ "python-fastapi-pg/scenarios/health/p95_ms": {
+  "min": 2.205,
+  "max": 2.412,
+  "n": 2,
+  "values": [
+   2.412,
+   2.205
+  ]
+ },
+ "python-fastapi-pg/scenarios/health/p99_ms": {
+  "min": 4.446,
+  "max": 6.246,
+  "n": 2,
+  "values": [
+   6.246,
+   4.446
+  ]
+ },
+ "python-fastapi-pg/scenarios/health/p999_ms": {
+  "min": 8.213,
+  "max": 13.012,
+  "n": 2,
+  "values": [
+   13.012,
+   8.213
+  ]
+ },
+ "python-fastapi-pg/scenarios/health/max_ms": {
+  "min": 32.546,
+  "max": 126.272,
+  "n": 2,
+  "values": [
+   32.546,
+   126.272
+  ]
+ },
+ "python-fastapi-pg/scenarios/health/mean_ms": {
+  "min": 0.806,
+  "max": 0.827,
+  "n": 2,
+  "values": [
+   0.806,
+   0.827
+  ]
+ },
+ "python-fastapi-pg/scenarios/health/status_codes/200": {
+  "min": 773219,
+  "max": 793269,
+  "n": 2,
+  "values": [
+   793269,
+   773219
+  ]
+ },
+ "python-fastapi-pg/scenarios/health/concurrency": {
+  "min": 64,
+  "max": 64,
+  "n": 2,
+  "values": [
+   64,
+   64
+  ]
+ },
+ "python-fastapi-pg/scenarios/health/peak_rss_bytes": {
+  "min": 711835648.0,
+  "max": 712884224.0,
+  "n": 2,
+  "values": [
+   712884224.0,
+   711835648.0
+  ]
+ },
+ "python-fastapi-pg/scenarios/health/idle_rss_bytes": {
+  "min": 711081984.0,
+  "max": 712097792.0,
+  "n": 2,
+  "values": [
+   712097792.0,
+   711081984.0
+  ]
+ },
+ "python-fastapi-pg/scenarios/health/rss_growth_per_req_bytes": {
+  "min": 1,
+  "max": 1,
+  "n": 2,
+  "values": [
+   1,
+   1
+  ]
+ },
+ "python-fastapi-pg/scenarios/health/cpu_seconds": {
+  "min": 66.76,
+  "max": 67.91,
+  "n": 2,
+  "values": [
+   67.91,
+   66.76
+  ]
+ },
+ "python-fastapi-pg/scenarios/health/cpu_ms_per_1k_req": {
+  "min": 85.61,
+  "max": 86.34,
+  "n": 2,
+  "values": [
+   85.61,
+   86.34
+  ]
+ },
+ "python-fastapi-pg/scenarios/health/server_cpu_util": {
+  "min": 0.66,
+  "max": 0.671,
+  "n": 2,
+  "values": [
+   0.671,
+   0.66
+  ]
+ },
+ "python-fastapi-pg/scenarios/get/rps": {
+  "min": 22553.3,
+  "max": 25725.3,
+  "n": 2,
+  "values": [
+   25725.3,
+   22553.3
+  ]
+ },
+ "python-fastapi-pg/scenarios/get/total": {
+  "min": 225519,
+  "max": 257256,
+  "n": 2,
+  "values": [
+   257256,
+   225519
+  ]
+ },
+ "python-fastapi-pg/scenarios/get/errors": {
+  "min": 0,
+  "max": 0,
+  "n": 2,
+  "values": [
+   0,
+   0
+  ]
+ },
+ "python-fastapi-pg/scenarios/get/error_pct": {
+  "min": 0.0,
+  "max": 0.0,
+  "n": 2,
+  "values": [
+   0.0,
+   0.0
+  ]
+ },
+ "python-fastapi-pg/scenarios/get/p50_ms": {
+  "min": 1.662,
+  "max": 2.219,
+  "n": 2,
+  "values": [
+   1.662,
+   2.219
+  ]
+ },
+ "python-fastapi-pg/scenarios/get/p90_ms": {
+  "min": 5.229,
+  "max": 5.314,
+  "n": 2,
+  "values": [
+   5.229,
+   5.314
+  ]
+ },
+ "python-fastapi-pg/scenarios/get/p95_ms": {
+  "min": 6.078,
+  "max": 6.737,
+  "n": 2,
+  "values": [
+   6.078,
+   6.737
+  ]
+ },
+ "python-fastapi-pg/scenarios/get/p99_ms": {
+  "min": 10.091,
+  "max": 11.48,
+  "n": 2,
+  "values": [
+   10.091,
+   11.48
+  ]
+ },
+ "python-fastapi-pg/scenarios/get/p999_ms": {
+  "min": 17.058,
+  "max": 38.266,
+  "n": 2,
+  "values": [
+   17.058,
+   38.266
+  ]
+ },
+ "python-fastapi-pg/scenarios/get/max_ms": {
+  "min": 121.767,
+  "max": 137.281,
+  "n": 2,
+  "values": [
+   121.767,
+   137.281
+  ]
+ },
+ "python-fastapi-pg/scenarios/get/mean_ms": {
+  "min": 2.486,
+  "max": 2.836,
+  "n": 2,
+  "values": [
+   2.486,
+   2.836
+  ]
+ },
+ "python-fastapi-pg/scenarios/get/status_codes/200": {
+  "min": 225519,
+  "max": 257256,
+  "n": 2,
+  "values": [
+   257256,
+   225519
+  ]
+ },
+ "python-fastapi-pg/scenarios/get/concurrency": {
+  "min": 64,
+  "max": 64,
+  "n": 2,
+  "values": [
+   64,
+   64
+  ]
+ },
+ "python-fastapi-pg/scenarios/get/peak_rss_bytes": {
+  "min": 711081984.0,
+  "max": 712228864.0,
+  "n": 2,
+  "values": [
+   711081984.0,
+   712228864.0
+  ]
+ },
+ "python-fastapi-pg/scenarios/get/idle_rss_bytes": {
+  "min": 709115904.0,
+  "max": 709525504.0,
+  "n": 2,
+  "values": [
+   709525504.0,
+   709115904.0
+  ]
+ },
+ "python-fastapi-pg/scenarios/get/rss_growth_per_req_bytes": {
+  "min": 6,
+  "max": 14,
+  "n": 2,
+  "values": [
+   6,
+   14
+  ]
+ },
+ "python-fastapi-pg/scenarios/get/cpu_seconds": {
+  "min": 62.01,
+  "max": 67.57,
+  "n": 2,
+  "values": [
+   67.57,
+   62.01
+  ]
+ },
+ "python-fastapi-pg/scenarios/get/cpu_ms_per_1k_req": {
+  "min": 262.66,
+  "max": 274.97,
+  "n": 2,
+  "values": [
+   262.66,
+   274.97
+  ]
+ },
+ "python-fastapi-pg/scenarios/get/server_cpu_util": {
+  "min": 0.617,
+  "max": 0.672,
+  "n": 2,
+  "values": [
+   0.672,
+   0.617
+  ]
+ },
+ "python-fastapi-pg/scenarios/list/rps": {
+  "min": 4654.2,
+  "max": 5820.1,
+  "n": 2,
+  "values": [
+   5820.1,
+   4654.2
+  ]
+ },
+ "python-fastapi-pg/scenarios/list/total": {
+  "min": 46489,
+  "max": 58163,
+  "n": 2,
+  "values": [
+   58163,
+   46489
+  ]
+ },
+ "python-fastapi-pg/scenarios/list/errors": {
+  "min": 0,
+  "max": 0,
+  "n": 2,
+  "values": [
+   0,
+   0
+  ]
+ },
+ "python-fastapi-pg/scenarios/list/error_pct": {
+  "min": 0.0,
+  "max": 0.0,
+  "n": 2,
+  "values": [
+   0.0,
+   0.0
+  ]
+ },
+ "python-fastapi-pg/scenarios/list/p50_ms": {
+  "min": 11.789,
+  "max": 12.563,
+  "n": 2,
+  "values": [
+   11.789,
+   12.563
+  ]
+ },
+ "python-fastapi-pg/scenarios/list/p90_ms": {
+  "min": 19.703,
+  "max": 22.991,
+  "n": 2,
+  "values": [
+   19.703,
+   22.991
+  ]
+ },
+ "python-fastapi-pg/scenarios/list/p95_ms": {
+  "min": 23.028,
+  "max": 29.644,
+  "n": 2,
+  "values": [
+   23.028,
+   29.644
+  ]
+ },
+ "python-fastapi-pg/scenarios/list/p99_ms": {
+  "min": 33.925,
+  "max": 51.171,
+  "n": 2,
+  "values": [
+   33.925,
+   51.171
+  ]
+ },
+ "python-fastapi-pg/scenarios/list/p999_ms": {
+  "min": 51.558,
+  "max": 118.931,
+  "n": 2,
+  "values": [
+   51.558,
+   118.931
+  ]
+ },
+ "python-fastapi-pg/scenarios/list/max_ms": {
+  "min": 88.749,
+  "max": 264.283,
+  "n": 2,
+  "values": [
+   88.749,
+   264.283
+  ]
+ },
+ "python-fastapi-pg/scenarios/list/mean_ms": {
+  "min": 10.995,
+  "max": 13.754,
+  "n": 2,
+  "values": [
+   10.995,
+   13.754
+  ]
+ },
+ "python-fastapi-pg/scenarios/list/status_codes/200": {
+  "min": 46489,
+  "max": 58163,
+  "n": 2,
+  "values": [
+   58163,
+   46489
+  ]
+ },
+ "python-fastapi-pg/scenarios/list/concurrency": {
+  "min": 64,
+  "max": 64,
+  "n": 2,
+  "values": [
+   64,
+   64
+  ]
+ },
+ "python-fastapi-pg/scenarios/list/peak_rss_bytes": {
+  "min": 713490432.0,
+  "max": 716783616.0,
+  "n": 2,
+  "values": [
+   713490432.0,
+   716783616.0
+  ]
+ },
+ "python-fastapi-pg/scenarios/list/idle_rss_bytes": {
+  "min": 708706304.0,
+  "max": 712589312.0,
+  "n": 2,
+  "values": [
+   708706304.0,
+   712589312.0
+  ]
+ },
+ "python-fastapi-pg/scenarios/list/rss_growth_per_req_bytes": {
+  "min": 82,
+  "max": 90,
+  "n": 2,
+  "values": [
+   82,
+   90
+  ]
+ },
+ "python-fastapi-pg/scenarios/list/cpu_seconds": {
+  "min": 68.18,
+  "max": 79.34,
+  "n": 2,
+  "values": [
+   79.34,
+   68.18
+  ]
+ },
+ "python-fastapi-pg/scenarios/list/cpu_ms_per_1k_req": {
+  "min": 1364.1,
+  "max": 1466.58,
+  "n": 2,
+  "values": [
+   1364.1,
+   1466.58
+  ]
+ },
+ "python-fastapi-pg/scenarios/list/server_cpu_util": {
+  "min": 0.68,
+  "max": 0.792,
+  "n": 2,
+  "values": [
+   0.792,
+   0.68
+  ]
+ },
+ "python-fastapi-pg/scenarios/create/rps": {
+  "min": 17790.0,
+  "max": 19226.6,
+  "n": 2,
+  "values": [
+   19226.6,
+   17790.0
+  ]
+ },
+ "python-fastapi-pg/scenarios/create/total": {
+  "min": 177871,
+  "max": 192235,
+  "n": 2,
+  "values": [
+   192235,
+   177871
+  ]
+ },
+ "python-fastapi-pg/scenarios/create/errors": {
+  "min": 0,
+  "max": 0,
+  "n": 2,
+  "values": [
+   0,
+   0
+  ]
+ },
+ "python-fastapi-pg/scenarios/create/error_pct": {
+  "min": 0.0,
+  "max": 0.0,
+  "n": 2,
+  "values": [
+   0.0,
+   0.0
+  ]
+ },
+ "python-fastapi-pg/scenarios/create/p50_ms": {
+  "min": 2.427,
+  "max": 3.183,
+  "n": 2,
+  "values": [
+   2.427,
+   3.183
+  ]
+ },
+ "python-fastapi-pg/scenarios/create/p90_ms": {
+  "min": 6.721,
+  "max": 6.913,
+  "n": 2,
+  "values": [
+   6.913,
+   6.721
+  ]
+ },
+ "python-fastapi-pg/scenarios/create/p95_ms": {
+  "min": 8.365,
+  "max": 8.447,
+  "n": 2,
+  "values": [
+   8.447,
+   8.365
+  ]
+ },
+ "python-fastapi-pg/scenarios/create/p99_ms": {
+  "min": 13.229,
+  "max": 14.062,
+  "n": 2,
+  "values": [
+   14.062,
+   13.229
+  ]
+ },
+ "python-fastapi-pg/scenarios/create/p999_ms": {
+  "min": 23.604,
+  "max": 24.477,
+  "n": 2,
+  "values": [
+   23.604,
+   24.477
+  ]
+ },
+ "python-fastapi-pg/scenarios/create/max_ms": {
+  "min": 75.78,
+  "max": 88.922,
+  "n": 2,
+  "values": [
+   75.78,
+   88.922
+  ]
+ },
+ "python-fastapi-pg/scenarios/create/mean_ms": {
+  "min": 3.326,
+  "max": 3.595,
+  "n": 2,
+  "values": [
+   3.326,
+   3.595
+  ]
+ },
+ "python-fastapi-pg/scenarios/create/status_codes/201": {
+  "min": 177871,
+  "max": 192235,
+  "n": 2,
+  "values": [
+   192235,
+   177871
+  ]
+ },
+ "python-fastapi-pg/scenarios/create/concurrency": {
+  "min": 64,
+  "max": 64,
+  "n": 2,
+  "values": [
+   64,
+   64
+  ]
+ },
+ "python-fastapi-pg/scenarios/create/peak_rss_bytes": {
+  "min": 711491584.0,
+  "max": 711786496.0,
+  "n": 2,
+  "values": [
+   711786496.0,
+   711491584.0
+  ]
+ },
+ "python-fastapi-pg/scenarios/create/idle_rss_bytes": {
+  "min": 707690496.0,
+  "max": 710754304.0,
+  "n": 2,
+  "values": [
+   710754304.0,
+   707690496.0
+  ]
+ },
+ "python-fastapi-pg/scenarios/create/rss_growth_per_req_bytes": {
+  "min": 5,
+  "max": 21,
+  "n": 2,
+  "values": [
+   5,
+   21
+  ]
+ },
+ "python-fastapi-pg/scenarios/create/cpu_seconds": {
+  "min": 61.53,
+  "max": 63.19,
+  "n": 2,
+  "values": [
+   63.19,
+   61.53
+  ]
+ },
+ "python-fastapi-pg/scenarios/create/cpu_ms_per_1k_req": {
+  "min": 328.71,
+  "max": 345.92,
+  "n": 2,
+  "values": [
+   328.71,
+   345.92
+  ]
+ },
+ "python-fastapi-pg/scenarios/create/server_cpu_util": {
+  "min": 0.613,
+  "max": 0.629,
+  "n": 2,
+  "values": [
+   0.629,
+   0.613
+  ]
+ },
+ "python-fastapi-pg/scenarios/cpu/rps": {
+  "min": 3005.9,
+  "max": 3261.5,
+  "n": 2,
+  "values": [
+   3261.5,
+   3005.9
+  ]
+ },
+ "python-fastapi-pg/scenarios/cpu/total": {
+  "min": 30007,
+  "max": 32561,
+  "n": 2,
+  "values": [
+   32561,
+   30007
+  ]
+ },
+ "python-fastapi-pg/scenarios/cpu/errors": {
+  "min": 0,
+  "max": 0,
+  "n": 2,
+  "values": [
+   0,
+   0
+  ]
+ },
+ "python-fastapi-pg/scenarios/cpu/error_pct": {
+  "min": 0.0,
+  "max": 0.0,
+  "n": 2,
+  "values": [
+   0.0,
+   0.0
+  ]
+ },
+ "python-fastapi-pg/scenarios/cpu/p50_ms": {
+  "min": 16.598,
+  "max": 18.977,
+  "n": 2,
+  "values": [
+   16.598,
+   18.977
+  ]
+ },
+ "python-fastapi-pg/scenarios/cpu/p90_ms": {
+  "min": 34.156,
+  "max": 35.888,
+  "n": 2,
+  "values": [
+   34.156,
+   35.888
+  ]
+ },
+ "python-fastapi-pg/scenarios/cpu/p95_ms": {
+  "min": 42.462,
+  "max": 43.794,
+  "n": 2,
+  "values": [
+   43.794,
+   42.462
+  ]
+ },
+ "python-fastapi-pg/scenarios/cpu/p99_ms": {
+  "min": 59.217,
+  "max": 102.071,
+  "n": 2,
+  "values": [
+   102.071,
+   59.217
+  ]
+ },
+ "python-fastapi-pg/scenarios/cpu/p999_ms": {
+  "min": 90.814,
+  "max": 140.664,
+  "n": 2,
+  "values": [
+   140.664,
+   90.814
+  ]
+ },
+ "python-fastapi-pg/scenarios/cpu/max_ms": {
+  "min": 151.661,
+  "max": 158.188,
+  "n": 2,
+  "values": [
+   158.188,
+   151.661
+  ]
+ },
+ "python-fastapi-pg/scenarios/cpu/mean_ms": {
+  "min": 19.63,
+  "max": 21.305,
+  "n": 2,
+  "values": [
+   19.63,
+   21.305
+  ]
+ },
+ "python-fastapi-pg/scenarios/cpu/status_codes/200": {
+  "min": 30007,
+  "max": 32561,
+  "n": 2,
+  "values": [
+   32561,
+   30007
+  ]
+ },
+ "python-fastapi-pg/scenarios/cpu/concurrency": {
+  "min": 64,
+  "max": 64,
+  "n": 2,
+  "values": [
+   64,
+   64
+  ]
+ },
+ "python-fastapi-pg/scenarios/cpu/peak_rss_bytes": {
+  "min": 719421440.0,
+  "max": 719831040.0,
+  "n": 2,
+  "values": [
+   719421440.0,
+   719831040.0
+  ]
+ },
+ "python-fastapi-pg/scenarios/cpu/idle_rss_bytes": {
+  "min": 718061568.0,
+  "max": 719159296.0,
+  "n": 2,
+  "values": [
+   718061568.0,
+   719159296.0
+  ]
+ },
+ "python-fastapi-pg/scenarios/cpu/rss_growth_per_req_bytes": {
+  "min": 22,
+  "max": 42,
+  "n": 2,
+  "values": [
+   42,
+   22
+  ]
+ },
+ "python-fastapi-pg/scenarios/cpu/cpu_seconds": {
+  "min": 92.59,
+  "max": 95.93,
+  "n": 2,
+  "values": [
+   95.93,
+   92.59
+  ]
+ },
+ "python-fastapi-pg/scenarios/cpu/cpu_ms_per_1k_req": {
+  "min": 2946.16,
+  "max": 3085.61,
+  "n": 2,
+  "values": [
+   2946.16,
+   3085.61
+  ]
+ },
+ "python-fastapi-pg/scenarios/cpu/server_cpu_util": {
+  "min": 0.924,
+  "max": 0.957,
+  "n": 2,
+  "values": [
+   0.957,
+   0.924
+  ]
+ },
+ "python-fastapi-pg/scenarios/io/rps": {
+  "min": 5630.1,
+  "max": 5660.3,
+  "n": 2,
+  "values": [
+   5660.3,
+   5630.1
+  ]
+ },
+ "python-fastapi-pg/scenarios/io/total": {
+  "min": 56265,
+  "max": 56561,
+  "n": 2,
+  "values": [
+   56561,
+   56265
+  ]
+ },
+ "python-fastapi-pg/scenarios/io/errors": {
+  "min": 0,
+  "max": 0,
+  "n": 2,
+  "values": [
+   0,
+   0
+  ]
+ },
+ "python-fastapi-pg/scenarios/io/error_pct": {
+  "min": 0.0,
+  "max": 0.0,
+  "n": 2,
+  "values": [
+   0.0,
+   0.0
+  ]
+ },
+ "python-fastapi-pg/scenarios/io/p50_ms": {
+  "min": 11.256,
+  "max": 11.327,
+  "n": 2,
+  "values": [
+   11.256,
+   11.327
+  ]
+ },
+ "python-fastapi-pg/scenarios/io/p90_ms": {
+  "min": 12.079,
+  "max": 12.174,
+  "n": 2,
+  "values": [
+   12.079,
+   12.174
+  ]
+ },
+ "python-fastapi-pg/scenarios/io/p95_ms": {
+  "min": 12.276,
+  "max": 12.439,
+  "n": 2,
+  "values": [
+   12.276,
+   12.439
+  ]
+ },
+ "python-fastapi-pg/scenarios/io/p99_ms": {
+  "min": 12.7,
+  "max": 12.857,
+  "n": 2,
+  "values": [
+   12.7,
+   12.857
+  ]
+ },
+ "python-fastapi-pg/scenarios/io/p999_ms": {
+  "min": 20.896,
+  "max": 21.848,
+  "n": 2,
+  "values": [
+   21.848,
+   20.896
+  ]
+ },
+ "python-fastapi-pg/scenarios/io/max_ms": {
+  "min": 26.948,
+  "max": 28.001,
+  "n": 2,
+  "values": [
+   28.001,
+   26.948
+  ]
+ },
+ "python-fastapi-pg/scenarios/io/mean_ms": {
+  "min": 11.308,
+  "max": 11.368,
+  "n": 2,
+  "values": [
+   11.308,
+   11.368
+  ]
+ },
+ "python-fastapi-pg/scenarios/io/status_codes/200": {
+  "min": 56265,
+  "max": 56561,
+  "n": 2,
+  "values": [
+   56561,
+   56265
+  ]
+ },
+ "python-fastapi-pg/scenarios/io/concurrency": {
+  "min": 64,
+  "max": 64,
+  "n": 2,
+  "values": [
+   64,
+   64
+  ]
+ },
+ "python-fastapi-pg/scenarios/io/peak_rss_bytes": {
+  "min": 707723264.0,
+  "max": 708100096.0,
+  "n": 2,
+  "values": [
+   708100096.0,
+   707723264.0
+  ]
+ },
+ "python-fastapi-pg/scenarios/io/idle_rss_bytes": {
+  "min": 704757760.0,
+  "max": 705593344.0,
+  "n": 2,
+  "values": [
+   704757760.0,
+   705593344.0
+  ]
+ },
+ "python-fastapi-pg/scenarios/io/rss_growth_per_req_bytes": {
+  "min": 38,
+  "max": 59,
+  "n": 2,
+  "values": [
+   59,
+   38
+  ]
+ },
+ "python-fastapi-pg/scenarios/io/cpu_seconds": {
+  "min": 7.24,
+  "max": 7.72,
+  "n": 2,
+  "values": [
+   7.72,
+   7.24
+  ]
+ },
+ "python-fastapi-pg/scenarios/io/cpu_ms_per_1k_req": {
+  "min": 128.68,
+  "max": 136.49,
+  "n": 2,
+  "values": [
+   136.49,
+   128.68
+  ]
+ },
+ "python-fastapi-pg/scenarios/io/server_cpu_util": {
+  "min": 0.072,
+  "max": 0.077,
+  "n": 2,
+  "values": [
+   0.077,
+   0.072
+  ]
+ },
+ "python-fastapi-pg/scenarios/mixed/rps": {
+  "min": 16830.5,
+  "max": 18391.5,
+  "n": 2,
+  "values": [
+   18391.5,
+   16830.5
+  ]
+ },
+ "python-fastapi-pg/scenarios/mixed/total": {
+  "min": 168283,
+  "max": 183896,
+  "n": 2,
+  "values": [
+   183896,
+   168283
+  ]
+ },
+ "python-fastapi-pg/scenarios/mixed/errors": {
+  "min": 0,
+  "max": 0,
+  "n": 2,
+  "values": [
+   0,
+   0
+  ]
+ },
+ "python-fastapi-pg/scenarios/mixed/error_pct": {
+  "min": 0.0,
+  "max": 0.0,
+  "n": 2,
+  "values": [
+   0.0,
+   0.0
+  ]
+ },
+ "python-fastapi-pg/scenarios/mixed/p50_ms": {
+  "min": 2.522,
+  "max": 3.247,
+  "n": 2,
+  "values": [
+   3.247,
+   2.522
+  ]
+ },
+ "python-fastapi-pg/scenarios/mixed/p90_ms": {
+  "min": 5.646,
+  "max": 8.55,
+  "n": 2,
+  "values": [
+   5.646,
+   8.55
+  ]
+ },
+ "python-fastapi-pg/scenarios/mixed/p95_ms": {
+  "min": 6.866,
+  "max": 10.205,
+  "n": 2,
+  "values": [
+   6.866,
+   10.205
+  ]
+ },
+ "python-fastapi-pg/scenarios/mixed/p99_ms": {
+  "min": 10.043,
+  "max": 16.465,
+  "n": 2,
+  "values": [
+   10.043,
+   16.465
+  ]
+ },
+ "python-fastapi-pg/scenarios/mixed/p999_ms": {
+  "min": 17.106,
+  "max": 25.973,
+  "n": 2,
+  "values": [
+   17.106,
+   25.973
+  ]
+ },
+ "python-fastapi-pg/scenarios/mixed/max_ms": {
+  "min": 58.62,
+  "max": 59.083,
+  "n": 2,
+  "values": [
+   59.083,
+   58.62
+  ]
+ },
+ "python-fastapi-pg/scenarios/mixed/mean_ms": {
+  "min": 3.478,
+  "max": 3.8,
+  "n": 2,
+  "values": [
+   3.478,
+   3.8
+  ]
+ },
+ "python-fastapi-pg/scenarios/mixed/status_codes/200": {
+  "min": 168283,
+  "max": 183896,
+  "n": 2,
+  "values": [
+   183896,
+   168283
+  ]
+ },
+ "python-fastapi-pg/scenarios/mixed/concurrency": {
+  "min": 64,
+  "max": 64,
+  "n": 2,
+  "values": [
+   64,
+   64
+  ]
+ },
+ "python-fastapi-pg/scenarios/mixed/peak_rss_bytes": {
+  "min": 710459392.0,
+  "max": 711065600.0,
+  "n": 2,
+  "values": [
+   711065600.0,
+   710459392.0
+  ]
+ },
+ "python-fastapi-pg/scenarios/mixed/idle_rss_bytes": {
+  "min": 705789952.0,
+  "max": 709345280.0,
+  "n": 2,
+  "values": [
+   709345280.0,
+   705789952.0
+  ]
+ },
+ "python-fastapi-pg/scenarios/mixed/rss_growth_per_req_bytes": {
+  "min": 9,
+  "max": 28,
+  "n": 2,
+  "values": [
+   9,
+   28
+  ]
+ },
+ "python-fastapi-pg/scenarios/mixed/cpu_seconds": {
+  "min": 69.97,
+  "max": 71.87,
+  "n": 2,
+  "values": [
+   71.87,
+   69.97
+  ]
+ },
+ "python-fastapi-pg/scenarios/mixed/cpu_ms_per_1k_req": {
+  "min": 390.82,
+  "max": 415.79,
+  "n": 2,
+  "values": [
+   390.82,
+   415.79
+  ]
+ },
+ "python-fastapi-pg/scenarios/mixed/server_cpu_util": {
+  "min": 0.697,
+  "max": 0.716,
+  "n": 2,
+  "values": [
+   0.716,
+   0.697
+  ]
+ },
+ "python-fastapi-pg/saturation/sat-get/rps": {
+  "min": 23035.6,
+  "max": 24486.1,
+  "n": 2,
+  "values": [
+   24486.1,
+   23035.6
+  ]
+ },
+ "python-fastapi-pg/saturation/sat-get/total": {
+  "min": 229492,
+  "max": 244087,
+  "n": 2,
+  "values": [
+   244087,
+   229492
+  ]
+ },
+ "python-fastapi-pg/saturation/sat-get/errors": {
+  "min": 0,
+  "max": 0,
+  "n": 2,
+  "values": [
+   0,
+   0
+  ]
+ },
+ "python-fastapi-pg/saturation/sat-get/error_pct": {
+  "min": 0.0,
+  "max": 0.0,
+  "n": 2,
+  "values": [
+   0.0,
+   0.0
+  ]
+ },
+ "python-fastapi-pg/saturation/sat-get/p50_ms": {
+  "min": 35.4,
+  "max": 37.266,
+  "n": 2,
+  "values": [
+   35.4,
+   37.266
+  ]
+ },
+ "python-fastapi-pg/saturation/sat-get/p90_ms": {
+  "min": 78.602,
+  "max": 83.062,
+  "n": 2,
+  "values": [
+   78.602,
+   83.062
+  ]
+ },
+ "python-fastapi-pg/saturation/sat-get/p95_ms": {
+  "min": 99.108,
+  "max": 105.24,
+  "n": 2,
+  "values": [
+   99.108,
+   105.24
+  ]
+ },
+ "python-fastapi-pg/saturation/sat-get/p99_ms": {
+  "min": 146.914,
+  "max": 153.436,
+  "n": 2,
+  "values": [
+   146.914,
+   153.436
+  ]
+ },
+ "python-fastapi-pg/saturation/sat-get/p999_ms": {
+  "min": 207.355,
+  "max": 214.373,
+  "n": 2,
+  "values": [
+   207.355,
+   214.373
+  ]
+ },
+ "python-fastapi-pg/saturation/sat-get/max_ms": {
+  "min": 392.914,
+  "max": 440.279,
+  "n": 2,
+  "values": [
+   392.914,
+   440.279
+  ]
+ },
+ "python-fastapi-pg/saturation/sat-get/mean_ms": {
+  "min": 40.82,
+  "max": 43.382,
+  "n": 2,
+  "values": [
+   40.82,
+   43.382
+  ]
+ },
+ "python-fastapi-pg/saturation/sat-get/status_codes/200": {
+  "min": 229492,
+  "max": 244087,
+  "n": 2,
+  "values": [
+   244087,
+   229492
+  ]
+ },
+ "python-fastapi-pg/saturation/sat-get/concurrency": {
+  "min": 1000,
+  "max": 1000,
+  "n": 2,
+  "values": [
+   1000,
+   1000
+  ]
+ },
+ "python-fastapi-pg/saturation/sat-get/peak_rss_bytes": {
+  "min": 736083968.0,
+  "max": 737591296.0,
+  "n": 2,
+  "values": [
+   737591296.0,
+   736083968.0
+  ]
+ },
+ "python-fastapi-pg/saturation/sat-get/idle_rss_bytes": {
+  "min": 698220544.0,
+  "max": 699891712.0,
+  "n": 2,
+  "values": [
+   699891712.0,
+   698220544.0
+  ]
+ },
+ "python-fastapi-pg/saturation/sat-get/rss_growth_per_req_bytes": {
+  "min": 154,
+  "max": 165,
+  "n": 2,
+  "values": [
+   154,
+   165
+  ]
+ },
+ "python-fastapi-pg/saturation/sat-get/cpu_seconds": {
+  "min": 65.92,
+  "max": 67.22,
+  "n": 2,
+  "values": [
+   67.22,
+   65.92
+  ]
+ },
+ "python-fastapi-pg/saturation/sat-get/cpu_ms_per_1k_req": {
+  "min": 275.39,
+  "max": 287.24,
+  "n": 2,
+  "values": [
+   275.39,
+   287.24
+  ]
+ },
+ "python-fastapi-pg/saturation/sat-get/server_cpu_util": {
+  "min": 0.655,
+  "max": 0.668,
+  "n": 2,
+  "values": [
+   0.668,
+   0.655
+  ]
+ },
+ "python-fastapi-pg/saturation/sat-cpu/rps": {
+  "min": 973.2,
+  "max": 1005.9,
+  "n": 2,
+  "values": [
+   1005.9,
+   973.2
+  ]
+ },
+ "python-fastapi-pg/saturation/sat-cpu/total": {
+  "min": 9237,
+  "max": 9565,
+  "n": 2,
+  "values": [
+   9565,
+   9237
+  ]
+ },
+ "python-fastapi-pg/saturation/sat-cpu/errors": {
+  "min": 167,
+  "max": 311,
+  "n": 2,
+  "values": [
+   167,
+   311
+  ]
+ },
+ "python-fastapi-pg/saturation/sat-cpu/error_pct": {
+  "min": 1.746,
+  "max": 3.367,
+  "n": 2,
+  "values": [
+   1.746,
+   3.367
+  ]
+ },
+ "python-fastapi-pg/saturation/sat-cpu/p50_ms": {
+  "min": 485.494,
+  "max": 490.787,
+  "n": 2,
+  "values": [
+   485.494,
+   490.787
+  ]
+ },
+ "python-fastapi-pg/saturation/sat-cpu/p90_ms": {
+  "min": 745.762,
+  "max": 775.229,
+  "n": 2,
+  "values": [
+   745.762,
+   775.229
+  ]
+ },
+ "python-fastapi-pg/saturation/sat-cpu/p95_ms": {
+  "min": 821.538,
+  "max": 856.782,
+  "n": 2,
+  "values": [
+   821.538,
+   856.782
+  ]
+ },
+ "python-fastapi-pg/saturation/sat-cpu/p99_ms": {
+  "min": 944.878,
+  "max": 949.765,
+  "n": 2,
+  "values": [
+   944.878,
+   949.765
+  ]
+ },
+ "python-fastapi-pg/saturation/sat-cpu/p999_ms": {
+  "min": 994.239,
+  "max": 998.855,
+  "n": 2,
+  "values": [
+   994.239,
+   998.855
+  ]
+ },
+ "python-fastapi-pg/saturation/sat-cpu/max_ms": {
+  "min": 999.987,
+  "max": 1000.142,
+  "n": 2,
+  "values": [
+   1000.142,
+   999.987
+  ]
+ },
+ "python-fastapi-pg/saturation/sat-cpu/mean_ms": {
+  "min": 500.16,
+  "max": 510.264,
+  "n": 2,
+  "values": [
+   500.16,
+   510.264
+  ]
+ },
+ "python-fastapi-pg/saturation/sat-cpu/status_codes/200": {
+  "min": 8926,
+  "max": 9398,
+  "n": 2,
+  "values": [
+   9398,
+   8926
+  ]
+ },
+ "python-fastapi-pg/saturation/sat-cpu/error_kinds/timeout": {
+  "min": 167,
+  "max": 311,
+  "n": 2,
+  "values": [
+   167,
+   311
+  ]
+ },
+ "python-fastapi-pg/saturation/sat-cpu/concurrency": {
+  "min": 500,
+  "max": 500,
+  "n": 2,
+  "values": [
+   500,
+   500
+  ]
+ },
+ "python-fastapi-pg/saturation/sat-cpu/peak_rss_bytes": {
+  "min": 748060672.0,
+  "max": 751157248.0,
+  "n": 2,
+  "values": [
+   748060672.0,
+   751157248.0
+  ]
+ },
+ "python-fastapi-pg/saturation/sat-cpu/idle_rss_bytes": {
+  "min": 697942016.0,
+  "max": 699039744.0,
+  "n": 2,
+  "values": [
+   697942016.0,
+   699039744.0
+  ]
+ },
+ "python-fastapi-pg/saturation/sat-cpu/rss_growth_per_req_bytes": {
+  "min": 5240,
+  "max": 5642,
+  "n": 2,
+  "values": [
+   5240,
+   5642
+  ]
+ },
+ "python-fastapi-pg/saturation/sat-cpu/cpu_seconds": {
+  "min": 94.97,
+  "max": 96.64,
+  "n": 2,
+  "values": [
+   96.64,
+   94.97
+  ]
+ },
+ "python-fastapi-pg/saturation/sat-cpu/cpu_ms_per_1k_req": {
+  "min": 10103.5,
+  "max": 10281.48,
+  "n": 2,
+  "values": [
+   10103.5,
+   10281.48
+  ]
+ },
+ "python-fastapi-pg/saturation/sat-cpu/server_cpu_util": {
+  "min": 0.947,
+  "max": 0.964,
+  "n": 2,
+  "values": [
+   0.964,
+   0.947
+  ]
+ },
+ "python-fastapi-pg/connections/connections": {
+  "min": 1000,
+  "max": 1000,
+  "n": 2,
+  "values": [
+   1000,
+   1000
+  ]
+ },
+ "python-fastapi-pg/connections/failed": {
+  "min": 0,
+  "max": 0,
+  "n": 2,
+  "values": [
+   0,
+   0
+  ]
+ },
+ "python-fastapi-pg/connections/idle_rss_bytes": {
+  "min": 698695680.0,
+  "max": 699990016.0,
+  "n": 2,
+  "values": [
+   698695680.0,
+   699990016.0
+  ]
+ },
+ "python-fastapi-pg/connections/held_rss_bytes": {
+  "min": 717471744.0,
+  "max": 718864384.0,
+  "n": 2,
+  "values": [
+   717471744.0,
+   718864384.0
+  ]
+ },
+ "python-fastapi-pg/connections/after_close_rss_bytes": {
+  "min": 717471744.0,
+  "max": 718880768.0,
+  "n": 2,
+  "values": [
+   717471744.0,
+   718880768.0
+  ]
+ },
+ "python-fastapi-pg/connections/bytes_per_conn": {
+  "min": 18776,
+  "max": 18874,
+  "n": 2,
+  "values": [
+   18776,
+   18874
+  ]
+ },
+ "python-fastapi-pg/recovery/spike/concurrency": {
+  "min": 256,
+  "max": 256,
+  "n": 2,
+  "values": [
+   256,
+   256
+  ]
+ },
+ "python-fastapi-pg/recovery/spike/seconds": {
+  "min": 5,
+  "max": 5,
+  "n": 2,
+  "values": [
+   5,
+   5
+  ]
+ },
+ "python-fastapi-pg/recovery/spike/rps": {
+  "min": 6437,
+  "max": 6803,
+  "n": 2,
+  "values": [
+   6803,
+   6437
+  ]
+ },
+ "python-fastapi-pg/recovery/spike/errors": {
+  "min": 0,
+  "max": 0,
+  "n": 2,
+  "values": [
+   0,
+   0
+  ]
+ },
+ "python-fastapi-pg/recovery/idle_rss_bytes": {
+  "min": 698941440.0,
+  "max": 699678720.0,
+  "n": 2,
+  "values": [
+   699678720.0,
+   698941440.0
+  ]
+ },
+ "python-fastapi-pg/recovery/peak_rss_bytes": {
+  "min": 720306176.0,
+  "max": 721108992.0,
+  "n": 2,
+  "values": [
+   721108992.0,
+   720306176.0
+  ]
+ },
+ "python-fastapi-pg/recovery/rss_after_spike_bytes": {
+  "min": 720306176.0,
+  "max": 721108992.0,
+  "n": 2,
+  "values": [
+   721108992.0,
+   720306176.0
+  ]
+ },
+ "python-fastapi-pg/recovery/rss_after_settle_bytes": {
+  "min": 720306176.0,
+  "max": 721108992.0,
+  "n": 2,
+  "values": [
+   721108992.0,
+   720306176.0
+  ]
+ },
+ "python-fastapi-pg/recovery/settle_s": {
+  "min": 10,
+  "max": 10,
+  "n": 2,
+  "values": [
+   10,
+   10
+  ]
+ },
+ "python-fastapi-pg/recovery/retained_pct": {
+  "min": 100.0,
+  "max": 100.0,
+  "n": 2,
+  "values": [
+   100.0,
+   100.0
+  ]
+ },
+ "python-fastapi-pg/recovery/probe_pre/p50_ms": {
+  "min": 0.215,
+  "max": 0.216,
+  "n": 2,
+  "values": [
+   0.215,
+   0.216
+  ]
+ },
+ "python-fastapi-pg/recovery/probe_pre/p99_ms": {
+  "min": 0.662,
+  "max": 0.816,
+  "n": 2,
+  "values": [
+   0.662,
+   0.816
+  ]
+ },
+ "python-fastapi-pg/recovery/probe_after_spike/p50_ms": {
+  "min": 0.36,
+  "max": 0.392,
+  "n": 2,
+  "values": [
+   0.36,
+   0.392
+  ]
+ },
+ "python-fastapi-pg/recovery/probe_after_spike/p99_ms": {
+  "min": 0.89,
+  "max": 1.529,
+  "n": 2,
+  "values": [
+   0.89,
+   1.529
+  ]
+ },
+ "python-fastapi-pg/recovery/probe_after_settle/p50_ms": {
+  "min": 0.213,
+  "max": 0.216,
+  "n": 2,
+  "values": [
+   0.213,
+   0.216
+  ]
+ },
+ "python-fastapi-pg/recovery/probe_after_settle/p99_ms": {
+  "min": 0.578,
+  "max": 0.68,
+  "n": 2,
+  "values": [
+   0.578,
+   0.68
+  ]
+ },
+ "python-fastapi-1w-pg/port": {
+  "min": 8014,
+  "max": 8014,
+  "n": 2,
+  "values": [
+   8014,
+   8014
+  ]
+ },
+ "python-fastapi-1w-pg/loc": {
+  "min": 129,
+  "max": 129,
+  "n": 2,
+  "values": [
+   129,
+   129
+  ]
+ },
+ "python-fastapi-1w-pg/deps": {
+  "min": 22,
+  "max": 22,
+  "n": 2,
+  "values": [
+   22,
+   22
+  ]
+ },
+ "python-fastapi-1w-pg/cold_start_ms": {
+  "min": 153.5,
+  "max": 161.4,
+  "n": 10,
+  "values": [
+   159.0,
+   158.1,
+   153.5,
+   155.9,
+   159.0,
+   157.9,
+   156.0,
+   156.0,
+   161.4,
+   156.0
+  ]
+ },
+ "python-fastapi-1w-pg/cold_start_median_ms": {
+  "min": 156.0,
+  "max": 158.1,
+  "n": 2,
+  "values": [
+   158.1,
+   156.0
+  ]
+ },
+ "python-fastapi-1w-pg/idle_rss_bytes": {
+  "min": 64815104.0,
+  "max": 65191936.0,
+  "n": 2,
+  "values": [
+   64815104.0,
+   65191936.0
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/health/rps": {
+  "min": 32679.8,
+  "max": 33946.7,
+  "n": 2,
+  "values": [
+   33946.7,
+   32679.8
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/health/total": {
+  "min": 326858,
+  "max": 339537,
+  "n": 2,
+  "values": [
+   339537,
+   326858
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/health/errors": {
+  "min": 0,
+  "max": 0,
+  "n": 2,
+  "values": [
+   0,
+   0
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/health/error_pct": {
+  "min": 0.0,
+  "max": 0.0,
+  "n": 2,
+  "values": [
+   0.0,
+   0.0
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/health/p50_ms": {
+  "min": 1.857,
+  "max": 1.901,
+  "n": 2,
+  "values": [
+   1.857,
+   1.901
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/health/p90_ms": {
+  "min": 1.91,
+  "max": 2.015,
+  "n": 2,
+  "values": [
+   1.91,
+   2.015
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/health/p95_ms": {
+  "min": 1.962,
+  "max": 2.064,
+  "n": 2,
+  "values": [
+   1.962,
+   2.064
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/health/p99_ms": {
+  "min": 3.656,
+  "max": 3.801,
+  "n": 2,
+  "values": [
+   3.656,
+   3.801
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/health/p999_ms": {
+  "min": 3.853,
+  "max": 4.394,
+  "n": 2,
+  "values": [
+   3.853,
+   4.394
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/health/max_ms": {
+  "min": 61.533,
+  "max": 63.122,
+  "n": 2,
+  "values": [
+   61.533,
+   63.122
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/health/mean_ms": {
+  "min": 1.885,
+  "max": 1.958,
+  "n": 2,
+  "values": [
+   1.885,
+   1.958
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/health/status_codes/200": {
+  "min": 326858,
+  "max": 339537,
+  "n": 2,
+  "values": [
+   339537,
+   326858
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/health/concurrency": {
+  "min": 64,
+  "max": 64,
+  "n": 2,
+  "values": [
+   64,
+   64
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/health/peak_rss_bytes": {
+  "min": 68288512.0,
+  "max": 68681728.0,
+  "n": 2,
+  "values": [
+   68288512.0,
+   68681728.0
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/health/idle_rss_bytes": {
+  "min": 67633152.0,
+  "max": 67993600.0,
+  "n": 2,
+  "values": [
+   67633152.0,
+   67993600.0
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/health/rss_growth_per_req_bytes": {
+  "min": 2,
+  "max": 2,
+  "n": 2,
+  "values": [
+   2,
+   2
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/health/cpu_seconds": {
+  "min": 9.98,
+  "max": 10.0,
+  "n": 2,
+  "values": [
+   10.0,
+   9.98
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/health/cpu_ms_per_1k_req": {
+  "min": 29.45,
+  "max": 30.53,
+  "n": 2,
+  "values": [
+   29.45,
+   30.53
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/health/server_cpu_util": {
+  "min": 0.099,
+  "max": 0.1,
+  "n": 2,
+  "values": [
+   0.1,
+   0.099
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/get/rps": {
+  "min": 13746.1,
+  "max": 14467.9,
+  "n": 2,
+  "values": [
+   14467.9,
+   13746.1
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/get/total": {
+  "min": 137435,
+  "max": 144657,
+  "n": 2,
+  "values": [
+   144657,
+   137435
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/get/errors": {
+  "min": 0,
+  "max": 0,
+  "n": 2,
+  "values": [
+   0,
+   0
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/get/error_pct": {
+  "min": 0.0,
+  "max": 0.0,
+  "n": 2,
+  "values": [
+   0.0,
+   0.0
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/get/p50_ms": {
+  "min": 4.431,
+  "max": 4.64,
+  "n": 2,
+  "values": [
+   4.431,
+   4.64
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/get/p90_ms": {
+  "min": 4.881,
+  "max": 5.242,
+  "n": 2,
+  "values": [
+   4.881,
+   5.242
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/get/p95_ms": {
+  "min": 6.85,
+  "max": 7.183,
+  "n": 2,
+  "values": [
+   6.85,
+   7.183
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/get/p99_ms": {
+  "min": 7.461,
+  "max": 8.021,
+  "n": 2,
+  "values": [
+   7.461,
+   8.021
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/get/p999_ms": {
+  "min": 11.72,
+  "max": 12.946,
+  "n": 2,
+  "values": [
+   11.72,
+   12.946
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/get/max_ms": {
+  "min": 21.004,
+  "max": 28.724,
+  "n": 2,
+  "values": [
+   28.724,
+   21.004
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/get/mean_ms": {
+  "min": 4.423,
+  "max": 4.656,
+  "n": 2,
+  "values": [
+   4.423,
+   4.656
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/get/status_codes/200": {
+  "min": 137435,
+  "max": 144657,
+  "n": 2,
+  "values": [
+   144657,
+   137435
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/get/concurrency": {
+  "min": 64,
+  "max": 64,
+  "n": 2,
+  "values": [
+   64,
+   64
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/get/peak_rss_bytes": {
+  "min": 67387392.0,
+  "max": 67420160.0,
+  "n": 2,
+  "values": [
+   67387392.0,
+   67420160.0
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/get/idle_rss_bytes": {
+  "min": 67272704.0,
+  "max": 67289088.0,
+  "n": 2,
+  "values": [
+   67272704.0,
+   67289088.0
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/get/rss_growth_per_req_bytes": {
+  "min": 1,
+  "max": 1,
+  "n": 2,
+  "values": [
+   1,
+   1
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/get/cpu_seconds": {
+  "min": 9.99,
+  "max": 10.0,
+  "n": 2,
+  "values": [
+   10.0,
+   9.99
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/get/cpu_ms_per_1k_req": {
+  "min": 69.13,
+  "max": 72.69,
+  "n": 2,
+  "values": [
+   69.13,
+   72.69
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/get/server_cpu_util": {
+  "min": 0.1,
+  "max": 0.1,
+  "n": 2,
+  "values": [
+   0.1,
+   0.1
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/list/rps": {
+  "min": 2177.2,
+  "max": 2185.3,
+  "n": 2,
+  "values": [
+   2185.3,
+   2177.2
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/list/total": {
+  "min": 21718,
+  "max": 21793,
+  "n": 2,
+  "values": [
+   21793,
+   21718
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/list/errors": {
+  "min": 0,
+  "max": 0,
+  "n": 2,
+  "values": [
+   0,
+   0
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/list/error_pct": {
+  "min": 0.0,
+  "max": 0.0,
+  "n": 2,
+  "values": [
+   0.0,
+   0.0
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/list/p50_ms": {
+  "min": 29.087,
+  "max": 29.089,
+  "n": 2,
+  "values": [
+   29.089,
+   29.087
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/list/p90_ms": {
+  "min": 30.784,
+  "max": 31.776,
+  "n": 2,
+  "values": [
+   30.784,
+   31.776
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/list/p95_ms": {
+  "min": 36.649,
+  "max": 38.334,
+  "n": 2,
+  "values": [
+   36.649,
+   38.334
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/list/p99_ms": {
+  "min": 77.146,
+  "max": 78.944,
+  "n": 2,
+  "values": [
+   78.944,
+   77.146
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/list/p999_ms": {
+  "min": 193.769,
+  "max": 256.13,
+  "n": 2,
+  "values": [
+   256.13,
+   193.769
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/list/max_ms": {
+  "min": 501.894,
+  "max": 621.011,
+  "n": 2,
+  "values": [
+   621.011,
+   501.894
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/list/mean_ms": {
+  "min": 29.324,
+  "max": 29.428,
+  "n": 2,
+  "values": [
+   29.324,
+   29.428
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/list/status_codes/200": {
+  "min": 21718,
+  "max": 21793,
+  "n": 2,
+  "values": [
+   21793,
+   21718
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/list/concurrency": {
+  "min": 64,
+  "max": 64,
+  "n": 2,
+  "values": [
+   64,
+   64
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/list/peak_rss_bytes": {
+  "min": 69681152.0,
+  "max": 69828608.0,
+  "n": 2,
+  "values": [
+   69828608.0,
+   69681152.0
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/list/idle_rss_bytes": {
+  "min": 69582848.0,
+  "max": 69713920.0,
+  "n": 2,
+  "values": [
+   69713920.0,
+   69582848.0
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/list/rss_growth_per_req_bytes": {
+  "min": 5,
+  "max": 5,
+  "n": 2,
+  "values": [
+   5,
+   5
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/list/cpu_seconds": {
+  "min": 10.01,
+  "max": 10.02,
+  "n": 2,
+  "values": [
+   10.01,
+   10.02
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/list/cpu_ms_per_1k_req": {
+  "min": 459.32,
+  "max": 461.37,
+  "n": 2,
+  "values": [
+   459.32,
+   461.37
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/list/server_cpu_util": {
+  "min": 0.1,
+  "max": 0.1,
+  "n": 2,
+  "values": [
+   0.1,
+   0.1
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/create/rps": {
+  "min": 10720.4,
+  "max": 11435.0,
+  "n": 2,
+  "values": [
+   11435.0,
+   10720.4
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/create/total": {
+  "min": 107169,
+  "max": 114326,
+  "n": 2,
+  "values": [
+   114326,
+   107169
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/create/errors": {
+  "min": 0,
+  "max": 0,
+  "n": 2,
+  "values": [
+   0,
+   0
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/create/error_pct": {
+  "min": 0.0,
+  "max": 0.0,
+  "n": 2,
+  "values": [
+   0.0,
+   0.0
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/create/p50_ms": {
+  "min": 5.618,
+  "max": 5.735,
+  "n": 2,
+  "values": [
+   5.618,
+   5.735
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/create/p90_ms": {
+  "min": 5.939,
+  "max": 6.43,
+  "n": 2,
+  "values": [
+   5.939,
+   6.43
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/create/p95_ms": {
+  "min": 6.044,
+  "max": 6.93,
+  "n": 2,
+  "values": [
+   6.044,
+   6.93
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/create/p99_ms": {
+  "min": 6.326,
+  "max": 10.566,
+  "n": 2,
+  "values": [
+   6.326,
+   10.566
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/create/p999_ms": {
+  "min": 10.942,
+  "max": 19.618,
+  "n": 2,
+  "values": [
+   10.942,
+   19.618
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/create/max_ms": {
+  "min": 24.464,
+  "max": 41.542,
+  "n": 2,
+  "values": [
+   24.464,
+   41.542
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/create/mean_ms": {
+  "min": 5.597,
+  "max": 5.971,
+  "n": 2,
+  "values": [
+   5.597,
+   5.971
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/create/status_codes/201": {
+  "min": 107169,
+  "max": 114326,
+  "n": 2,
+  "values": [
+   114326,
+   107169
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/create/concurrency": {
+  "min": 64,
+  "max": 64,
+  "n": 2,
+  "values": [
+   64,
+   64
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/create/peak_rss_bytes": {
+  "min": 67452928.0,
+  "max": 67682304.0,
+  "n": 2,
+  "values": [
+   67682304.0,
+   67452928.0
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/create/idle_rss_bytes": {
+  "min": 67436544.0,
+  "max": 67485696.0,
+  "n": 2,
+  "values": [
+   67485696.0,
+   67436544.0
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/create/rss_growth_per_req_bytes": {
+  "min": 0,
+  "max": 2,
+  "n": 2,
+  "values": [
+   2,
+   0
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/create/cpu_seconds": {
+  "min": 9.86,
+  "max": 9.93,
+  "n": 2,
+  "values": [
+   9.93,
+   9.86
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/create/cpu_ms_per_1k_req": {
+  "min": 86.86,
+  "max": 92.0,
+  "n": 2,
+  "values": [
+   86.86,
+   92.0
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/create/server_cpu_util": {
+  "min": 0.098,
+  "max": 0.099,
+  "n": 2,
+  "values": [
+   0.099,
+   0.098
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/cpu/rps": {
+  "min": 978.7,
+  "max": 979.1,
+  "n": 2,
+  "values": [
+   979.1,
+   978.7
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/cpu/total": {
+  "min": 9726,
+  "max": 9731,
+  "n": 2,
+  "values": [
+   9731,
+   9726
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/cpu/errors": {
+  "min": 0,
+  "max": 0,
+  "n": 2,
+  "values": [
+   0,
+   0
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/cpu/error_pct": {
+  "min": 0.0,
+  "max": 0.0,
+  "n": 2,
+  "values": [
+   0.0,
+   0.0
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/cpu/p50_ms": {
+  "min": 65.13,
+  "max": 65.272,
+  "n": 2,
+  "values": [
+   65.13,
+   65.272
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/cpu/p90_ms": {
+  "min": 66.105,
+  "max": 66.626,
+  "n": 2,
+  "values": [
+   66.626,
+   66.105
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/cpu/p95_ms": {
+  "min": 67.032,
+  "max": 67.231,
+  "n": 2,
+  "values": [
+   67.231,
+   67.032
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/cpu/p99_ms": {
+  "min": 71.246,
+  "max": 80.036,
+  "n": 2,
+  "values": [
+   71.246,
+   80.036
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/cpu/p999_ms": {
+  "min": 360.324,
+  "max": 370.816,
+  "n": 2,
+  "values": [
+   370.816,
+   360.324
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/cpu/max_ms": {
+  "min": 474.475,
+  "max": 485.462,
+  "n": 2,
+  "values": [
+   485.462,
+   474.475
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/cpu/mean_ms": {
+  "min": 65.562,
+  "max": 65.581,
+  "n": 2,
+  "values": [
+   65.562,
+   65.581
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/cpu/status_codes/200": {
+  "min": 9726,
+  "max": 9731,
+  "n": 2,
+  "values": [
+   9731,
+   9726
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/cpu/concurrency": {
+  "min": 64,
+  "max": 64,
+  "n": 2,
+  "values": [
+   64,
+   64
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/cpu/peak_rss_bytes": {
+  "min": 70008832.0,
+  "max": 70221824.0,
+  "n": 2,
+  "values": [
+   70221824.0,
+   70008832.0
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/cpu/idle_rss_bytes": {
+  "min": 69681152.0,
+  "max": 70172672.0,
+  "n": 2,
+  "values": [
+   70172672.0,
+   69681152.0
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/cpu/rss_growth_per_req_bytes": {
+  "min": 5,
+  "max": 34,
+  "n": 2,
+  "values": [
+   5,
+   34
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/cpu/cpu_seconds": {
+  "min": 10.12,
+  "max": 10.12,
+  "n": 2,
+  "values": [
+   10.12,
+   10.12
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/cpu/cpu_ms_per_1k_req": {
+  "min": 1039.98,
+  "max": 1040.51,
+  "n": 2,
+  "values": [
+   1039.98,
+   1040.51
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/cpu/server_cpu_util": {
+  "min": 0.101,
+  "max": 0.101,
+  "n": 2,
+  "values": [
+   0.101,
+   0.101
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/io/rps": {
+  "min": 5460.8,
+  "max": 5468.4,
+  "n": 2,
+  "values": [
+   5460.8,
+   5468.4
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/io/total": {
+  "min": 54565,
+  "max": 54651,
+  "n": 2,
+  "values": [
+   54565,
+   54651
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/io/errors": {
+  "min": 0,
+  "max": 0,
+  "n": 2,
+  "values": [
+   0,
+   0
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/io/error_pct": {
+  "min": 0.0,
+  "max": 0.0,
+  "n": 2,
+  "values": [
+   0.0,
+   0.0
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/io/p50_ms": {
+  "min": 11.72,
+  "max": 11.746,
+  "n": 2,
+  "values": [
+   11.746,
+   11.72
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/io/p90_ms": {
+  "min": 12.501,
+  "max": 12.519,
+  "n": 2,
+  "values": [
+   12.501,
+   12.519
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/io/p95_ms": {
+  "min": 12.803,
+  "max": 12.808,
+  "n": 2,
+  "values": [
+   12.803,
+   12.808
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/io/p99_ms": {
+  "min": 13.439,
+  "max": 13.584,
+  "n": 2,
+  "values": [
+   13.584,
+   13.439
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/io/p999_ms": {
+  "min": 20.769,
+  "max": 20.93,
+  "n": 2,
+  "values": [
+   20.93,
+   20.769
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/io/max_ms": {
+  "min": 22.822,
+  "max": 23.92,
+  "n": 2,
+  "values": [
+   22.822,
+   23.92
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/io/mean_ms": {
+  "min": 11.707,
+  "max": 11.724,
+  "n": 2,
+  "values": [
+   11.724,
+   11.707
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/io/status_codes/200": {
+  "min": 54565,
+  "max": 54651,
+  "n": 2,
+  "values": [
+   54565,
+   54651
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/io/concurrency": {
+  "min": 64,
+  "max": 64,
+  "n": 2,
+  "values": [
+   64,
+   64
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/io/peak_rss_bytes": {
+  "min": 67420160.0,
+  "max": 67616768.0,
+  "n": 2,
+  "values": [
+   67616768.0,
+   67420160.0
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/io/idle_rss_bytes": {
+  "min": 67010560.0,
+  "max": 67158016.0,
+  "n": 2,
+  "values": [
+   67158016.0,
+   67010560.0
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/io/rss_growth_per_req_bytes": {
+  "min": 7,
+  "max": 8,
+  "n": 2,
+  "values": [
+   8,
+   7
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/io/cpu_seconds": {
+  "min": 3.49,
+  "max": 3.52,
+  "n": 2,
+  "values": [
+   3.49,
+   3.52
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/io/cpu_ms_per_1k_req": {
+  "min": 63.96,
+  "max": 64.41,
+  "n": 2,
+  "values": [
+   63.96,
+   64.41
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/io/server_cpu_util": {
+  "min": 0.035,
+  "max": 0.035,
+  "n": 2,
+  "values": [
+   0.035,
+   0.035
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/mixed/rps": {
+  "min": 7853.4,
+  "max": 8550.1,
+  "n": 2,
+  "values": [
+   7853.4,
+   8550.1
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/mixed/total": {
+  "min": 78496,
+  "max": 85461,
+  "n": 2,
+  "values": [
+   78496,
+   85461
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/mixed/errors": {
+  "min": 0,
+  "max": 0,
+  "n": 2,
+  "values": [
+   0,
+   0
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/mixed/error_pct": {
+  "min": 0.0,
+  "max": 0.0,
+  "n": 2,
+  "values": [
+   0.0,
+   0.0
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/mixed/p50_ms": {
+  "min": 7.514,
+  "max": 7.693,
+  "n": 2,
+  "values": [
+   7.693,
+   7.514
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/mixed/p90_ms": {
+  "min": 8.145,
+  "max": 11.687,
+  "n": 2,
+  "values": [
+   11.687,
+   8.145
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/mixed/p95_ms": {
+  "min": 11.803,
+  "max": 12.64,
+  "n": 2,
+  "values": [
+   12.64,
+   11.803
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/mixed/p99_ms": {
+  "min": 12.417,
+  "max": 18.933,
+  "n": 2,
+  "values": [
+   18.933,
+   12.417
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/mixed/p999_ms": {
+  "min": 20.044,
+  "max": 35.269,
+  "n": 2,
+  "values": [
+   35.269,
+   20.044
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/mixed/max_ms": {
+  "min": 50.987,
+  "max": 51.566,
+  "n": 2,
+  "values": [
+   51.566,
+   50.987
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/mixed/mean_ms": {
+  "min": 7.486,
+  "max": 8.151,
+  "n": 2,
+  "values": [
+   8.151,
+   7.486
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/mixed/status_codes/200": {
+  "min": 78496,
+  "max": 85461,
+  "n": 2,
+  "values": [
+   78496,
+   85461
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/mixed/concurrency": {
+  "min": 64,
+  "max": 64,
+  "n": 2,
+  "values": [
+   64,
+   64
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/mixed/peak_rss_bytes": {
+  "min": 67387392.0,
+  "max": 67567616.0,
+  "n": 2,
+  "values": [
+   67387392.0,
+   67567616.0
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/mixed/idle_rss_bytes": {
+  "min": 67174400.0,
+  "max": 67403776.0,
+  "n": 2,
+  "values": [
+   67174400.0,
+   67403776.0
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/mixed/rss_growth_per_req_bytes": {
+  "min": 2,
+  "max": 3,
+  "n": 2,
+  "values": [
+   3,
+   2
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/mixed/cpu_seconds": {
+  "min": 9.87,
+  "max": 10.0,
+  "n": 2,
+  "values": [
+   9.87,
+   10.0
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/mixed/cpu_ms_per_1k_req": {
+  "min": 117.01,
+  "max": 125.74,
+  "n": 2,
+  "values": [
+   125.74,
+   117.01
+  ]
+ },
+ "python-fastapi-1w-pg/scenarios/mixed/server_cpu_util": {
+  "min": 0.099,
+  "max": 0.1,
+  "n": 2,
+  "values": [
+   0.099,
+   0.1
+  ]
+ },
+ "python-fastapi-1w-pg/saturation/sat-get/rps": {
+  "min": 12817.8,
+  "max": 12952.5,
+  "n": 2,
+  "values": [
+   12817.8,
+   12952.5
+  ]
+ },
+ "python-fastapi-1w-pg/saturation/sat-get/total": {
+  "min": 127261,
+  "max": 128618,
+  "n": 2,
+  "values": [
+   127261,
+   128618
+  ]
+ },
+ "python-fastapi-1w-pg/saturation/sat-get/errors": {
+  "min": 0,
+  "max": 0,
+  "n": 2,
+  "values": [
+   0,
+   0
+  ]
+ },
+ "python-fastapi-1w-pg/saturation/sat-get/error_pct": {
+  "min": 0.0,
+  "max": 0.0,
+  "n": 2,
+  "values": [
+   0.0,
+   0.0
+  ]
+ },
+ "python-fastapi-1w-pg/saturation/sat-get/p50_ms": {
+  "min": 76.638,
+  "max": 77.093,
+  "n": 2,
+  "values": [
+   77.093,
+   76.638
+  ]
+ },
+ "python-fastapi-1w-pg/saturation/sat-get/p90_ms": {
+  "min": 87.833,
+  "max": 88.53,
+  "n": 2,
+  "values": [
+   87.833,
+   88.53
+  ]
+ },
+ "python-fastapi-1w-pg/saturation/sat-get/p95_ms": {
+  "min": 151.058,
+  "max": 151.422,
+  "n": 2,
+  "values": [
+   151.058,
+   151.422
+  ]
+ },
+ "python-fastapi-1w-pg/saturation/sat-get/p99_ms": {
+  "min": 179.112,
+  "max": 202.793,
+  "n": 2,
+  "values": [
+   179.112,
+   202.793
+  ]
+ },
+ "python-fastapi-1w-pg/saturation/sat-get/p999_ms": {
+  "min": 304.425,
+  "max": 311.453,
+  "n": 2,
+  "values": [
+   311.453,
+   304.425
+  ]
+ },
+ "python-fastapi-1w-pg/saturation/sat-get/max_ms": {
+  "min": 518.868,
+  "max": 574.71,
+  "n": 2,
+  "values": [
+   518.868,
+   574.71
+  ]
+ },
+ "python-fastapi-1w-pg/saturation/sat-get/mean_ms": {
+  "min": 77.372,
+  "max": 78.214,
+  "n": 2,
+  "values": [
+   78.214,
+   77.372
+  ]
+ },
+ "python-fastapi-1w-pg/saturation/sat-get/status_codes/200": {
+  "min": 127261,
+  "max": 128618,
+  "n": 2,
+  "values": [
+   127261,
+   128618
+  ]
+ },
+ "python-fastapi-1w-pg/saturation/sat-get/concurrency": {
+  "min": 1000,
+  "max": 1000,
+  "n": 2,
+  "values": [
+   1000,
+   1000
+  ]
+ },
+ "python-fastapi-1w-pg/saturation/sat-get/peak_rss_bytes": {
+  "min": 93257728.0,
+  "max": 93306880.0,
+  "n": 2,
+  "values": [
+   93306880.0,
+   93257728.0
+  ]
+ },
+ "python-fastapi-1w-pg/saturation/sat-get/idle_rss_bytes": {
+  "min": 64995328.0,
+  "max": 65060864.0,
+  "n": 2,
+  "values": [
+   65060864.0,
+   64995328.0
+  ]
+ },
+ "python-fastapi-1w-pg/saturation/sat-get/rss_growth_per_req_bytes": {
+  "min": 220,
+  "max": 222,
+  "n": 2,
+  "values": [
+   222,
+   220
+  ]
+ },
+ "python-fastapi-1w-pg/saturation/sat-get/cpu_seconds": {
+  "min": 9.99,
+  "max": 10.0,
+  "n": 2,
+  "values": [
+   9.99,
+   10.0
+  ]
+ },
+ "python-fastapi-1w-pg/saturation/sat-get/cpu_ms_per_1k_req": {
+  "min": 77.75,
+  "max": 78.5,
+  "n": 2,
+  "values": [
+   78.5,
+   77.75
+  ]
+ },
+ "python-fastapi-1w-pg/saturation/sat-get/server_cpu_util": {
+  "min": 0.1,
+  "max": 0.1,
+  "n": 2,
+  "values": [
+   0.1,
+   0.1
+  ]
+ },
+ "python-fastapi-1w-pg/saturation/sat-cpu/rps": {
+  "min": 619.2,
+  "max": 643.3,
+  "n": 2,
+  "values": [
+   643.3,
+   619.2
+  ]
+ },
+ "python-fastapi-1w-pg/saturation/sat-cpu/total": {
+  "min": 5695,
+  "max": 5936,
+  "n": 2,
+  "values": [
+   5936,
+   5695
+  ]
+ },
+ "python-fastapi-1w-pg/saturation/sat-cpu/errors": {
+  "min": 3591,
+  "max": 4310,
+  "n": 2,
+  "values": [
+   3591,
+   4310
+  ]
+ },
+ "python-fastapi-1w-pg/saturation/sat-cpu/error_pct": {
+  "min": 60.495,
+  "max": 75.68,
+  "n": 2,
+  "values": [
+   60.495,
+   75.68
+  ]
+ },
+ "python-fastapi-1w-pg/saturation/sat-cpu/p50_ms": {
+  "min": 145.651,
+  "max": 438.891,
+  "n": 2,
+  "values": [
+   438.891,
+   145.651
+  ]
+ },
+ "python-fastapi-1w-pg/saturation/sat-cpu/p90_ms": {
+  "min": 338.024,
+  "max": 477.132,
+  "n": 2,
+  "values": [
+   477.132,
+   338.024
+  ]
+ },
+ "python-fastapi-1w-pg/saturation/sat-cpu/p95_ms": {
+  "min": 483.683,
+  "max": 789.386,
+  "n": 2,
+  "values": [
+   483.683,
+   789.386
+  ]
+ },
+ "python-fastapi-1w-pg/saturation/sat-cpu/p99_ms": {
+  "min": 507.47,
+  "max": 948.563,
+  "n": 2,
+  "values": [
+   507.47,
+   948.563
+  ]
+ },
+ "python-fastapi-1w-pg/saturation/sat-cpu/p999_ms": {
+  "min": 972.561,
+  "max": 993.445,
+  "n": 2,
+  "values": [
+   972.561,
+   993.445
+  ]
+ },
+ "python-fastapi-1w-pg/saturation/sat-cpu/max_ms": {
+  "min": 972.94,
+  "max": 993.927,
+  "n": 2,
+  "values": [
+   972.94,
+   993.927
+  ]
+ },
+ "python-fastapi-1w-pg/saturation/sat-cpu/mean_ms": {
+  "min": 210.712,
+  "max": 421.909,
+  "n": 2,
+  "values": [
+   421.909,
+   210.712
+  ]
+ },
+ "python-fastapi-1w-pg/saturation/sat-cpu/status_codes/200": {
+  "min": 1385,
+  "max": 2345,
+  "n": 2,
+  "values": [
+   2345,
+   1385
+  ]
+ },
+ "python-fastapi-1w-pg/saturation/sat-cpu/error_kinds/timeout": {
+  "min": 3591,
+  "max": 4310,
+  "n": 2,
+  "values": [
+   3591,
+   4310
+  ]
+ },
+ "python-fastapi-1w-pg/saturation/sat-cpu/concurrency": {
+  "min": 500,
+  "max": 500,
+  "n": 2,
+  "values": [
+   500,
+   500
+  ]
+ },
+ "python-fastapi-1w-pg/saturation/sat-cpu/peak_rss_bytes": {
+  "min": 71794688.0,
+  "max": 85196800.0,
+  "n": 2,
+  "values": [
+   71794688.0,
+   85196800.0
+  ]
+ },
+ "python-fastapi-1w-pg/saturation/sat-cpu/idle_rss_bytes": {
+  "min": 65208320.0,
+  "max": 65241088.0,
+  "n": 2,
+  "values": [
+   65208320.0,
+   65241088.0
+  ]
+ },
+ "python-fastapi-1w-pg/saturation/sat-cpu/rss_growth_per_req_bytes": {
+  "min": 1110,
+  "max": 3504,
+  "n": 2,
+  "values": [
+   1110,
+   3504
+  ]
+ },
+ "python-fastapi-1w-pg/saturation/sat-cpu/cpu_seconds": {
+  "min": 10.13,
+  "max": 10.22,
+  "n": 2,
+  "values": [
+   10.22,
+   10.13
+  ]
+ },
+ "python-fastapi-1w-pg/saturation/sat-cpu/cpu_ms_per_1k_req": {
+  "min": 1721.7,
+  "max": 1778.75,
+  "n": 2,
+  "values": [
+   1721.7,
+   1778.75
+  ]
+ },
+ "python-fastapi-1w-pg/saturation/sat-cpu/server_cpu_util": {
+  "min": 0.101,
+  "max": 0.102,
+  "n": 2,
+  "values": [
+   0.102,
+   0.101
+  ]
+ },
+ "python-fastapi-1w-pg/connections/connections": {
+  "min": 1000,
+  "max": 1000,
+  "n": 2,
+  "values": [
+   1000,
+   1000
+  ]
+ },
+ "python-fastapi-1w-pg/connections/failed": {
+  "min": 0,
+  "max": 0,
+  "n": 2,
+  "values": [
+   0,
+   0
+  ]
+ },
+ "python-fastapi-1w-pg/connections/idle_rss_bytes": {
+  "min": 65110016.0,
+  "max": 65208320.0,
+  "n": 2,
+  "values": [
+   65208320.0,
+   65110016.0
+  ]
+ },
+ "python-fastapi-1w-pg/connections/held_rss_bytes": {
+  "min": 77283328.0,
+  "max": 77316096.0,
+  "n": 2,
+  "values": [
+   77316096.0,
+   77283328.0
+  ]
+ },
+ "python-fastapi-1w-pg/connections/after_close_rss_bytes": {
+  "min": 76234752.0,
+  "max": 76267520.0,
+  "n": 2,
+  "values": [
+   76267520.0,
+   76234752.0
+  ]
+ },
+ "python-fastapi-1w-pg/connections/bytes_per_conn": {
+  "min": 12108,
+  "max": 12173,
+  "n": 2,
+  "values": [
+   12108,
+   12173
+  ]
+ },
+ "python-fastapi-1w-pg/recovery/spike/concurrency": {
+  "min": 256,
+  "max": 256,
+  "n": 2,
+  "values": [
+   256,
+   256
+  ]
+ },
+ "python-fastapi-1w-pg/recovery/spike/seconds": {
+  "min": 5,
+  "max": 5,
+  "n": 2,
+  "values": [
+   5,
+   5
+  ]
+ },
+ "python-fastapi-1w-pg/recovery/spike/rps": {
+  "min": 2123,
+  "max": 2154,
+  "n": 2,
+  "values": [
+   2154,
+   2123
+  ]
+ },
+ "python-fastapi-1w-pg/recovery/spike/errors": {
+  "min": 0,
+  "max": 0,
+  "n": 2,
+  "values": [
+   0,
+   0
+  ]
+ },
+ "python-fastapi-1w-pg/recovery/idle_rss_bytes": {
+  "min": 65142784.0,
+  "max": 65142784.0,
+  "n": 2,
+  "values": [
+   65142784.0,
+   65142784.0
+  ]
+ },
+ "python-fastapi-1w-pg/recovery/peak_rss_bytes": {
+  "min": 75202560.0,
+  "max": 75317248.0,
+  "n": 2,
+  "values": [
+   75202560.0,
+   75317248.0
+  ]
+ },
+ "python-fastapi-1w-pg/recovery/rss_after_spike_bytes": {
+  "min": 75202560.0,
+  "max": 75317248.0,
+  "n": 2,
+  "values": [
+   75202560.0,
+   75317248.0
+  ]
+ },
+ "python-fastapi-1w-pg/recovery/rss_after_settle_bytes": {
+  "min": 75202560.0,
+  "max": 75317248.0,
+  "n": 2,
+  "values": [
+   75202560.0,
+   75317248.0
+  ]
+ },
+ "python-fastapi-1w-pg/recovery/settle_s": {
+  "min": 10,
+  "max": 10,
+  "n": 2,
+  "values": [
+   10,
+   10
+  ]
+ },
+ "python-fastapi-1w-pg/recovery/retained_pct": {
+  "min": 100.0,
+  "max": 100.0,
+  "n": 2,
+  "values": [
+   100.0,
+   100.0
+  ]
+ },
+ "python-fastapi-1w-pg/recovery/probe_pre/p50_ms": {
+  "min": 0.219,
+  "max": 0.222,
+  "n": 2,
+  "values": [
+   0.222,
+   0.219
+  ]
+ },
+ "python-fastapi-1w-pg/recovery/probe_pre/p99_ms": {
+  "min": 0.581,
+  "max": 0.607,
+  "n": 2,
+  "values": [
+   0.607,
+   0.581
+  ]
+ },
+ "python-fastapi-1w-pg/recovery/probe_after_spike/p50_ms": {
+  "min": 0.206,
+  "max": 0.227,
+  "n": 2,
+  "values": [
+   0.227,
+   0.206
+  ]
+ },
+ "python-fastapi-1w-pg/recovery/probe_after_spike/p99_ms": {
+  "min": 0.394,
+  "max": 11.968,
+  "n": 2,
+  "values": [
+   0.394,
+   11.968
+  ]
+ },
+ "python-fastapi-1w-pg/recovery/probe_after_settle/p50_ms": {
+  "min": 0.213,
+  "max": 0.227,
+  "n": 2,
+  "values": [
+   0.227,
+   0.213
+  ]
+ },
+ "python-fastapi-1w-pg/recovery/probe_after_settle/p99_ms": {
+  "min": 0.431,
+  "max": 0.634,
+  "n": 2,
+  "values": [
+   0.634,
+   0.431
+  ]
+ }
+}

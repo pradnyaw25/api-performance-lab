@@ -1,5 +1,7 @@
 //! API Performance Lab — Rust implementation (Axum on Tokio).
-//! Implements the contract in docs/API.md.
+//! Implements the contract in docs/API.md. With DATABASE_URL set, the item
+//! endpoints go to PostgreSQL through an sqlx pool (Phase 2); otherwise an
+//! in-memory store behind a RwLock (Phase 1).
 
 use axum::{
     extract::{Path, Query, State},
@@ -11,6 +13,7 @@ use axum::{
 use serde::{Deserialize, Serialize};
 use serde_json::json;
 use sha2::{Digest, Sha256};
+use sqlx::{postgres::PgPoolOptions, PgPool, Row};
 use std::{
     collections::HashMap,
     net::SocketAddr,
@@ -23,6 +26,7 @@ use std::{
 
 const SEED_COUNT: u64 = 10_000;
 const SEED_CREATED_AT: &str = "2026-01-01T00:00:00Z";
+const SELECT_COLS: &str = "id, name, price, tags, created_at";
 
 #[derive(Clone, Serialize)]
 struct Item {
@@ -41,9 +45,16 @@ struct NewItem {
     tags: Vec<String>,
 }
 
+enum Store {
+    Memory {
+        items: RwLock<HashMap<u64, Item>>,
+        next_id: AtomicU64,
+    },
+    Pg(PgPool),
+}
+
 struct AppState {
-    items: RwLock<HashMap<u64, Item>>,
-    next_id: AtomicU64,
+    store: Store,
 }
 
 type Shared = Arc<AppState>;
@@ -77,15 +88,43 @@ fn error(status: StatusCode, msg: &str) -> Response {
     (status, Json(json!({ "error": msg }))).into_response()
 }
 
+fn db_error(e: sqlx::Error) -> Response {
+    error(StatusCode::INTERNAL_SERVER_ERROR, &format!("database error: {e}"))
+}
+
+fn row_to_item(row: &sqlx::postgres::PgRow) -> Item {
+    let created: chrono::DateTime<chrono::Utc> = row.get("created_at");
+    Item {
+        id: row.get::<i64, _>("id") as u64,
+        name: row.get("name"),
+        price: row.get("price"),
+        tags: row.get("tags"),
+        created_at: created.format("%Y-%m-%dT%H:%M:%SZ").to_string(),
+    }
+}
+
+async fn fetch_item(store: &Store, id: u64) -> Result<Option<Item>, sqlx::Error> {
+    match store {
+        Store::Memory { items, .. } => Ok(items.read().unwrap().get(&id).cloned()),
+        Store::Pg(pool) => {
+            let row = sqlx::query(&format!("SELECT {SELECT_COLS} FROM items WHERE id = $1"))
+                .bind(id as i64)
+                .fetch_optional(pool)
+                .await?;
+            Ok(row.as_ref().map(row_to_item))
+        }
+    }
+}
+
 async fn health() -> impl IntoResponse {
     Json(json!({ "status": "ok" }))
 }
 
 async fn get_item(State(s): State<Shared>, Path(id): Path<u64>) -> Response {
-    let items = s.items.read().unwrap();
-    match items.get(&id) {
-        Some(item) => Json(item.clone()).into_response(),
-        None => error(StatusCode::NOT_FOUND, "not found"),
+    match fetch_item(&s.store, id).await {
+        Ok(Some(item)) => Json(item).into_response(),
+        Ok(None) => error(StatusCode::NOT_FOUND, "not found"),
+        Err(e) => db_error(e),
     }
 }
 
@@ -100,13 +139,25 @@ struct ListResponse {
     items: Vec<Item>,
 }
 
-async fn list_items(State(s): State<Shared>, Query(q): Query<ListQuery>) -> impl IntoResponse {
+async fn list_items(State(s): State<Shared>, Query(q): Query<ListQuery>) -> Response {
     let limit = q.limit.unwrap_or(20).clamp(1, 1000);
-    let items = s.items.read().unwrap();
-    let out: Vec<Item> = (1..=limit as u64)
-        .filter_map(|i| items.get(&i).cloned())
-        .collect();
-    Json(ListResponse { count: out.len(), items: out })
+    let out: Vec<Item> = match &s.store {
+        Store::Memory { items, .. } => {
+            let items = items.read().unwrap();
+            (1..=limit as u64).filter_map(|i| items.get(&i).cloned()).collect()
+        }
+        Store::Pg(pool) => {
+            match sqlx::query(&format!("SELECT {SELECT_COLS} FROM items WHERE id <= $1 ORDER BY id"))
+                .bind(limit as i64)
+                .fetch_all(pool)
+                .await
+            {
+                Ok(rows) => rows.iter().map(row_to_item).collect(),
+                Err(e) => return db_error(e),
+            }
+        }
+    };
+    Json(ListResponse { count: out.len(), items: out }).into_response()
 }
 
 async fn create_item(State(s): State<Shared>, Json(body): Json<NewItem>) -> Response {
@@ -116,15 +167,34 @@ async fn create_item(State(s): State<Shared>, Json(body): Json<NewItem>) -> Resp
     if body.price < 0.0 {
         return error(StatusCode::BAD_REQUEST, "price must be >= 0");
     }
-    let id = s.next_id.fetch_add(1, Ordering::Relaxed);
-    let item = Item {
-        id,
-        name: body.name,
-        price: body.price,
-        tags: body.tags,
-        created_at: chrono::Utc::now().format("%Y-%m-%dT%H:%M:%SZ").to_string(),
+    let item = match &s.store {
+        Store::Memory { items, next_id } => {
+            let id = next_id.fetch_add(1, Ordering::Relaxed);
+            let item = Item {
+                id,
+                name: body.name,
+                price: body.price,
+                tags: body.tags,
+                created_at: chrono::Utc::now().format("%Y-%m-%dT%H:%M:%SZ").to_string(),
+            };
+            items.write().unwrap().insert(id, item.clone());
+            item
+        }
+        Store::Pg(pool) => {
+            match sqlx::query(&format!(
+                "INSERT INTO items (name, price, tags) VALUES ($1, $2, $3) RETURNING {SELECT_COLS}"
+            ))
+            .bind(&body.name)
+            .bind(body.price)
+            .bind(&body.tags)
+            .fetch_one(pool)
+            .await
+            {
+                Ok(row) => row_to_item(&row),
+                Err(e) => return db_error(e),
+            }
+        }
     };
-    s.items.write().unwrap().insert(id, item.clone());
     (StatusCode::CREATED, Json(item)).into_response()
 }
 
@@ -157,13 +227,15 @@ struct MixedQuery {
 
 async fn mixed(State(s): State<Shared>, Query(q): Query<MixedQuery>) -> Response {
     let id = q.id.unwrap_or(1);
-    tokio::time::sleep(Duration::from_millis(5)).await;
-    let item = {
-        let items = s.items.read().unwrap();
-        items.get(&id).cloned()
-    };
-    let Some(item) = item else {
-        return error(StatusCode::NOT_FOUND, "not found");
+    // In-memory mode simulates a 5 ms database wait; in Postgres mode the
+    // round-trip is the I/O.
+    if matches!(s.store, Store::Memory { .. }) {
+        tokio::time::sleep(Duration::from_millis(5)).await;
+    }
+    let item = match fetch_item(&s.store, id).await {
+        Ok(Some(item)) => item,
+        Ok(None) => return error(StatusCode::NOT_FOUND, "not found"),
+        Err(e) => return db_error(e),
     };
     let digest = chained_sha256(&id.to_string(), 200);
     Json(json!({ "item": item, "digest": digest })).into_response()
@@ -176,10 +248,24 @@ async fn main() {
         .and_then(|p| p.parse().ok())
         .unwrap_or(8001);
 
-    let state: Shared = Arc::new(AppState {
-        items: RwLock::new(seed()),
-        next_id: AtomicU64::new(SEED_COUNT + 1),
-    });
+    let store = match std::env::var("DATABASE_URL") {
+        Ok(url) if !url.is_empty() => {
+            let size: u32 = std::env::var("DB_POOL_SIZE").ok().and_then(|v| v.parse().ok()).unwrap_or(16);
+            let pool = PgPoolOptions::new()
+                .max_connections(size)
+                .min_connections(size)
+                .connect(&url)
+                .await
+                .expect("connect to DATABASE_URL");
+            eprintln!("rust-axum: postgres mode, pool size {size}");
+            Store::Pg(pool)
+        }
+        _ => Store::Memory {
+            items: RwLock::new(seed()),
+            next_id: AtomicU64::new(SEED_COUNT + 1),
+        },
+    };
+    let state: Shared = Arc::new(AppState { store });
 
     let app = Router::new()
         .route("/health", get(health))

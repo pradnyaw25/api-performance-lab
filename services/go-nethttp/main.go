@@ -1,8 +1,11 @@
 // API Performance Lab — Go implementation (standard library net/http).
-// Implements the contract in docs/API.md.
+// Implements the contract in docs/API.md. With DATABASE_URL set, the item
+// endpoints go to PostgreSQL through a pgx pool (Phase 2); otherwise an
+// in-memory map behind a RWMutex (Phase 1).
 package main
 
 import (
+	"context"
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
@@ -14,11 +17,14 @@ import (
 	"sync"
 	"sync/atomic"
 	"time"
+
+	"github.com/jackc/pgx/v5/pgxpool"
 )
 
 const (
 	seedCount     = 10000
 	seedCreatedAt = "2026-01-01T00:00:00Z"
+	selectCols    = "id, name, price, tags, created_at"
 )
 
 type Item struct {
@@ -35,13 +41,15 @@ type NewItem struct {
 	Tags  []string `json:"tags"`
 }
 
+// Store is either the in-memory map or a Postgres pool.
 type Store struct {
 	mu     sync.RWMutex
 	items  map[uint64]*Item
 	nextID atomic.Uint64
+	pool   *pgxpool.Pool
 }
 
-func newStore() *Store {
+func newMemoryStore() *Store {
 	s := &Store{items: make(map[uint64]*Item, seedCount)}
 	for i := uint64(1); i <= seedCount; i++ {
 		s.items[i] = &Item{
@@ -54,6 +62,60 @@ func newStore() *Store {
 	}
 	s.nextID.Store(seedCount + 1)
 	return s
+}
+
+func newPgStore(url string, size int32) *Store {
+	cfg, err := pgxpool.ParseConfig(url)
+	if err != nil {
+		log.Fatalf("DATABASE_URL: %v", err)
+	}
+	cfg.MaxConns = size
+	cfg.MinConns = size
+	pool, err := pgxpool.NewWithConfig(context.Background(), cfg)
+	if err != nil {
+		log.Fatalf("pgxpool: %v", err)
+	}
+	if err := pool.Ping(context.Background()); err != nil {
+		log.Fatalf("postgres ping: %v", err)
+	}
+	log.Printf("go-nethttp: postgres mode, pool size %d", size)
+	return &Store{pool: pool}
+}
+
+type scanner interface {
+	Scan(dest ...any) error
+}
+
+func scanItem(row scanner) (*Item, error) {
+	var it Item
+	var id int64
+	var created time.Time
+	if err := row.Scan(&id, &it.Name, &it.Price, &it.Tags, &created); err != nil {
+		return nil, err
+	}
+	it.ID = uint64(id)
+	if it.Tags == nil {
+		it.Tags = []string{}
+	}
+	it.CreatedAt = created.UTC().Format("2006-01-02T15:04:05Z")
+	return &it, nil
+}
+
+func (s *Store) get(ctx context.Context, id uint64) (*Item, bool, error) {
+	if s.pool == nil {
+		s.mu.RLock()
+		it, ok := s.items[id]
+		s.mu.RUnlock()
+		return it, ok, nil
+	}
+	it, err := scanItem(s.pool.QueryRow(ctx, "SELECT "+selectCols+" FROM items WHERE id = $1", int64(id)))
+	if err != nil {
+		if err.Error() == "no rows in result set" {
+			return nil, false, nil
+		}
+		return nil, false, err
+	}
+	return it, true, nil
 }
 
 func chainedSHA256(seed string, rounds int) string {
@@ -73,6 +135,10 @@ func writeJSON(w http.ResponseWriter, status int, v any) {
 
 func writeError(w http.ResponseWriter, status int, msg string) {
 	writeJSON(w, status, map[string]string{"error": msg})
+}
+
+func dbError(w http.ResponseWriter, err error) {
+	writeError(w, 500, "database error: "+err.Error())
 }
 
 func queryInt(r *http.Request, key string, def, lo, hi int) int {
@@ -98,7 +164,16 @@ func main() {
 	if port == "" {
 		port = "8002"
 	}
-	store := newStore()
+	var store *Store
+	if url := os.Getenv("DATABASE_URL"); url != "" {
+		size := 16
+		if v, err := strconv.Atoi(os.Getenv("DB_POOL_SIZE")); err == nil && v > 0 {
+			size = v
+		}
+		store = newPgStore(url, int32(size))
+	} else {
+		store = newMemoryStore()
+	}
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("GET /health", func(w http.ResponseWriter, r *http.Request) {
@@ -111,9 +186,11 @@ func main() {
 			writeError(w, 400, "invalid id")
 			return
 		}
-		store.mu.RLock()
-		item, ok := store.items[id]
-		store.mu.RUnlock()
+		item, ok, err := store.get(r.Context(), id)
+		if err != nil {
+			dbError(w, err)
+			return
+		}
 		if !ok {
 			writeError(w, 404, "not found")
 			return
@@ -124,13 +201,30 @@ func main() {
 	mux.HandleFunc("GET /items", func(w http.ResponseWriter, r *http.Request) {
 		limit := queryInt(r, "limit", 20, 1, 1000)
 		out := make([]*Item, 0, limit)
-		store.mu.RLock()
-		for i := uint64(1); i <= uint64(limit); i++ {
-			if it, ok := store.items[i]; ok {
+		if store.pool == nil {
+			store.mu.RLock()
+			for i := uint64(1); i <= uint64(limit); i++ {
+				if it, ok := store.items[i]; ok {
+					out = append(out, it)
+				}
+			}
+			store.mu.RUnlock()
+		} else {
+			rows, err := store.pool.Query(r.Context(), "SELECT "+selectCols+" FROM items WHERE id <= $1 ORDER BY id", int64(limit))
+			if err != nil {
+				dbError(w, err)
+				return
+			}
+			defer rows.Close()
+			for rows.Next() {
+				it, err := scanItem(rows)
+				if err != nil {
+					dbError(w, err)
+					return
+				}
 				out = append(out, it)
 			}
 		}
-		store.mu.RUnlock()
 		writeJSON(w, 200, map[string]any{"count": len(out), "items": out})
 	})
 
@@ -140,7 +234,7 @@ func main() {
 			writeError(w, 400, "invalid json")
 			return
 		}
-		if len([]byte(body.Name)) == 0 || isBlank(body.Name) {
+		if isBlank(body.Name) {
 			writeError(w, 400, "name must not be empty")
 			return
 		}
@@ -151,16 +245,28 @@ func main() {
 		if body.Tags == nil {
 			body.Tags = []string{}
 		}
-		item := &Item{
-			ID:        store.nextID.Add(1) - 1,
-			Name:      body.Name,
-			Price:     body.Price,
-			Tags:      body.Tags,
-			CreatedAt: time.Now().UTC().Format("2006-01-02T15:04:05Z"),
+		var item *Item
+		if store.pool == nil {
+			item = &Item{
+				ID:        store.nextID.Add(1) - 1,
+				Name:      body.Name,
+				Price:     body.Price,
+				Tags:      body.Tags,
+				CreatedAt: time.Now().UTC().Format("2006-01-02T15:04:05Z"),
+			}
+			store.mu.Lock()
+			store.items[item.ID] = item
+			store.mu.Unlock()
+		} else {
+			var err error
+			item, err = scanItem(store.pool.QueryRow(r.Context(),
+				"INSERT INTO items (name, price, tags) VALUES ($1, $2, $3) RETURNING "+selectCols,
+				body.Name, body.Price, body.Tags))
+			if err != nil {
+				dbError(w, err)
+				return
+			}
 		}
-		store.mu.Lock()
-		store.items[item.ID] = item
-		store.mu.Unlock()
 		writeJSON(w, 201, item)
 	})
 
@@ -177,10 +283,16 @@ func main() {
 
 	mux.HandleFunc("GET /mixed", func(w http.ResponseWriter, r *http.Request) {
 		id := uint64(queryInt(r, "id", 1, 1, 1<<31))
-		time.Sleep(5 * time.Millisecond)
-		store.mu.RLock()
-		item, ok := store.items[id]
-		store.mu.RUnlock()
+		// In-memory mode simulates a 5 ms database wait; in Postgres mode the
+		// round-trip is the I/O.
+		if store.pool == nil {
+			time.Sleep(5 * time.Millisecond)
+		}
+		item, ok, err := store.get(r.Context(), id)
+		if err != nil {
+			dbError(w, err)
+			return
+		}
 		if !ok {
 			writeError(w, 404, "not found")
 			return

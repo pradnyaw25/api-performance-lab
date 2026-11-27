@@ -309,6 +309,57 @@ def chart_social(summary, out):
     fig.savefig(out, facecolor=bg)
     plt.close(fig)
 
+# ------------------------------------------------------------ phase 2 helpers
+
+
+def strip_suffix(summary, spread, suffix):
+    """Rename `<impl><suffix>` to `<impl>` so Phase 2 data renders with the Phase 1 chart code."""
+    impls = {(k[:-len(suffix)] if k.endswith(suffix) else k): v for k, v in summary["implementations"].items()}
+    summary = dict(summary, implementations=impls)
+    sp = {}
+    for k, v in spread.items():
+        head, _, rest = k.partition("/")
+        if head.endswith(suffix):
+            head = head[:-len(suffix)]
+        sp[f"{head}/{rest}"] = v
+    return summary, sp
+
+
+def chart_memory_vs_postgres(mem, pg, out):
+    """Per language, in-memory store vs PostgreSQL on the four endpoints that touch the store."""
+    impls = ["rust-axum", "go-nethttp", "python-fastapi"]
+    # mixed is left out: in memory it sleeps 5 ms, on Postgres the query is the wait, so the pair is not like for like.
+    scen = [("Simple lookup", "get"), ("200-item list", "list"), ("Create (insert)", "create")]
+    fig, axes = plt.subplots(1, 3, figsize=(16, 8.5), dpi=100)
+    fig.text(0.05, 0.95, "What a database on the request path does to the gap", fontsize=30, fontweight="bold", color=INK, va="top")
+    fig.text(0.05, 0.875, "Requests per second with the in-memory store (light) and with PostgreSQL behind the same endpoint (solid). Same API, same machine.",
+             fontsize=17, color=INK2, va="top")
+    fig.subplots_adjust(left=0.10, right=0.97, top=0.76, bottom=0.10, wspace=0.55)
+    for ax, n in zip(axes, impls):
+        name = {"rust-axum": "Rust", "go-nethttp": "Go", "python-fastapi": "Python ×10"}[n]
+        y = list(range(len(scen)))[::-1]
+        m = [mem["implementations"][n]["scenarios"][sc]["rps"] for _, sc in scen]
+        q = [pg["implementations"][n]["scenarios"][sc]["rps"] for _, sc in scen]
+        top = max(m) * 1.35
+        for yy, mv, qv in zip(y, m, q):
+            ax.barh(yy + 0.19, mv / top, height=0.34, color=SERIES[n], alpha=0.35, edgecolor="none")
+            ax.barh(yy - 0.19, qv / top, height=0.34, color=SERIES[n], edgecolor="none")
+            ax.text(mv / top + 0.015, yy + 0.19, fmt_num(mv), va="center", fontsize=14, color=INK2)
+            ax.text(qv / top + 0.015, yy - 0.19, f"{fmt_num(qv)}   {qv / mv:.0%}", va="center", fontsize=15, color=INK, fontweight="bold")
+        ax.set_yticks(y)
+        ax.set_yticklabels([lab for lab, _ in scen], fontsize=15)
+        ax.tick_params(axis="y", length=0, colors=INK)
+        ax.set_xticks([])
+        ax.set_xlim(0, 1.3)
+        ax.set_ylim(-0.7, len(scen) - 0.3)
+        ax.set_title(name, fontsize=22, fontweight="bold", loc="left", color=INK, pad=12)
+        for sp in ax.spines.values():
+            sp.set_visible(False)
+    simple_footer(fig, "Bold figure: PostgreSQL throughput and its share of the in-memory figure. Pool of 16 connections per single-process service, 2 per worker for ten-worker Python. Medians across runs.")
+    fig.savefig(out)
+    plt.close(fig)
+
+
 # ------------------------------------------------- simplified set (Medium)
 # One message per chart, at most four bars, big type, no axes to read.
 
@@ -515,14 +566,22 @@ def main():
     ap.add_argument("--baseline", default=str(ROOT / "results" / "20261126-215740"))
     ap.add_argument("--no-gif", action="store_true")
     ap.add_argument("--simple-only", action="store_true", help="render only the simplified PNG set")
+    ap.add_argument("--strip-suffix", default="", help='e.g. "-pg": rename implementations so a Phase 2 summary renders with the same chart code')
+    ap.add_argument("--compare", default="", help="path to a second run dir (the in-memory aggregate) for the memory-vs-postgres chart")
     args = ap.parse_args()
     run = Path(args.run_dir)
     summary = json.loads((run / "summary.json").read_text())
     spread = json.loads((run / "spread.json").read_text()) if (run / "spread.json").exists() else {}
+    if args.strip_suffix:
+        summary, spread = strip_suffix(summary, spread, args.strip_suffix)
     out = Path(args.out).resolve()
     out.mkdir(parents=True, exist_ok=True)
     gif = not args.no_gif
     base = Path(args.baseline)
+    if args.compare:
+        other = json.loads((Path(args.compare) / "summary.json").read_text())
+        (out / "simple").mkdir(parents=True, exist_ok=True)
+        chart_memory_vs_postgres(other, summary, out / "simple" / "p1-memory-vs-postgres.png")
     if args.simple_only:
         render_simple(summary, json.loads((base / "summary.json").read_text()) if (base / "summary.json").exists() else None, out / "simple")
         return
