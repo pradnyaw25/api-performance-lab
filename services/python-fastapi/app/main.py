@@ -50,6 +50,13 @@ def seed() -> dict[int, dict]:
 
 # Plain dicts are stored (not pydantic models) so the hot read path is a dict
 # lookup + orjson dump, which is how a tuned FastAPI service is actually written.
+#
+# Handlers return ORJSONResponse(...) directly instead of a dict. A returned
+# dict goes through FastAPI's pure-Python `jsonable_encoder` before the response
+# class serializes it, which on a 200-item list cost ~1.6 ms of CPU per request
+# in the baseline run (results/20261126-215740). Returning the response object
+# skips that pass. Both forms are common in production code; the difference is
+# one of the study's findings.
 ITEMS: dict[int, dict] = seed()
 _ids = itertools.count(SEED_COUNT + 1)
 _write_lock = threading.Lock()
@@ -68,7 +75,7 @@ def error(status: int, msg: str) -> ORJSONResponse:
 
 @app.get("/health")
 async def health():
-    return {"status": "ok"}
+    return ORJSONResponse({"status": "ok"})
 
 
 @app.get("/items/{item_id}")
@@ -76,14 +83,14 @@ async def get_item(item_id: int):
     item = ITEMS.get(item_id)
     if item is None:
         return error(404, "not found")
-    return item
+    return ORJSONResponse(item)
 
 
 @app.get("/items")
 async def list_items(limit: int = Query(20)):
     limit = max(1, min(limit, 1000))
     out = [ITEMS[i] for i in range(1, limit + 1) if i in ITEMS]
-    return {"count": len(out), "items": out}
+    return ORJSONResponse({"count": len(out), "items": out})
 
 
 @app.post("/items", status_code=201)
@@ -110,14 +117,14 @@ def compute_hash(n: int = Query(1000)):
     # Sync `def` endpoint: FastAPI runs it in the threadpool, which is the
     # idiomatic way to keep CPU work off the event loop. The GIL still applies.
     n = max(1, min(n, 1_000_000))
-    return {"n": n, "digest": chained_sha256(str(n), n)}
+    return ORJSONResponse({"n": n, "digest": chained_sha256(str(n), n)})
 
 
 @app.get("/io/wait")
 async def io_wait(ms: int = Query(10)):
     ms = max(0, min(ms, 5000))
     await asyncio.sleep(ms / 1000)
-    return {"waited_ms": ms}
+    return ORJSONResponse({"waited_ms": ms})
 
 
 @app.get("/mixed")
@@ -126,4 +133,4 @@ async def mixed(id: int = Query(1)):
     item = ITEMS.get(id)
     if item is None:
         return error(404, "not found")
-    return {"item": item, "digest": chained_sha256(str(id), 200)}
+    return ORJSONResponse({"item": item, "digest": chained_sha256(str(id), 200)})

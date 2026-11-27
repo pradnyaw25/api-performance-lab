@@ -41,23 +41,17 @@ results tell you *which kind* of work benefits from which runtime:
 
 ### What we measure
 
-For every (implementation, scenario) pair, at fixed concurrency and duration:
-
-- **Throughput**: requests/second
-- **Latency distribution**: p50, p90, p99, p99.9, max (tail latency is where GC
-  and the GIL show up, not in the median)
-- **Memory**: resident set size at idle and peak during load (summed over the
-  process tree, which matters for multi-worker Python)
-- **CPU efficiency**: CPU-milliseconds consumed per request (throughput at the
-  same hardware cost is the honest comparison, not throughput alone)
-- **Error rate**: non-2xx or connection failures under load
-
-Plus the engineering-cost side, because that is the other half of "meaningful":
-
-- Build time (clean, release) and artifact size
-- Lines of code for the identical contract
-- Behaviour that differs *despite* the same contract (malformed input, error
-  shapes), which the contract test records
+| Metric | Why it matters | How the harness measures it |
+|---|---|---|
+| Requests per second | Maximum sustainable throughput | `oha` at fixed concurrency for a fixed window, after warm-up, fresh process per scenario |
+| p50 / p95 / p99 latency | Predictability under load | `oha` latency percentiles; p99.9 and max in the detail tables; p99/p50 as the tail-flatness ratio |
+| Peak memory (RSS) | Infrastructure footprint | Process-tree RSS sampled 4×/s during each run (summed over workers, which is what multi-worker Python actually costs) |
+| CPU per 1,000 requests | Compute efficiency | Process-tree CPU time delta across the run ÷ completed requests. Equal req/s at 3× the CPU is 3× less headroom |
+| Cold start time | Autoscaling performance | Process launch → first `200` from `/health`, polled every 2 ms, median of 5 starts |
+| Error rate under saturation | Resilience | Dedicated runs at 1000 and 500 concurrency with a 1 s per-request timeout; timeouts, resets, refused connections and non-2xx all count |
+| Memory per open connection | Streaming scalability | 1000 keep-alive connections opened and held idle; (RSS held − RSS idle) ÷ connections |
+| Recovery after load spikes | Runtime behaviour | Probe latency → 5 s spike at 256 concurrency → probe again → 10 s idle → probe again; how much of the spike's RSS is retained (does the runtime return memory to the OS) |
+| Implementation complexity | Developer productivity | Lines of code for the identical contract, transitive dependency count, cold build time, artifact size, and behaviour that differs despite the shared contract |
 
 ### Hypotheses (written before running anything)
 
@@ -90,8 +84,12 @@ Prerequisites: Rust toolchain, Go 1.22+, Python 3.11+, [`oha`](https://github.co
 make setup      # python venv + deps
 make build      # release builds for rust and go
 make contract   # start each service, run the shared contract test, stop it
-make bench      # full benchmark -> results/REPORT.md
+make bench      # full benchmark -> results/REPORT.md (~12 min)
 ```
+
+`bench/run.py --clean` cleans before building so the build-time column is a
+cold build. `--skip saturation`, `--skip recovery`, `--skip connections`,
+`--skip coldstart` and `--impl`/`--scenario` narrow a run.
 
 Tune the run in `bench/config.json` (duration, concurrency, which scenarios,
 which implementations). Results land in `results/` as raw oha JSON per run plus

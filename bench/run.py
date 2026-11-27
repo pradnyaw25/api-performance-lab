@@ -1,26 +1,37 @@
 #!/usr/bin/env python3
 """Benchmark orchestrator for API Performance Lab.
 
-For each implementation: build, start, wait for /health, run the shared
-contract test (refuse to benchmark an implementation that fails it), warm up,
-then run every scenario with `oha` while sampling process-tree RSS and CPU
-time. Writes results/<run-id>/{raw/*.json, summary.json, REPORT.md} and copies
-the report to results/REPORT.md.
+For each implementation:
+  1. build (cold with --clean), count dependencies and lines of code
+  2. cold start: start/stop N times, median time to first healthy /health
+  3. run the shared contract test; refuse to benchmark on failure
+  4. scenarios: fresh process each, warm-up, then `oha` at fixed concurrency
+     while sampling process-tree RSS and CPU time
+  5. saturation: high concurrency with a per-request timeout -> error rate
+  6. memory per open connection: hold N idle keep-alive connections
+  7. recovery: probe latency, spike, probe again, settle, probe again
+
+Writes results/<run-id>/{raw/*.json, summary.json, REPORT.md} and copies the
+report to results/REPORT.md.
 
 Usage:
   bench/run.py                       # full run from bench/config.json
   bench/run.py --contract-only       # start each impl, run contract test, stop
   bench/run.py --impl rust-axum --scenario cpu --duration 5
   bench/run.py --clean               # clean before build so build time is a cold build
+  bench/run.py --skip saturation --skip recovery
 """
 
 import argparse
 import datetime as dt
+import http.client
 import json
 import os
 import platform
+import resource
 import shutil
 import socket
+import statistics
 import subprocess
 import sys
 import threading
@@ -37,6 +48,15 @@ CPUS = os.cpu_count() or 1
 
 def log(msg):
     print(f"[bench] {msg}", flush=True)
+
+
+def ensure_fd_limit(want=65536):
+    """Raise the open-files soft limit; children (services, oha) inherit it."""
+    soft, hard = resource.getrlimit(resource.RLIMIT_NOFILE)
+    cap = want if hard == resource.RLIM_INFINITY else min(want, hard)
+    if soft < cap:
+        resource.setrlimit(resource.RLIMIT_NOFILE, (cap, hard))
+    return resource.getrlimit(resource.RLIMIT_NOFILE)[0]
 
 
 # ---------------------------------------------------------------- process tree
@@ -66,9 +86,8 @@ def _parse_cputime(s):
     if "-" in s:
         d, s = s.split("-", 1)
         days = int(d)
-    parts = s.split(":")
     secs = 0.0
-    for p in parts:
+    for p in s.split(":"):
         secs = secs * 60 + float(p)
     return days * 86400 + secs
 
@@ -120,38 +139,39 @@ def port_free(port):
 
 
 def wait_healthy(port, timeout=60):
-    deadline = time.time() + timeout
+    """Seconds until GET /health returns 200, or None. Polls every 2 ms."""
+    t0 = time.perf_counter()
+    deadline = t0 + timeout
     url = f"http://127.0.0.1:{port}/health"
-    while time.time() < deadline:
+    while time.perf_counter() < deadline:
         try:
             with urllib.request.urlopen(url, timeout=1) as r:
                 if r.status == 200:
-                    return True
+                    return time.perf_counter() - t0
         except Exception:
-            time.sleep(0.1)
-    return False
+            time.sleep(0.002)
+    return None
 
 
-def start_impl(impl):
+def start_impl(impl, quiet=False):
     port = impl["port"]
     if not port_free(port):
         raise RuntimeError(f"port {port} already in use; stop whatever is on it")
     cwd = ROOT / impl["cwd"]
     cmd = [c.format(port=port, cpus=CPUS) for c in impl["cmd"]]
     env = dict(os.environ, PORT=str(port))
-    log(f"starting {impl['name']}: {' '.join(cmd)}")
+    if not quiet:
+        log(f"starting {impl['name']}: {' '.join(cmd)}")
     proc = subprocess.Popen(
         cmd, cwd=cwd, env=env, start_new_session=True,
         stdout=subprocess.DEVNULL, stderr=subprocess.PIPE, text=True,
     )
-    t0 = time.time()
-    if not wait_healthy(port):
+    startup = wait_healthy(port)
+    if startup is None:
         stop_impl(proc)
         err = proc.stderr.read()[-2000:] if proc.stderr else ""
         raise RuntimeError(f"{impl['name']} never became healthy\n{err}")
-    startup_s = time.time() - t0
-    time.sleep(0.5)  # let workers settle before the idle measurement
-    return proc, startup_s
+    return proc, startup
 
 
 def stop_impl(proc):
@@ -163,6 +183,17 @@ def stop_impl(proc):
             os.killpg(os.getpgid(proc.pid), 9)
         except Exception:
             pass
+
+
+def restart(impl, proc):
+    stop_impl(proc)
+    deadline = time.time() + 5
+    while not port_free(impl["port"]) and time.time() < deadline:
+        time.sleep(0.01)
+    time.sleep(0.2)
+    proc, _ = start_impl(impl, quiet=True)
+    time.sleep(0.5)  # let workers settle before idle measurements
+    return proc
 
 
 def build_impl(impl, clean):
@@ -189,11 +220,31 @@ def loc(impl):
     return n
 
 
+def dep_count(impl):
+    """Direct + transitive third-party packages the service ships with."""
+    cwd = ROOT / impl["cwd"]
+    try:
+        if impl.get("deps") == "cargo":
+            lock = (cwd / "Cargo.lock").read_text()
+            return lock.count("[[package]]") - 1
+        if impl.get("deps") == "go":
+            out = subprocess.run(["go", "list", "-m", "all"], cwd=cwd, capture_output=True, text=True).stdout
+            return max(len(out.strip().splitlines()) - 1, 0)
+        if impl.get("deps") == "pip":
+            out = subprocess.run([str(cwd / ".venv/bin/pip"), "freeze"], capture_output=True, text=True).stdout
+            return len(out.strip().splitlines())
+    except Exception:
+        pass
+    return None
+
+
 # ------------------------------------------------------------------------ oha
 
 
-def run_oha(url, scenario, duration, concurrency):
+def run_oha(url, scenario, duration, concurrency, timeout_s=None):
     cmd = ["oha", "-z", f"{duration}s", "-c", str(concurrency), "--no-tui", "--output-format", "json"]
+    if timeout_s:
+        cmd += ["-t", f"{timeout_s}s"]
     if scenario.get("method", "GET") != "GET":
         cmd += ["-m", scenario["method"]]
     if "body" in scenario:
@@ -230,6 +281,7 @@ def summarize_oha(j):
         "error_pct": round(100.0 * err_count / total, 3) if total else None,
         "p50_ms": ms("p50"),
         "p90_ms": ms("p90"),
+        "p95_ms": ms("p95"),
         "p99_ms": ms("p99"),
         "p999_ms": ms("p99.9"),
         "max_ms": round(s.get("slowest", 0.0) * 1000, 3),
@@ -237,6 +289,128 @@ def summarize_oha(j):
         "status_codes": codes,
         "error_kinds": errors,
     }
+
+
+def measured_run(proc, url, sc, duration, concurrency, timeout_s=None):
+    """One oha run with RSS sampling and CPU accounting around it."""
+    idle_rss, cpu0 = tree_stats(proc.pid)
+    sampler = Sampler(proc.pid)
+    sampler.start()
+    t0 = time.time()
+    j = run_oha(url, sc, duration, concurrency, timeout_s)
+    wall = time.time() - t0
+    peak_rss = sampler.stop()
+    _, cpu1 = tree_stats(proc.pid)
+    res = summarize_oha(j)
+    cpu_s = max(cpu1 - cpu0, 0.0)
+    res["concurrency"] = concurrency
+    res["peak_rss_bytes"] = peak_rss
+    res["idle_rss_bytes"] = idle_rss
+    res["rss_growth_per_req_bytes"] = round((peak_rss - idle_rss) / res["total"]) if res["total"] else None
+    res["cpu_seconds"] = round(cpu_s, 3)
+    res["cpu_ms_per_1k_req"] = round(1000 * 1000 * cpu_s / res["total"], 2) if res["total"] else None
+    res["server_cpu_util"] = round(cpu_s / wall / CPUS, 3)  # fraction of all cores
+    return res, j
+
+
+# ------------------------------------------------------------- other probes
+
+
+def probe_latency(port, path, n):
+    """Sequential keep-alive requests from one connection; p50/p99 in ms."""
+    conn = http.client.HTTPConnection("127.0.0.1", port, timeout=10)
+    lat = []
+    for _ in range(n):
+        t = time.perf_counter()
+        conn.request("GET", path)
+        r = conn.getresponse()
+        r.read()
+        lat.append((time.perf_counter() - t) * 1000)
+    conn.close()
+    lat.sort()
+    return {"p50_ms": round(lat[len(lat) // 2], 3), "p99_ms": round(lat[min(len(lat) - 1, int(len(lat) * 0.99))], 3)}
+
+
+def connections_test(proc, port, n, hold_s):
+    """Open n keep-alive connections, one request each, hold them idle, measure RSS."""
+    idle, _ = tree_stats(proc.pid)
+    socks, failed = [], 0
+    req = b"GET /health HTTP/1.1\r\nHost: 127.0.0.1\r\nConnection: keep-alive\r\n\r\n"
+    for _ in range(n):
+        try:
+            s = socket.create_connection(("127.0.0.1", port), timeout=5)
+            s.sendall(req)
+            socks.append(s)
+        except OSError:
+            failed += 1
+    for s in socks:
+        s.settimeout(5)
+        try:
+            s.recv(4096)
+        except OSError:
+            pass
+    time.sleep(hold_s)
+    held, _ = tree_stats(proc.pid)
+    for s in socks:
+        s.close()
+    time.sleep(1.0)
+    after, _ = tree_stats(proc.pid)
+    opened = len(socks)
+    return {
+        "connections": opened,
+        "failed": failed,
+        "idle_rss_bytes": idle,
+        "held_rss_bytes": held,
+        "after_close_rss_bytes": after,
+        "bytes_per_conn": round((held - idle) / opened) if opened else None,
+    }
+
+
+def recovery_test(proc, port, cfg):
+    """Latency probe -> spike -> probe -> settle -> probe. RSS at each point."""
+    probe_path, n = cfg.get("probe_path", "/items/42"), cfg.get("probe_requests", 300)
+    idle, _ = tree_stats(proc.pid)
+    pre = probe_latency(port, probe_path, n)
+    sampler = Sampler(proc.pid, interval=0.1)
+    sampler.start()
+    spike = run_oha(f"http://127.0.0.1:{port}{cfg['spike_path']}", {}, cfg["spike_s"], cfg["spike_concurrency"])
+    peak = sampler.stop()
+    rss_after, _ = tree_stats(proc.pid)
+    post = probe_latency(port, probe_path, n)
+    time.sleep(cfg["settle_s"])
+    rss_settled, _ = tree_stats(proc.pid)
+    settled = probe_latency(port, probe_path, n)
+    grown = max(peak - idle, 1)
+    return {
+        "spike": {"path": cfg["spike_path"], "concurrency": cfg["spike_concurrency"], "seconds": cfg["spike_s"],
+                  "rps": round(spike["summary"]["requestsPerSec"]), "errors": summarize_oha(spike)["errors"]},
+        "idle_rss_bytes": idle,
+        "peak_rss_bytes": peak,
+        "rss_after_spike_bytes": rss_after,
+        "rss_after_settle_bytes": rss_settled,
+        "settle_s": cfg["settle_s"],
+        "retained_pct": round(100 * (rss_settled - idle) / grown, 1),
+        "probe_pre": pre,
+        "probe_after_spike": post,
+        "probe_after_settle": settled,
+    }
+
+
+def cold_start(impl, runs):
+    """Start/stop `runs` times; return times and the last process still running."""
+    times = []
+    proc = None
+    for i in range(runs):
+        if proc is not None:
+            stop_impl(proc)
+            deadline = time.time() + 5
+            while not port_free(impl["port"]) and time.time() < deadline:
+                time.sleep(0.01)
+            time.sleep(0.2)
+        proc, t = start_impl(impl, quiet=i > 0)
+        times.append(round(t * 1000, 1))
+    time.sleep(0.5)
+    return proc, times
 
 
 # ----------------------------------------------------------------------- main
@@ -257,6 +431,7 @@ def main():
     ap.add_argument("--config", default=str(ROOT / "bench" / "config.json"))
     ap.add_argument("--impl", action="append", help="limit to implementation name(s)")
     ap.add_argument("--scenario", action="append", help="limit to scenario name(s)")
+    ap.add_argument("--skip", action="append", default=[], choices=["scenarios", "saturation", "connections", "recovery", "coldstart"])
     ap.add_argument("--duration", type=int)
     ap.add_argument("--concurrency", type=int)
     ap.add_argument("--warmup", type=int)
@@ -267,6 +442,7 @@ def main():
 
     if not shutil.which("oha") and not args.contract_only:
         sys.exit("oha not found: brew install oha")
+    fd_limit = ensure_fd_limit()
 
     cfg = json.loads(Path(args.config).read_text())
     duration = args.duration or cfg["duration_s"]
@@ -274,6 +450,8 @@ def main():
     warmup = args.warmup if args.warmup is not None else cfg["warmup_s"]
     impls = [i for i in cfg["implementations"] if not args.impl or i["name"] in args.impl]
     scenarios = [s for s in cfg["scenarios"] if not args.scenario or s["name"] in args.scenario]
+    saturation = cfg.get("saturation", [])
+    cold_runs = cfg.get("cold_start_runs", 5)
 
     run_id = dt.datetime.now().strftime("%Y%m%d-%H%M%S")
     out_dir = ROOT / "results" / run_id
@@ -287,29 +465,42 @@ def main():
             "machine": platform.machine(),
             "cpus": CPUS,
             "cpu": _cpu_brand(),
+            "fd_limit": fd_limit,
+            "somaxconn": _sysctl("kern.ipc.somaxconn"),
         },
         "settings": {"duration_s": duration, "warmup_s": warmup, "concurrency": concurrency,
-                     "load_generator": _oha_version()},
+                     "cold_start_runs": cold_runs, "load_generator": _oha_version(),
+                     "connections": cfg.get("connections"), "recovery": cfg.get("recovery")},
         "scenarios": scenarios,
+        "saturation": saturation,
         "implementations": {},
     }
 
     exit_code = 0
     for impl in impls:
         name = impl["name"]
-        entry = {"port": impl["port"], "loc": loc(impl), "toolchain": _toolchain(impl)}
+        port = impl["port"]
+        base = f"http://127.0.0.1:{port}"
+        entry = {"port": port, "loc": loc(impl), "deps": dep_count(impl), "toolchain": _toolchain(impl)}
+        proc = None
         try:
             if not args.no_build:
                 entry.update(build_impl(impl, args.clean))
-            proc, startup_s = start_impl(impl)
+            if "coldstart" in args.skip or args.contract_only:
+                proc, t = start_impl(impl)
+                entry["cold_start_ms"] = [round(t * 1000, 1)]
+            else:
+                proc, entry["cold_start_ms"] = cold_start(impl, cold_runs)
+            entry["cold_start_median_ms"] = round(statistics.median(entry["cold_start_ms"]), 1)
         except Exception as e:
             log(f"{name}: FAILED to build/start: {e}")
             entry["error"] = str(e)
             summary["implementations"][name] = entry
             exit_code = 1
+            if proc:
+                stop_impl(proc)
             continue
         try:
-            entry["startup_s"] = round(startup_s, 3)
             entry["idle_rss_bytes"], _ = tree_stats(proc.pid)
             ok, text = contract_ok(impl)
             entry["contract"] = "pass" if ok else "fail"
@@ -320,32 +511,48 @@ def main():
                 continue
             if args.contract_only:
                 continue
+            raw_dir.mkdir(parents=True, exist_ok=True)
 
-            entry["scenarios"] = {}
-            base = f"http://127.0.0.1:{impl['port']}"
-            for sc in scenarios:
-                url = base + sc["path"]
-                if warmup:
-                    run_oha(url, sc, warmup, concurrency)
-                _, cpu0 = tree_stats(proc.pid)
-                sampler = Sampler(proc.pid)
-                sampler.start()
-                t0 = time.time()
-                j = run_oha(url, sc, duration, concurrency)
-                wall = time.time() - t0
-                peak_rss = sampler.stop()
-                _, cpu1 = tree_stats(proc.pid)
-                raw_dir.mkdir(parents=True, exist_ok=True)
-                (raw_dir / f"{name}-{sc['name']}.json").write_text(json.dumps(j, indent=1))
-                res = summarize_oha(j)
-                cpu_s = max(cpu1 - cpu0, 0.0)
-                res["peak_rss_bytes"] = peak_rss
-                res["cpu_seconds"] = round(cpu_s, 3)
-                res["cpu_ms_per_req"] = round(1000 * cpu_s / res["total"], 4) if res["total"] else None
-                res["server_cpu_util"] = round(cpu_s / wall / CPUS, 3)  # fraction of all cores
-                entry["scenarios"][sc["name"]] = res
-                log(f"{name:18s} {sc['name']:7s} {res['rps']:>10.0f} rps  p50 {res['p50_ms']:>8.2f}ms  "
-                    f"p99 {res['p99_ms']:>8.2f}ms  peak {peak_rss/1e6:>7.1f}MB  cpu/req {res['cpu_ms_per_req']}ms  err {res['errors']}")
+            if "scenarios" not in args.skip:
+                entry["scenarios"] = {}
+                for i, sc in enumerate(scenarios):
+                    if cfg.get("restart_per_scenario", True) and i > 0:
+                        proc = restart(impl, proc)
+                    url = base + sc["path"]
+                    if warmup:
+                        run_oha(url, sc, warmup, concurrency)
+                    res, raw = measured_run(proc, url, sc, duration, concurrency)
+                    (raw_dir / f"{name}-{sc['name']}.json").write_text(json.dumps(raw, indent=1))
+                    entry["scenarios"][sc["name"]] = res
+                    log(f"{name:18s} {sc['name']:8s} {res['rps']:>9.0f} rps  p50 {res['p50_ms']:>7.2f}  p95 {res['p95_ms']:>7.2f}  "
+                        f"p99 {res['p99_ms']:>7.2f} ms  peak {res['peak_rss_bytes']/1e6:>7.1f} MB  cpu/1k {res['cpu_ms_per_1k_req']:>8.2f} ms  err {res['errors']}")
+
+            if "saturation" not in args.skip and saturation:
+                entry["saturation"] = {}
+                for sc in saturation:
+                    proc = restart(impl, proc)
+                    res, raw = measured_run(proc, base + sc["path"], sc, sc.get("duration_s", duration),
+                                            sc["concurrency"], sc.get("timeout_s"))
+                    (raw_dir / f"{name}-{sc['name']}.json").write_text(json.dumps(raw, indent=1))
+                    entry["saturation"][sc["name"]] = res
+                    log(f"{name:18s} {sc['name']:8s} c={sc['concurrency']:<5d} {res['rps']:>9.0f} rps  p99 {res['p99_ms']:>8.2f} ms  "
+                        f"errors {res['errors']} ({res['error_pct']}%) {dict(list(res['error_kinds'].items())[:3])}")
+
+            if "connections" not in args.skip and cfg.get("connections"):
+                proc = restart(impl, proc)
+                c = cfg["connections"]
+                entry["connections"] = connections_test(proc, port, c["count"], c.get("hold_s", 1))
+                e = entry["connections"]
+                log(f"{name:18s} conns    {e['connections']} open: idle {e['idle_rss_bytes']/1e6:.1f} MB -> held {e['held_rss_bytes']/1e6:.1f} MB  "
+                    f"= {e['bytes_per_conn']/1024:.1f} KB/conn  (failed {e['failed']})")
+
+            if "recovery" not in args.skip and cfg.get("recovery"):
+                proc = restart(impl, proc)
+                entry["recovery"] = recovery_test(proc, port, cfg["recovery"])
+                r = entry["recovery"]
+                log(f"{name:18s} recover  idle {r['idle_rss_bytes']/1e6:.1f} -> peak {r['peak_rss_bytes']/1e6:.1f} -> +0s {r['rss_after_spike_bytes']/1e6:.1f} "
+                    f"-> +{r['settle_s']}s {r['rss_after_settle_bytes']/1e6:.1f} MB (retained {r['retained_pct']}%)  "
+                    f"probe p99 {r['probe_pre']['p99_ms']} -> {r['probe_after_spike']['p99_ms']} -> {r['probe_after_settle']['p99_ms']} ms")
         finally:
             stop_impl(proc)
             summary["implementations"][name] = entry
@@ -362,11 +569,15 @@ def main():
     return exit_code
 
 
-def _cpu_brand():
+def _sysctl(key):
     try:
-        return subprocess.run(["sysctl", "-n", "machdep.cpu.brand_string"], capture_output=True, text=True).stdout.strip()
+        return subprocess.run(["sysctl", "-n", key], capture_output=True, text=True).stdout.strip()
     except Exception:
-        return platform.processor()
+        return None
+
+
+def _cpu_brand():
+    return _sysctl("machdep.cpu.brand_string") or platform.processor()
 
 
 def _oha_version():
@@ -379,9 +590,9 @@ def _oha_version():
 def _toolchain(impl):
     try:
         if impl["name"].startswith("rust"):
-            return subprocess.run(["rustc", "--version"], capture_output=True, text=True).stdout.strip()
+            return subprocess.run(["rustc", "--version"], capture_output=True, text=True).stdout.strip().replace(" (", " (").split(" (")[0]
         if impl["name"].startswith("go"):
-            return subprocess.run(["go", "version"], capture_output=True, text=True).stdout.strip()
+            return subprocess.run(["go", "version"], capture_output=True, text=True).stdout.strip().replace("go version ", "").split()[0]
         py = ROOT / impl["cwd"] / ".venv" / "bin" / "python"
         v = subprocess.run([str(py), "-c",
                             "import sys,fastapi,uvicorn;print(f'Python {sys.version.split()[0]}, FastAPI {fastapi.__version__}, Uvicorn {uvicorn.__version__}')"],
