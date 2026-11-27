@@ -119,53 +119,59 @@ def bar_panel(ax, names, vals, t, fmt, spread_keys=None, spread=None, pad=24, tt
 
 
 def chart_ratios(summary, t, dpi):
+    """Every cell compares one alternative to Rust on one workload. A grey Rust
+    column of 1.0× cells sits first in each panel so the baseline is visible."""
     impls = summary["implementations"]
     others = [n for n in ORDER[1:] if impls.get(n, {}).get("scenarios")]
+    cols = ["rust-axum"] + others
     scenarios = [s["name"] for s in summary["scenarios"]]
     r = impls["rust-axum"]["scenarios"]
     panels = [
-        ("Throughput", "Rust ÷ alternative", lambda rs, o: (rs.get("rps") or 0) / (o.get("rps") or 1)),
-        ("p99 latency", "alternative ÷ Rust", lambda rs, o: (o.get("p99_ms") or 0) / (rs.get("p99_ms") or 1)),
-        ("CPU per 1k requests", "alternative ÷ Rust", lambda rs, o: (o.get("cpu_ms_per_1k_req") or 0) / (rs.get("cpu_ms_per_1k_req") or 1)),
-        ("Peak memory", "alternative ÷ Rust", lambda rs, o: (o.get("peak_rss_bytes") or 0) / (rs.get("peak_rss_bytes") or 1)),
+        ("Throughput", "how many times faster Rust is", lambda rs, o: (rs.get("rps") or 0) / (o.get("rps") or 1)),
+        ("p99 latency", "how many times higher than Rust's", lambda rs, o: (o.get("p99_ms") or 0) / (rs.get("p99_ms") or 1)),
+        ("CPU per request", "how many times more than Rust", lambda rs, o: (o.get("cpu_ms_per_1k_req") or 0) / (rs.get("cpu_ms_per_1k_req") or 1)),
+        ("Peak memory", "how many times more than Rust", lambda rs, o: (o.get("peak_rss_bytes") or 0) / (rs.get("peak_rss_bytes") or 1)),
     ]
     cmap = LinearSegmentedColormap.from_list("div", ["#eb6834", "#f6c9b5", "#ebebe8", "#b7d3f6", "#2a78d6"])
     norm = TwoSlopeNorm(vmin=math.log10(1 / 4), vcenter=0, vmax=math.log10(16))
     rows_shown = math.ceil(t * len(scenarios) - 1e-9)
-    fig, axes = plt.subplots(1, len(panels), figsize=(16, 6.6), dpi=dpi)
+    fig, axes = plt.subplots(1, len(panels), figsize=(16, 6.9), dpi=dpi)
     for ax, (ttl, sub, f) in zip(axes, panels):
-        grid = [[f(r.get(sc, {}), impls[o]["scenarios"].get(sc, {})) for o in others] for sc in scenarios]
+        grid = [[1.0] + [f(r.get(sc, {}), impls[o]["scenarios"].get(sc, {})) for o in others] for sc in scenarios]
         logs = [[math.log10(max(v, 1e-9)) for v in row] for row in grid]
         ax.imshow(logs, cmap=cmap, norm=norm, aspect="auto")
         for i, row in enumerate(grid):
             for j, v in enumerate(row):
                 if i >= rows_shown:
                     continue
+                if j == 0:
+                    ax.text(j, i, "1×", ha="center", va="center", fontsize=11, color=INK2)
+                    continue
                 lum = norm(math.log10(max(v, 1e-9)))
                 col = SURFACE if (lum > 0.78 or lum < 0.18) else INK
                 txt = f"{v:.1f}×" if v < 10 else f"{v:.0f}×"
                 ax.text(j, i, txt, ha="center", va="center", fontsize=11, color=col, fontweight="bold" if abs(math.log10(v)) > 0.3 else "normal")
         if rows_shown < len(scenarios):  # hide unrevealed rows
-            ax.add_patch(plt.Rectangle((-0.5, rows_shown - 0.5), len(others), len(scenarios) - rows_shown, color=SURFACE, zorder=5))
-        ax.set_xticks(range(len(others)))
-        ax.set_xticklabels([SHORT[o] for o in others], fontsize=10)
+            ax.add_patch(plt.Rectangle((-0.5, rows_shown - 0.5), len(cols), len(scenarios) - rows_shown, color=SURFACE, zorder=5))
+        ax.set_xticks(range(len(cols)))
+        ax.set_xticklabels(["Rust\n(baseline)"] + [f"{SHORT[o]}\nvs Rust" for o in others], fontsize=9.5)
         ax.set_yticks(range(len(scenarios)))
         ax.set_yticklabels(scenarios if ax is axes[0] else [""] * len(scenarios), fontsize=10.5)
         ax.tick_params(length=0)
         ax.set_title(f"{ttl}\n", fontsize=12.5, loc="left", color=INK, pad=2)
         ax.text(0, 1.02, sub, transform=ax.transAxes, fontsize=9.5, color=INK2, va="bottom")
-        for s in ax.spines.values():
-            s.set_visible(False)
-        for k in range(len(others) + 1):
+        for sp in ax.spines.values():
+            sp.set_visible(False)
+        for k in range(len(cols) + 1):
             ax.axvline(k - 0.5, color=SURFACE, linewidth=3, zorder=6)
         for k in range(len(scenarios) + 1):
             ax.axhline(k - 0.5, color=SURFACE, linewidth=3, zorder=6)
-    title(fig, "Where Rust's advantage actually is",
-          "Every cell is a ratio against the Rust implementation on the same workload. Blue: Rust is better by that factor. Orange: the alternative won. "
-          "Grey: the language did not matter.")
+    title(fig, "Everything compared to Rust, workload by workload",
+          "Each cell is one language measured against the Rust implementation on the same workload. Blue: Rust did better by that factor. "
+          "Orange: the other language did better. Grey: no real difference.")
     footer(fig, "Same contract, same machine (Apple M5, 10 cores, macOS), oha at 64 concurrent connections, 10 s per cell, medians of 4 runs. "
            "io and mixed are bound by their 10 ms / 5 ms waits by design: throughput cannot exceed 64 ÷ wait.")
-    fig.subplots_adjust(left=0.065, right=0.99, top=0.76, bottom=0.07, wspace=0.14)
+    fig.subplots_adjust(left=0.065, right=0.99, top=0.76, bottom=0.10, wspace=0.14)
     return fig
 
 
@@ -338,9 +344,9 @@ def chart_social(summary, out):
     fig.text(0.06, 0.86, "Benchmarking API performance: Python vs Go vs Rust", fontsize=36, fontweight="bold", color="#f0efec", va="top")
     fig.text(0.06, 0.745, "Same API, three production stacks, nine metrics. Where does Rust actually matter?", fontsize=20, color="#c3c2b7", va="top")
     tiles = [
-        (f"{r['cpu']['rps']/g['cpu']['rps']:.1f}×", "faster than Go", "on CPU-bound requests", "#3987e5"),
-        (f"{r['get']['p99_ms']:.2f} ms", "p99 latency", f"Go {g['get']['p99_ms']:.1f} ms · Python {p['get']['p99_ms']:.1f} ms", "#3987e5"),
-        ("≈ equal", "throughput when I/O-bound", f"Python {p['io']['rps']/r['io']['rps']:.2f}× Rust · Go {g['io']['rps']/r['io']['rps']:.2f}×", "#d95926"),
+        (f"{r['cpu']['rps']/g['cpu']['rps']:.1f}×", "Rust vs Go, CPU-bound requests", f"and {r['cpu']['rps']/p['cpu']['rps']:.1f}× vs Python ×10", "#3987e5"),
+        (f"{r['get']['p99_ms']:.2f} ms", "Rust p99 on a simple lookup", f"Go {g['get']['p99_ms']:.1f} ms · Python ×10 {p['get']['p99_ms']:.1f} ms", "#3987e5"),
+        ("≈ equal", "all three when I/O-bound", f"Rust {r['io']['rps']:,.0f} · Go {g['io']['rps']:,.0f} · Python {p['io']['rps']:,.0f} req/s", "#d95926"),
     ]
     for i, (big, lab, sub, col) in enumerate(tiles):
         x = 0.06 + i * 0.31
