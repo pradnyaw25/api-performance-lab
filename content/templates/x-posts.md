@@ -1,10 +1,10 @@
 # X posts
 
-Two posts, one graphic. Attach `charts/01-where-rust-wins.gif` to the first; X plays GIFs inline. Each is under 280 characters (URLs count as 23).
+Two posts, one graphic. Attach `charts/simple/s1-rust-advantage.png` to the first. Each is under 280 characters (URLs count as 23).
 
 ---
 
-**Post 1** [attach charts/01-where-rust-wins.gif]
+**Post 1** [attach charts/simple/s1-rust-advantage.png]
 
 Benchmarking API performance: Python vs Go vs Rust.
 

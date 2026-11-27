@@ -22,7 +22,6 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # noqa: E402
 import numpy as np  # noqa: E402
-from matplotlib.colors import LinearSegmentedColormap, TwoSlopeNorm  # noqa: E402
 from PIL import Image  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -116,63 +115,6 @@ def bar_panel(ax, names, vals, t, fmt, spread_keys=None, spread=None, pad=24, tt
 
 
 # ------------------------------------------------------------------- charts
-
-
-def chart_ratios(summary, t, dpi):
-    """Every cell compares one alternative to Rust on one workload. A grey Rust
-    column of 1.0× cells sits first in each panel so the baseline is visible."""
-    impls = summary["implementations"]
-    others = [n for n in ORDER[1:] if impls.get(n, {}).get("scenarios")]
-    cols = ["rust-axum"] + others
-    scenarios = [s["name"] for s in summary["scenarios"]]
-    r = impls["rust-axum"]["scenarios"]
-    panels = [
-        ("Throughput", "how many times faster Rust is", lambda rs, o: (rs.get("rps") or 0) / (o.get("rps") or 1)),
-        ("p99 latency", "how many times higher than Rust's", lambda rs, o: (o.get("p99_ms") or 0) / (rs.get("p99_ms") or 1)),
-        ("CPU per request", "how many times more than Rust", lambda rs, o: (o.get("cpu_ms_per_1k_req") or 0) / (rs.get("cpu_ms_per_1k_req") or 1)),
-        ("Peak memory", "how many times more than Rust", lambda rs, o: (o.get("peak_rss_bytes") or 0) / (rs.get("peak_rss_bytes") or 1)),
-    ]
-    cmap = LinearSegmentedColormap.from_list("div", ["#eb6834", "#f6c9b5", "#ebebe8", "#b7d3f6", "#2a78d6"])
-    norm = TwoSlopeNorm(vmin=math.log10(1 / 4), vcenter=0, vmax=math.log10(16))
-    rows_shown = math.ceil(t * len(scenarios) - 1e-9)
-    fig, axes = plt.subplots(1, len(panels), figsize=(16, 6.9), dpi=dpi)
-    for ax, (ttl, sub, f) in zip(axes, panels):
-        grid = [[1.0] + [f(r.get(sc, {}), impls[o]["scenarios"].get(sc, {})) for o in others] for sc in scenarios]
-        logs = [[math.log10(max(v, 1e-9)) for v in row] for row in grid]
-        ax.imshow(logs, cmap=cmap, norm=norm, aspect="auto")
-        for i, row in enumerate(grid):
-            for j, v in enumerate(row):
-                if i >= rows_shown:
-                    continue
-                if j == 0:
-                    ax.text(j, i, "1×", ha="center", va="center", fontsize=11, color=INK2)
-                    continue
-                lum = norm(math.log10(max(v, 1e-9)))
-                col = SURFACE if (lum > 0.78 or lum < 0.18) else INK
-                txt = f"{v:.1f}×" if v < 10 else f"{v:.0f}×"
-                ax.text(j, i, txt, ha="center", va="center", fontsize=11, color=col, fontweight="bold" if abs(math.log10(v)) > 0.3 else "normal")
-        if rows_shown < len(scenarios):  # hide unrevealed rows
-            ax.add_patch(plt.Rectangle((-0.5, rows_shown - 0.5), len(cols), len(scenarios) - rows_shown, color=SURFACE, zorder=5))
-        ax.set_xticks(range(len(cols)))
-        ax.set_xticklabels(["Rust\n(baseline)"] + [f"{SHORT[o]}\nvs Rust" for o in others], fontsize=9.5)
-        ax.set_yticks(range(len(scenarios)))
-        ax.set_yticklabels(scenarios if ax is axes[0] else [""] * len(scenarios), fontsize=10.5)
-        ax.tick_params(length=0)
-        ax.set_title(f"{ttl}\n", fontsize=12.5, loc="left", color=INK, pad=2)
-        ax.text(0, 1.02, sub, transform=ax.transAxes, fontsize=9.5, color=INK2, va="bottom")
-        for sp in ax.spines.values():
-            sp.set_visible(False)
-        for k in range(len(cols) + 1):
-            ax.axvline(k - 0.5, color=SURFACE, linewidth=3, zorder=6)
-        for k in range(len(scenarios) + 1):
-            ax.axhline(k - 0.5, color=SURFACE, linewidth=3, zorder=6)
-    title(fig, "Everything compared to Rust, workload by workload",
-          "Each cell is one language measured against the Rust implementation on the same workload. Blue: Rust did better by that factor. "
-          "Orange: the other language did better. Grey: no real difference.")
-    footer(fig, "Same contract, same machine (Apple M5, 10 cores, macOS), oha at 64 concurrent connections, 10 s per cell, medians of 4 runs. "
-           "io and mixed are bound by their 10 ms / 5 ms waits by design: throughput cannot exceed 64 ÷ wait.")
-    fig.subplots_adjust(left=0.065, right=0.99, top=0.76, bottom=0.10, wspace=0.14)
-    return fig
 
 
 def chart_small_multiples(summary, spread, metric, ttl, sub, unit, higher_better, fmt=fmt_num):
@@ -497,8 +439,8 @@ def simple_memory(summary, out):
     names = [n for n in ORDER if I[n].get("scenarios")]
     vals = [I[n]["idle_rss_bytes"] / 1e6 for n in names]
     fig, ax = simple_canvas("Idle memory: ten Python workers are ten copies of everything",
-                            "Resident memory of the whole process tree before any load, in MB.")
-    simple_bars(ax, names, vals, [f"{v:,.0f} MB" + (f"   ({v / vals[0]:.1f}× Rust)" if 0 < i and v / vals[0] < 10 else f"   ({v / vals[0]:.0f}× Rust)" if i else "") for i, v in enumerate(vals)])
+                            "Resident memory of the whole process tree before any load, in MB. Rust and Go fit in the width of the first bar's label.")
+    simple_bars(ax, names, vals, [f"{v:,.0f} MB" for v in vals])
     simple_footer(fig, "Each Uvicorn worker is a separate process with its own interpreter and its own copy of the data; they share nothing in memory.")
     fig.savefig(out)
     plt.close(fig)
@@ -585,7 +527,6 @@ def main():
         render_simple(summary, json.loads((base / "summary.json").read_text()) if (base / "summary.json").exists() else None, out / "simple")
         return
 
-    render(lambda t, dpi: chart_ratios(summary, t, dpi), out, "01-where-rust-wins", gif, grow_frames=14, frame_ms=110)
     render(chart_small_multiples(summary, spread, "rps", "Throughput by workload",
                                  "Requests per second at 64 concurrent connections. Each panel has its own scale; the question is the gap within a panel, not across panels.",
                                  "requests/s", True), out, "02-throughput", gif)
