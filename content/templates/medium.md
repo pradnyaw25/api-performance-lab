@@ -10,7 +10,7 @@ Last week Anthropic published [Migrating our Messages API to Rust](https://www.a
 
 I wanted to know the *shape* of that gain. Which requests get faster? By how much? Which parts are the language, which are the runtime, and which are a library choice? Those questions can be answered on one laptop, with everything else held constant.
 
-So I built the same API three times: Rust with Axum, Go with the standard library, Python with FastAPI on Uvicorn (uvloop, httptools, orjson). Seven endpoints, each isolating one kind of work. A shared test that refuses to benchmark anything that behaves differently. Nine metrics, {{n_runs}} full runs, medians below.
+So I built the same API three times: Rust with Axum, Go with the standard library, Python with FastAPI on Uvicorn (uvloop, httptools, orjson). Python runs two ways: one worker, which has the same one-process, one-store, one-lock semantics as Rust and Go and is the like-for-like comparison, and ten workers, which is how it is actually deployed and which has ten separate stores. Seven endpoints, each isolating one kind of work. A shared test that refuses to benchmark anything that behaves differently. Nine metrics, {{n_runs}} full runs, medians below.
 
 **One thing first:** this is a lab benchmark on a laptop, not production traffic. It cannot tell you what a migration like Anthropic's would yield. It can tell you *where* the differences come from.
 
@@ -56,7 +56,7 @@ I kept the first run, with every framework at its defaults, on purpose.
 
 ## The finding that is not a benchmark number
 
-Ten-worker Python has no shared memory. The contract test caught it: an item created on one Uvicorn worker is a 404 on the other nine. Python's only route to all your cores is ten processes, which means ten copies of everything and Redis for what Rust and Go get from a mutex.
+Ten-worker Python has no shared memory. The contract test caught it: an item created on one Uvicorn worker is a 404 on the other nine. Python's only route to all your cores is ten processes, which means ten copies of everything and Redis for what Rust and Go get from a mutex. It also means the ten-worker write numbers are not the same guarantee as the others; compare the single-worker row for like-for-like.
 
 ## What it costs
 

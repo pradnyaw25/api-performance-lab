@@ -24,6 +24,20 @@ verified by one shared contract test (`tests/contract_test.py`) that runs
 against all of them. If the contract test does not pass, the benchmark numbers
 are not comparable and the harness refuses to run.
 
+### Two kinds of comparison
+
+The four rows are not all the same comparison, and the report should be read
+with that in mind:
+
+| Comparison | Implementations | What it answers |
+|---|---|---|
+| **Identical semantics** | `rust-axum`, `go-nethttp`, `python-fastapi-1w` | One process, one store, one lock in each. Every request sees every write. This is the fair application-level comparison. |
+| **Native deployment** | the three above plus `python-fastapi` (10 workers) | Each ecosystem's production deployment model. Python's route to ten cores is ten processes with ten stores and ten locks, so its `create` numbers carry a weaker consistency guarantee: a write is visible only on the worker that took it. The contract test records this (`--process-local-state`) instead of failing, because the harness would otherwise have nothing to say about how Python is actually deployed. |
+
+Read the Python ×1 row for the fair comparison and the Python ×10 row for
+what you would actually deploy. Phase 2 (the same contract on PostgreSQL)
+gives all four identical semantics, which is the proper fix.
+
 ### Workload dimensions
 
 Each endpoint isolates one thing an API service spends time on, so the
@@ -91,7 +105,7 @@ Publication drafts and charts built from the aggregate are in [`content/`](conte
 | 1 | CPU-bound: Rust and Go an order of magnitude ahead of Python; Rust leads Go by a small constant | **Mostly right, with a twist.** Rust 20.5k req/s, Go 11.0k, Python×10 3.1k, Python×1 927. Rust leads Go by **1.9×**, not a small constant, but only after enabling the `sha2` crate's `asm` feature. With the crate's default software SHA-256, Rust was **slower than Go** (8.4k vs 14.7k in the baseline) because Go's standard library uses the ARM SHA-2 instructions out of the box. The language sets the ceiling; the library decides whether you reach it. |
 | 2 | I/O-bound: all three converge; differences are memory and tail, not req/s | **Confirmed, and Rust was the slowest.** `io` throughput spans 5.2k–5.7k req/s (9%); p99 spans 12.7–14.6 ms. Rust is last because Tokio's `sleep(10 ms)` completes in 12.3 ms even at concurrency 1 on this macOS build, while Go and uvloop sleep 11.3 ms. What Rust wins while waiting is cost: **31 ms CPU per 1k requests vs 64 (Go) and 110 (Python×10)**, at 13 MB vs 27 MB vs 720 MB. |
 | 3 | Serialization: Rust > Go > Python, but orjson narrows the gap more than expected | **Confirmed, dramatically.** Baseline Python `list` was **14× slower** than Rust and burned 1.7 ms CPU per request. Returning `ORJSONResponse` directly, so FastAPI skips its pure-Python `jsonable_encoder` pass, took that to **1.6×** (60.2k vs 37.5k req/s). Rust over Go on serialization: 1.1×. Serialization alone is not a reason to choose Rust; knowing your framework's hot path is worth 7× in Python. |
-| 4 | Tail latency: Rust flattest p99/p50; Go's tail shows GC; Python degrades fastest | **Confirmed.** On `get`, p99/p50 is **2.6× Rust, 6.5× Go, 8.5× Python×10**. Absolute p99: 0.91 / 1.98 / 5.30 ms (Rust's ranged 0.71–2.04 ms across runs; the comparison holds at its worst run). Under CPU saturation Go's p99/p50 reaches **24×** while Rust stays at 2×. Go's p95 is where its GC and scheduler become visible. |
+| 4 | Tail latency: Rust flattest p99/p50; Go's tail shows GC; Python degrades fastest | **Confirmed.** On `get`, p99/p50 is **2.6× Rust, 6.5× Go, 8.5× Python×10**. Absolute p99: 0.91 / 1.98 / 5.30 ms (Rust's ranged 0.71–2.04 ms across runs; the comparison holds at its worst run). Under CPU saturation Go's p99/p50 reaches **24×** while Rust stays at 2×. The tail is measured; its cause is not. The hypothesis in the first draft, Go's garbage collector, did not survive a `GOGC=off` counterfactual (see Findings). |
 | 5 | Memory: Rust < Go << Python×N; the ratio matters for density | **Confirmed at the baseline, wrong per connection.** Idle RSS: **9.9 MB Rust, 13.4 MB Go, 66 MB Python×1, 711 MB Python×10** (72× Rust). Per *idle connection* the order inverts: **Rust 31.6 KB, Go 22.9 KB, Python 18.5 KB**; hyper's per-connection buffers are the largest of the three. At 100k connections that is 3.2 GB vs 2.3 GB vs 1.9 GB, so the fixed cost, not the per-connection cost, is the story. |
 | 6 | Engineering cost: Rust costs the most lines and the longest build | **Half right.** LOC: **Rust 177, Go 182, Python 93**. Rust ships **93 transitive crates**; Go **0**; Python 21 packages. Cold build 13.7 s Rust (LTO) vs 3.2 s Go. Cold start **10 ms Rust, 13 ms Go, 173 ms Python×1, 416 ms Python×10**. Rust and Go cost the same lines; Rust's cost is the dependency graph and the build. |
 
@@ -103,7 +117,7 @@ Publication drafts and charts built from the aggregate are in [`content/`](conte
   (laptop noise), which is why everything here is a median with its range in
   the report. Rust's edge over Go is in p99 (2.2×), CPU per request (1.4×) and
   memory (2.2×), not in requests per second.
-- **Multi-worker Python has no shared memory.** The contract test found that
+- **Multi-worker Python has no shared memory**, so it is a different comparison (see *Two kinds of comparison* above). The contract test found that
   an item created on one Uvicorn worker is a 404 on the other nine (1 hit in
   10). Python's only route to all ten cores is ten processes, which means ten
   copies of every in-memory structure (711 MB idle for a 10k-item seed) and no
@@ -114,9 +128,10 @@ Publication drafts and charts built from the aggregate are in [`content/`](conte
   ahead.** `sat-cpu` (500 concurrent, 20k hash rounds, 1 s timeout):
   **Rust 0 timeouts in every run, p99 174 ms; Go 0.21%, p99 707 ms; Python×10
   7.95% at the median (0.45–21.5% run to run), p99 968 ms; Python×1 63%.** Go's
-  median (69 ms) is close to Rust's (59 ms) while its p99 is 4× worse: its
-  scheduler lets a tail of requests wait out the deadline, Tokio's work-stealing
-  spreads the delay evenly. Under connection overload (`sat-get`, 1000
+  median (69 ms) is close to Rust's (59 ms) while its p99 is 4× worse. One
+  hypothesis is scheduling: Go lets a tail of requests wait out the deadline
+  while Tokio's work-stealing spreads the delay evenly. Neither runtime has
+  been profiled to confirm it. Under connection overload (`sat-get`, 1000
   concurrent) Rust, Go and Python×10 served every request; Python×1 timed out
   2.3%.
 - **Nobody has a latency hangover; memory retention is too noisy to rank.**
@@ -126,6 +141,15 @@ Publication drafts and charts built from the aggregate are in [`content/`](conte
   98%, Python×10 100%, Python×1 below its starting point), so this harness
   cannot rank them on it. The growth was small in all cases (13 MB Rust, 23 MB
   Go, 11 MB Python×10).
+- **Go's tail is not (mainly) the garbage collector.** Running the Go
+  service with `GOGC=off` did not flatten it: lookup p99 went from 2.6 to 3.0 ms
+  and from 5.1 to 7.5 ms in two runs, and on the CPU endpoint p95 fell by about
+  a quarter while the median tripled and p99 barely moved
+  ([`results/GC-COUNTERFACTUAL.md`](results/GC-COUNTERFACTUAL.md)). The tail
+  comes from something this harness cannot separate: scheduler, netpoll and
+  syscall timing, lock contention, or allocation behaviour. Profiling with
+  `pprof`, the execution tracer and Tokio's runtime metrics is the next step;
+  until then every *why* in this study is a hypothesis.
 - **Per-item storage cost** (`create`, RSS growth per inserted item): Rust 346 B,
   Go 397 B, Python×10 486 B, Python×1 520 B.
 - **Python's per-request CPU is close to Go's; its scaling is the cost.**
@@ -177,6 +201,10 @@ the differences come from.
 - In-memory store. Phase 2 is the same contract on PostgreSQL, where driver and
   pool quality start to dominate and the gaps narrow again.
 - RSS is sampled from `ps` four times a second, so short spikes can be missed.
+- The study measures *what* differs. Every explanation of *why* (GC,
+  scheduler, allocator) is a hypothesis: no profiles or runtime traces were
+  collected, and the one counterfactual run (GC off) rejected the first
+  explanation offered.
 
 ## Quick start
 

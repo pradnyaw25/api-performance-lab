@@ -1,0 +1,85 @@
+{
+  "duration_s": 10,
+  "warmup_s": 3,
+  "concurrency": 64,
+  "restart_per_scenario": true,
+  "cold_start_runs": 1,
+  "scenarios": [
+    {
+      "name": "get",
+      "path": "/items/42"
+    },
+    {
+      "name": "list",
+      "path": "/items?limit=200"
+    },
+    {
+      "name": "cpu",
+      "path": "/compute/hash?n=5000"
+    }
+  ],
+  "saturation": [
+    {
+      "name": "sat-cpu",
+      "path": "/compute/hash?n=20000",
+      "concurrency": 500,
+      "timeout_s": 1,
+      "duration_s": 10
+    }
+  ],
+  "implementations": [
+    {
+      "name": "go-nethttp",
+      "port": 8002,
+      "cwd": "services/go-nethttp",
+      "build": [
+        "go",
+        "build",
+        "-o",
+        "bin/api-lab-go",
+        "."
+      ],
+      "clean": [
+        "go",
+        "clean",
+        "-cache"
+      ],
+      "deps": "go",
+      "artifact": "bin/api-lab-go",
+      "cmd": [
+        "bin/api-lab-go"
+      ],
+      "src": [
+        "main.go"
+      ]
+    },
+    {
+      "name": "go-nethttp-nogc",
+      "port": 8012,
+      "cwd": "services/go-nethttp",
+      "build": [
+        "go",
+        "build",
+        "-o",
+        "bin/api-lab-go",
+        "."
+      ],
+      "clean": [
+        "go",
+        "clean",
+        "-cache"
+      ],
+      "deps": "go",
+      "artifact": "bin/api-lab-go",
+      "cmd": [
+        "bin/api-lab-go"
+      ],
+      "src": [
+        "main.go"
+      ],
+      "env": {
+        "GOGC": "off"
+      }
+    }
+  ]
+}

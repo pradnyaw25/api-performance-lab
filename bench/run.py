@@ -159,7 +159,7 @@ def start_impl(impl, quiet=False):
         raise RuntimeError(f"port {port} already in use; stop whatever is on it")
     cwd = ROOT / impl["cwd"]
     cmd = [c.format(port=port, cpus=CPUS) for c in impl["cmd"]]
-    env = dict(os.environ, PORT=str(port))
+    env = dict(os.environ, PORT=str(port), **{k: str(v) for k, v in impl.get("env", {}).items()})
     if not quiet:
         log(f"starting {impl['name']}: {' '.join(cmd)}")
     proc = subprocess.Popen(

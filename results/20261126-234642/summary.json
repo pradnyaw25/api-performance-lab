@@ -1,0 +1,284 @@
+{
+  "run_id": "20261126-234642",
+  "started_at": "2026-11-27T04:46:42+00:00",
+  "machine": {
+    "platform": "macOS-26.5-arm64-arm-64bit-Mach-O",
+    "machine": "arm64",
+    "cpus": 10,
+    "cpu": "Apple M5",
+    "fd_limit": 1048576,
+    "somaxconn": "128"
+  },
+  "settings": {
+    "duration_s": 10,
+    "warmup_s": 3,
+    "concurrency": 64,
+    "cold_start_runs": 1,
+    "load_generator": "oha 1.17.0",
+    "connections": null,
+    "recovery": null
+  },
+  "scenarios": [
+    {
+      "name": "get",
+      "path": "/items/42"
+    },
+    {
+      "name": "list",
+      "path": "/items?limit=200"
+    },
+    {
+      "name": "cpu",
+      "path": "/compute/hash?n=5000"
+    }
+  ],
+  "saturation": [
+    {
+      "name": "sat-cpu",
+      "path": "/compute/hash?n=20000",
+      "concurrency": 500,
+      "timeout_s": 1,
+      "duration_s": 10
+    }
+  ],
+  "implementations": {
+    "go-nethttp": {
+      "port": 8002,
+      "loc": 182,
+      "deps": 0,
+      "toolchain": "go1.27.4",
+      "cold_start_ms": [
+        30.8
+      ],
+      "cold_start_median_ms": 30.8,
+      "idle_rss_bytes": 13500416.0,
+      "contract": "pass",
+      "contract_notes": [
+        "non-numeric id -> 400 {'error': 'invalid id'}",
+        "malformed json -> 400 {'error': 'invalid json'}",
+        "wrong types -> 400 {'error': 'invalid json'}"
+      ],
+      "scenarios": {
+        "get": {
+          "rps": 176618.0,
+          "total": 1766652,
+          "errors": 0,
+          "error_pct": 0.0,
+          "p50_ms": 0.238,
+          "p90_ms": 0.626,
+          "p95_ms": 0.946,
+          "p99_ms": 2.621,
+          "p999_ms": 5.988,
+          "max_ms": 38.632,
+          "mean_ms": 0.361,
+          "status_codes": {
+            "200": 1766652
+          },
+          "error_kinds": {},
+          "concurrency": 64,
+          "peak_rss_bytes": 28278784.0,
+          "idle_rss_bytes": 26869760.0,
+          "rss_growth_per_req_bytes": 1,
+          "cpu_seconds": 46.35,
+          "cpu_ms_per_1k_req": 26.24,
+          "server_cpu_util": 0.454
+        },
+        "list": {
+          "rps": 61858.6,
+          "total": 618759,
+          "errors": 0,
+          "error_pct": 0.0,
+          "p50_ms": 0.682,
+          "p90_ms": 2.238,
+          "p95_ms": 3.283,
+          "p99_ms": 5.91,
+          "p999_ms": 10.213,
+          "max_ms": 33.524,
+          "mean_ms": 1.033,
+          "status_codes": {
+            "200": 618759
+          },
+          "error_kinds": {},
+          "concurrency": 64,
+          "peak_rss_bytes": 28655616.0,
+          "idle_rss_bytes": 28082176.0,
+          "rss_growth_per_req_bytes": 1,
+          "cpu_seconds": 63.88,
+          "cpu_ms_per_1k_req": 103.24,
+          "server_cpu_util": 0.634
+        },
+        "cpu": {
+          "rps": 14241.0,
+          "total": 142378,
+          "errors": 0,
+          "error_pct": 0.0,
+          "p50_ms": 1.24,
+          "p90_ms": 13.175,
+          "p95_ms": 18.82,
+          "p99_ms": 30.719,
+          "p999_ms": 47.642,
+          "max_ms": 82.208,
+          "mean_ms": 4.49,
+          "status_codes": {
+            "200": 142378
+          },
+          "error_kinds": {},
+          "concurrency": 64,
+          "peak_rss_bytes": 40681472.0,
+          "idle_rss_bytes": 39501824.0,
+          "rss_growth_per_req_bytes": 8,
+          "cpu_seconds": 70.5,
+          "cpu_ms_per_1k_req": 495.16,
+          "server_cpu_util": 0.703
+        }
+      },
+      "saturation": {
+        "sat-cpu": {
+          "rps": 4581.2,
+          "total": 45332,
+          "errors": 36,
+          "error_pct": 0.079,
+          "p50_ms": 63.883,
+          "p90_ms": 302.631,
+          "p95_ms": 402.851,
+          "p99_ms": 618.833,
+          "p999_ms": 876.309,
+          "max_ms": 999.376,
+          "mean_ms": 107.882,
+          "status_codes": {
+            "200": 45296
+          },
+          "error_kinds": {
+            "timeout": 36
+          },
+          "concurrency": 500,
+          "peak_rss_bytes": 73695232.0,
+          "idle_rss_bytes": 13467648.0,
+          "rss_growth_per_req_bytes": 1329,
+          "cpu_seconds": 82.89,
+          "cpu_ms_per_1k_req": 1828.51,
+          "server_cpu_util": 0.827
+        }
+      }
+    },
+    "go-nethttp-nogc": {
+      "port": 8012,
+      "loc": 182,
+      "deps": 0,
+      "toolchain": "go1.27.4",
+      "cold_start_ms": [
+        5.8
+      ],
+      "cold_start_median_ms": 5.8,
+      "idle_rss_bytes": 13451264.0,
+      "contract": "pass",
+      "contract_notes": [
+        "non-numeric id -> 400 {'error': 'invalid id'}",
+        "malformed json -> 400 {'error': 'invalid json'}",
+        "wrong types -> 400 {'error': 'invalid json'}"
+      ],
+      "scenarios": {
+        "get": {
+          "rps": 175643.2,
+          "total": 1756991,
+          "errors": 0,
+          "error_pct": 0.0,
+          "p50_ms": 0.225,
+          "p90_ms": 0.545,
+          "p95_ms": 0.863,
+          "p99_ms": 3.03,
+          "p999_ms": 10.604,
+          "max_ms": 116.384,
+          "mean_ms": 0.363,
+          "status_codes": {
+            "200": 1756991
+          },
+          "error_kinds": {},
+          "concurrency": 64,
+          "peak_rss_bytes": 716619776.0,
+          "idle_rss_bytes": 571719680.0,
+          "rss_growth_per_req_bytes": 82,
+          "cpu_seconds": 45.98,
+          "cpu_ms_per_1k_req": 26.17,
+          "server_cpu_util": 0.449
+        },
+        "list": {
+          "rps": 70790.8,
+          "total": 708062,
+          "errors": 0,
+          "error_pct": 0.0,
+          "p50_ms": 0.657,
+          "p90_ms": 1.785,
+          "p95_ms": 2.374,
+          "p99_ms": 4.432,
+          "p999_ms": 9.713,
+          "max_ms": 159.272,
+          "mean_ms": 0.903,
+          "status_codes": {
+            "200": 708062
+          },
+          "error_kinds": {},
+          "concurrency": 64,
+          "peak_rss_bytes": 1993588736.0,
+          "idle_rss_bytes": 1201520640.0,
+          "rss_growth_per_req_bytes": 1119,
+          "cpu_seconds": 68.85,
+          "cpu_ms_per_1k_req": 97.24,
+          "server_cpu_util": 0.68
+        },
+        "cpu": {
+          "rps": 12983.4,
+          "total": 130244,
+          "errors": 0,
+          "error_pct": 0.0,
+          "p50_ms": 3.579,
+          "p90_ms": 8.92,
+          "p95_ms": 12.402,
+          "p99_ms": 25.383,
+          "p999_ms": 91.167,
+          "max_ms": 157.508,
+          "mean_ms": 4.854,
+          "status_codes": {
+            "200": 130244
+          },
+          "error_kinds": {},
+          "concurrency": 64,
+          "peak_rss_bytes": 2317844480.0,
+          "idle_rss_bytes": 1356972032.0,
+          "rss_growth_per_req_bytes": 7377,
+          "cpu_seconds": 59.03,
+          "cpu_ms_per_1k_req": 453.23,
+          "server_cpu_util": 0.571
+        }
+      },
+      "saturation": {
+        "sat-cpu": {
+          "rps": 2404.1,
+          "total": 23604,
+          "errors": 76,
+          "error_pct": 0.322,
+          "p50_ms": 175.186,
+          "p90_ms": 309.038,
+          "p95_ms": 535.55,
+          "p99_ms": 860.134,
+          "p999_ms": 980.327,
+          "max_ms": 1009.262,
+          "mean_ms": 206.847,
+          "status_codes": {
+            "200": 23528
+          },
+          "error_kinds": {
+            "timeout": 76
+          },
+          "concurrency": 500,
+          "peak_rss_bytes": 6078316544.0,
+          "idle_rss_bytes": 13172736.0,
+          "rss_growth_per_req_bytes": 256954,
+          "cpu_seconds": 37.87,
+          "cpu_ms_per_1k_req": 1604.39,
+          "server_cpu_util": 0.376
+        }
+      }
+    }
+  }
+}
