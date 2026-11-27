@@ -213,7 +213,7 @@ def chart_saturation(summary, t, dpi):
         bar_panel(ax, names, vals, t, f, ttl=ttl, unit=unit)
     title(fig, "Under CPU overload, only Rust met the deadline for every request",
           f"{cfg['concurrency']} concurrent clients hammering {cfg['path']} for {cfg.get('duration_s', 10)} s with a {cfg['timeout_s']} s per-request timeout.")
-    footer(fig, "Same hardware for all four, medians of 4 runs. Go's median is close to Rust's; its tail waits out the deadline. Tokio's work-stealing spreads the delay evenly.")
+    footer(fig, "Same hardware for all four, medians of 4 runs. Go's median is close to Rust's; its tail waits out the deadline. Why is not established: a GOGC=off run did not change it.")
     fig.subplots_adjust(left=0.06, right=0.985, top=1 - 1.45 / fig.get_figheight(), bottom=0.08, wspace=0.42)
     return fig
 

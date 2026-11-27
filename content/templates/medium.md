@@ -26,7 +26,7 @@ Each group is one workload; each bar is that language's throughput as a share of
 
 ![Under CPU overload, only Rust met the deadline for every request](charts/simple/s2-overload.png)
 
-Push past saturation and it stops being a factor and becomes a behaviour. With 500 clients and a 1-second timeout, Rust missed the deadline on **zero** requests in every run. Go missed {{satcpu_err_go}}%, ten-worker Python {{satcpu_err_py10}}% (anywhere from {{satcpu_errrange_py10}}% run to run), single-worker Python {{satcpu_err_py1}}%. Go's median is close to Rust's but its p99 is four times worse: its scheduler lets a tail of requests wait out the deadline, while Tokio spreads the delay evenly. If you have an SLO, evenly is what you want.
+Push past saturation and it stops being a factor and becomes a behaviour. With 500 clients and a 1-second timeout, Rust missed the deadline on **zero** requests in every run. Go missed {{satcpu_err_go}}%, ten-worker Python {{satcpu_err_py10}}% (anywhere from {{satcpu_errrange_py10}}% run to run), single-worker Python {{satcpu_err_py1}}%. Go's median is close to Rust's but its p99 is four times worse. Why is a hypothesis I have not profiled; my first guess, the garbage collector, did not survive a run with it switched off. What is measured is the shape, and if you have an SLO, the flat one is what you want.
 
 **Tail latency.** On a simple lookup, Rust's p99 is {{p99_get_rust}} ms and about {{tail_get_rust}}× its median. Go's is {{p99_get_go}} ms at {{tail_get_go}}×. Python's is {{p99_get_py10}} ms at {{tail_get_py10}}×. Under CPU load Go's p99 opens to {{tail_cpu_go}}× its median; Rust's stays at {{tail_cpu_rust}}×.
 
@@ -74,6 +74,6 @@ On ordinary endpoints Go's throughput is a tie with Rust ({{rps_get_go}} vs {{rp
 
 ## Caveats
 
-One laptop with the load generator on the same cores, 10-second windows, macOS, an in-memory store, medians of {{n_runs}} runs with the ranges in the repo (Rust's lookup throughput swung {{rpsrange_get_rust}} req/s run to run, so Rust vs Go on ordinary endpoints is a tie, not a win). Small scale, not the production load of a large service. Phase 2 is the same contract on PostgreSQL.
+The study measures what differs, not why: every explanation of a tail is a hypothesis, and no profiles were taken. One laptop with the load generator on the same cores, 10-second windows, macOS, an in-memory store, medians of {{n_runs}} runs with the ranges in the repo (Rust's lookup throughput swung {{rpsrange_get_rust}} req/s run to run, so Rust vs Go on ordinary endpoints is a tie, not a win). Small scale, not the production load of a large service. Phase 2 is the same contract on PostgreSQL.
 
 Everything is open, including the raw `oha` output, the untuned baseline, and the contract test: [github.com/pradnyaw25/api-performance-lab](https://github.com/pradnyaw25/api-performance-lab). The long version with every number and the methodology is on [pradnya.dev](https://pradnya.dev/blog/api-performance-lab/). If a configuration is unfair to your favourite language, open an issue.
