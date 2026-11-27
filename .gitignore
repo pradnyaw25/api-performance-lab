@@ -1,0 +1,7 @@
+# build outputs
+services/rust-axum/target/
+services/go-nethttp/bin/
+services/python-fastapi/.venv/
+__pycache__/
+*.pyc
+.DS_Store

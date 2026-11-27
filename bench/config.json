@@ -1,0 +1,47 @@
+{
+  "duration_s": 10,
+  "warmup_s": 3,
+  "concurrency": 64,
+  "scenarios": [
+    {"name": "health", "path": "/health"},
+    {"name": "get",    "path": "/items/42"},
+    {"name": "list",   "path": "/items?limit=200"},
+    {"name": "create", "path": "/items", "method": "POST",
+     "body": {"name": "bench", "price": 1.5, "tags": ["a", "b"]}},
+    {"name": "cpu",    "path": "/compute/hash?n=5000"},
+    {"name": "io",     "path": "/io/wait?ms=10"},
+    {"name": "mixed",  "path": "/mixed?id=42"}
+  ],
+  "implementations": [
+    {
+      "name": "rust-axum", "port": 8001, "cwd": "services/rust-axum",
+      "build": ["cargo", "build", "--release"],
+      "clean": ["cargo", "clean"],
+      "artifact": "target/release/api-lab-rust",
+      "cmd": ["target/release/api-lab-rust"],
+      "src": ["src/main.rs", "Cargo.toml"]
+    },
+    {
+      "name": "go-nethttp", "port": 8002, "cwd": "services/go-nethttp",
+      "build": ["go", "build", "-o", "bin/api-lab-go", "."],
+      "clean": ["go", "clean", "-cache"],
+      "artifact": "bin/api-lab-go",
+      "cmd": ["bin/api-lab-go"],
+      "src": ["main.go"]
+    },
+    {
+      "name": "python-fastapi", "port": 8003, "cwd": "services/python-fastapi",
+      "build": null, "artifact": null, "process_local_state": true,
+      "cmd": [".venv/bin/uvicorn", "app.main:app", "--host", "127.0.0.1", "--port", "{port}",
+              "--workers", "{cpus}", "--loop", "uvloop", "--http", "httptools", "--log-level", "warning"],
+      "src": ["app/main.py"]
+    },
+    {
+      "name": "python-fastapi-1w", "port": 8004, "cwd": "services/python-fastapi",
+      "build": null, "artifact": null,
+      "cmd": [".venv/bin/uvicorn", "app.main:app", "--host", "127.0.0.1", "--port", "{port}",
+              "--workers", "1", "--loop", "uvloop", "--http", "httptools", "--log-level", "warning"],
+      "src": ["app/main.py"]
+    }
+  ]
+}
